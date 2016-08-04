@@ -13,7 +13,7 @@
 <% 
 'asp·þÎñÆ÷
 
-call openconn()  
+call openconn() 
 '=========
 
 

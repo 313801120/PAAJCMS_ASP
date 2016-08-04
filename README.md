@@ -1,12 +1,12 @@
 ﻿## 简介
 
-ASPPHPCMS 是一个免费开源的，快速、简单、轻量级网站内容管理系统，有ASP和PHP两种版本，并且是相互通用的。只要你写一次，就可以同时在ASP平台和PHP平台运行。
-创立于2015年初，是为了敏捷WEB应用开发和简化企业应用开发而诞生的。ASPPHPCMS从诞生以来一直秉承简洁实用的设计原则，在保持出色的性能和至简的代码的同时，也注重易用性。
+PAAJCMS 是一个免费开源的，快速、简单、轻量级网站内容管理系统，有ASP和PHP和ASP.Net多种版本，并且是相互通用的。只要你写一次，就可以同时在ASP平台和PHP平台和ASP.Net多种平台运行。
+创立于2015年初，是为了敏捷WEB应用开发和简化企业应用开发而诞生的。PAAJCMS从诞生以来一直秉承简洁实用的设计原则，在保持出色的性能和至简的代码的同时，也注重易用性。
 并且拥有众多的原创功能和特性，在易用性、扩展性和性能方面不断优化和改进，必将成为国内最领先和最具影响力的WEB应用开发框架，众多的典型案例确保可以稳定用于商业以及门户级的开发。
 
 ## 大道至简的开发理念
 
-ASPPHPCMS从诞生以来一直秉承大道至简的开发理念，无论从底层实现还是应用开发，我们都倡导用最少的代码完成相同的功能，正是由于对简单的执着和代码的修炼，让我们长期保持出色的性能和极速的开发体验。简单和快速开发是我们不变的宗旨。
+PAAJCMS从诞生以来一直秉承大道至简的开发理念，无论从底层实现还是应用开发，我们都倡导用最少的代码完成相同的功能，正是由于对简单的执着和代码的修炼，让我们长期保持出色的性能和极速的开发体验。简单和快速开发是我们不变的宗旨。
 
 ## 安全性
 
@@ -27,8 +27,8 @@ ASPPHPCMS从诞生以来一直秉承大道至简的开发理念，无论从底�
 *  3、phpinc/,index.php,admin/index.php为PHP版
 *  4、sharembweb.com.asp为测试程序
 *  5、更多帮助加群(35915100)或浏览(http://sharembweb.com)
-*  ASPPHPCMS内容管理系统最新版本是 v1.2
-*  http://sharembweb.com/aspphpcms/
+*  PAAJCMS内容管理系统最新版本是 v1.2
+*  http://sharembweb.com/PAAJCMS/
 
 ## 作者介绍
 
@@ -39,17 +39,17 @@ ASPPHPCMS从诞生以来一直秉承大道至简的开发理念，无论从底�
 *  更多帮助，文档，更新　请加群(35915100)或浏览(http://sharembweb.com)
 *  Powered By ASPPHPCNS
 
-*  ASPPHPCMS官网 http://sharembweb.com/
+*  PAAJCMS官网 http://sharembweb.com/
 *  学习交流请加QQ313801120 QQ交流群请加35915100(群里已有几百人)  邮箱313801120@qq.com
 *  作者呕心沥血花了大半年得时间才开发出来，现在分享给大家。
 *  程序不免会有BUG，如果你发现了BUG，请把BUG发送到作者得邮箱313801120@qq.com （作者会把你的名字放到程序里）
-*  想获得更多帮助和获得最新ASPPHPCMS动态　请浏览(http://sharembweb.com)
+*  想获得更多帮助和获得最新PAAJCMS动态　请浏览(http://sharembweb.com)
 *  在线演示：http://sharembweb.com/
 
 ## 更新日志
 
 —— 20016.04.08 update ——
-*  1、ASPPHPCMS升级到 ASPPHPCMS v1.2
+*  1、PAAJCMS升级到 PAAJCMS v1.2
 *  2、增加一套企业绿色模板
 *  3、新增大量模板标签
 *  4、前后台程序更加稳定
@@ -76,18 +76,18 @@ ASPPHPCMS从诞生以来一直秉承大道至简的开发理念，无论从底�
 *  4、[$cfg_webtitle fontcolor='red'$] 全局变量添加了函数功能
 
 —— 20016.01.01 update ——
-*  1、ASPPHPCMS升级到 ASPPHPCMS v1.1
+*  1、PAAJCMS升级到 PAAJCMS v1.1
 *  2、后台增加 robotes.txt生成
 *  3、后台增加sitemap.xml与sitemap.html生成 
 *  4、前端添加在线修改网站功能
 
 —— 20015.11.11 update ——
-*  1、ASPPHPCMS的PHP版 开发完成
+*  1、PAAJCMS的PHP版 开发完成
 *  2、加入了生成纯html静态网页功能
 *  3、ASP与PHP可切换
 
 —— 20015.10.10 update ——
-*  1、ASPPHPCMS v1.0 正式上线
+*  1、PAAJCMS v1.0 正式上线
 *  2、自带模板（sharembweb和ufoer）
 *  3、网站后台/admin/index.asp 账号：admin 密码：admin
 *  4、ASP版开发完成，测试通过，PHP待开发中

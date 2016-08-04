@@ -1091,6 +1091,54 @@ function getFileFolderEditTime(byVal folderPath, sType, byVal timeStr)
 end function 
 
 
+
+
+'批量删除文件(夹)  20160804
+function deleteDir(byVal folderPath,noDelFolderList,noDelFileList) 
+    dim fso, f, fc, myFile, f1, fileType 
+    call handlePath(folderPath)                                                     '获得完整路径 
+    set fso = createObject("Scripting.FileSystemObject")
+        if not fso.folderExists(folderPath) then exit function 
+        set f = fso.getFolder(folderPath) 
+		for each myFile in f.files
+			call deleteFile(myFile)
+		next  
+
+		set fc = f.subFolders
+			for each f1 in fc
+				if instr("|"& noDelFolderList &"|","|"& f1.name &"|")=0 then
+					call deleteFolder(f1)
+					'call echo("f1",f1)
+				end if
+			next 
+		set fc = nothing  
+        set f = nothing 
+    set fso = nothing  
+end function 
+'批量复制文件(夹)  20160804
+function copyDir(byVal folderPath,toFolderPath) 
+    dim fso, f, fc, myFile, f1, fileType 
+    call handlePath(folderPath)                                                     '获得完整路径 
+    set fso = createObject("Scripting.FileSystemObject")
+        if not fso.folderExists(folderPath) then exit function 
+        set f = fso.getFolder(folderPath) 
+		for each myFile in f.files
+			call copyfile(myFile, toFolderPath & "/" & myFile.Name)
+			
+		next  
+
+		set fc = f.subFolders
+			for each f1 in fc
+				if instr("|"& noDelFolderList &"|","|"& f1.name &"|")=0 then
+					call copyfile(f1, toFolderPath & "/" & f1.name)
+				end if
+			next 
+		set fc = nothing  
+        set f = nothing 
+    set fso = nothing  
+end function 
+
+
 '========================================= 辅助区 =========================================
 '处理成完成路径 (2013,9,27
 function handlePath(fFPath)                                                     'Path前面不加ByVal 重定义，这样是为了让前面函数里可以使用这个路径完整调用
