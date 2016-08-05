@@ -1289,7 +1289,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
         conn.execute("insert into " & db_PREFIX & "admin (username,pwd,flags) values('" & loginname & "','" & myMD5(loginpwd) & "','|*|')") 
 
 
-
+ 
         'Add WebSite
         dim fieldNameList, fieldValueList 
         fieldNameList = "webTitle,webKeywords,webDescription,WebSiteUrl,WebSiteBottom" 
