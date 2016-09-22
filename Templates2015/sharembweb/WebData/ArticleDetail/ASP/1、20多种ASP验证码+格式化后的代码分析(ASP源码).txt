@@ -18,7 +18,7 @@
 <img src="http://www.codesky.net/codedown/viewpic/201310147505802.jpg" title="20多种ASP验证码+格式化后的代码分析(ASP源码)" alt="20多种ASP验证码+格式化后的代码分析(ASP源码)" width="100%">
  
 本文版权归作者所有，转摘请注明作者和出处！
-作者：红尘云孙
+作者：云孙World
 首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a>
 
 [&全部换行end&]

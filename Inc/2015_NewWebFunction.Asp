@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -31,23 +31,32 @@ Function unSpecialStrReplace(ByVal content, startStr)
 End Function 
 
 '栏目类型处理 首页|文本|产品|新闻|视频|下载|案例|留言|反馈|招聘|订单
-Function handleColumnType(columnName)
-    Dim s 
-    Select Case columnName
-        Case "首页" : s = "home"
-        Case "文本" : s = "text"
-        Case "产品" : s = "product"
-        Case "新闻" : s = "news"
-        Case "视频" : s = "video"
-        Case "下载" : s = "download"
-        Case "案例" : s = "case"
-        Case "留言" : s = "message"
-        Case "反馈" : s = "feedback"
-        Case "招聘" : s = "job"
-        Case "订单" : s = "order"
-    End Select
+function handleColumnType(columnName)
+    dim s 
+    if columnName = "首页" then
+        s = "home" 
+    elseif columnName = "文本" then
+        s = "text" 
+    elseif columnName = "产品" then
+        s = "product" 
+    elseif columnName = "新闻" then
+        s = "news" 
+    elseif columnName = "视频" then
+        s = "video" 
+    elseif columnName = "下载" then
+        s = "download" 
+    elseif columnName = "案例" then
+        s = "case" 
+    elseif columnName = "留言" then
+        s = "message" 
+    elseif columnName = "反馈" then
+        s = "feedback" 
+    elseif columnName = "招聘" then
+        s = "job" 
+    elseif columnName = "订单" then
+        s = "order" 
+    end if 
     handleColumnType = s 
-End Function
+end function
 
 %> 
-

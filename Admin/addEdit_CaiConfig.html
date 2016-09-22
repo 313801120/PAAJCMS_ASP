@@ -4,20 +4,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
 <title>{$Web_Title$} - :::企业后台管理系统,QQ:313801120:::</title>
-<link href="css/style.css" rel="stylesheet"  type="text/css">
-<script type="text/javascript" src="../Jquery/Jquery.Min.js"></script>
-<script src="js/runAction.js"></script>
+<link href="Css/style.css" rel="stylesheet"  type="text/css">
+<script type="text/javascript" src="../Jquery/jquery.Min.js"></script>
+<script src="Js/runAction.js"></script>
 </head>
 <body>
 <!--#editor start#-->
-<script charset="utf-8" src="Keditor/kindeditor.js"></script> 
-<script charset="utf-8" src="Keditor/lang/zh_CN.js"></script>  
+<script charset="utf-8" src="KEditor/kindeditor.js"></script> 
+<script charset="utf-8" src="KEditor/lang/zh_CN.js"></script>  
 <script language="javascript">
 KindEditor.ready(function(K) {
 	var editor1 = K.create('textarea[name="bodycontent"]', {		//处理让文本域
-		cssPath : 'Keditor/plugins/code/prettify.css',
-		uploadJson : 'Keditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
-		fileManagerJson : 'Keditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		cssPath : 'KEditor/plugins/code/prettify.css',
+		uploadJson : 'KEditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		fileManagerJson : 'KEditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
 		allowFileManager : true,
 		afterCreate : function() {
 			var self = this;
@@ -142,6 +142,6 @@ KindEditor.ready(function(K) {
             <input name="重置" type="reset" class="mybtn2 radius5" value="重置"  />
         </div>    </div>
 </form>
-<script language="javascript" type="text/javascript" src="js/formBottom.js"></script>
+<script language="javascript" type="text/javascript" src="Js/formBottom.js"></script>
 </body>
 </html>

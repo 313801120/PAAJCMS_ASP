@@ -12,7 +12,7 @@
 【bodycontent】[&全部换行&]<strong>ASP在线帮助手册速查版：(整理收集时间20160121)</strong>
 
 本文版权归作者所有，转摘请注明作者和出处！
-作者：红尘云孙
+作者：云孙World
 首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a> 
 [&html转码&]
 Abs       返回数字的绝对值

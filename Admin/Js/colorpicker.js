@@ -52,3 +52,14 @@ function clear_title() {
 	$('#title').css('color','');
 	$('#title_colorpanel').html(' ');
 }
+//========================== 
+//设置标题颜色
+function set_title_color(color) {
+	$('#title').css('color',color);
+	$('#titlecolor').val(color);
+} 
+//设置栏目颜色
+function set_columnname_color(color) {
+	$('#columnname').css('color',color);
+	$('#fontcolor').val(color);
+}

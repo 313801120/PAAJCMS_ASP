@@ -4,10 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
 <title>{$Web_Title$} - :::企业后台管理系统,QQ:313801120:::</title>
-<link href="css/style.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="../Jquery/Jquery.Min.js"></script>
+<link href="Css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../Jquery/jquery.Min.js"></script>
 <script type="text/javascript" src="../Jquery/lhgdialog.min.js"></script>
-<script type="text/javascript" src="js/runAction.js"></script> 
+<script type="text/javascript" src="Js/runAction.js"></script> 
 </head>
 <body>
 <div id="positionwrap">
@@ -26,7 +26,7 @@
       </div>
         <table width="100%" border="0" cellpadding="2" cellspacing="1" bgcolor="#CFCFCF" align="center" style="margin-top:8px">
             <tr bgcolor="#E7E7E7">
-                <td height="28" colspan="2" background="images/tbg.gif" style="padding-left:10px;">
+                <td height="28" colspan="2" background="Images/tbg.gif" style="padding-left:10px;">
                     <!--           ◆ 所有栏目>单页管理 -->                </td>
             </tr>
             <tr align="center" bgcolor="#FBFCE2" height="25">
@@ -68,6 +68,10 @@
                     打包成Zip</label>
                       <label for="isMakeXml"><input name="isMakeXml" type="checkbox" id="isMakeXml" value="1" checked>
                     打包成Xml</label>
+                      <label for="isSetFileNameType"><input name="isSetFileNameType" type="checkbox" id="isSetFileNameType" value="1" checked>
+                    文件名以_链接</label>
+                      <label for="isPinYin"><input name="isPinYin" type="checkbox" id="isPinYin" value="1" checked>
+                    文件名转拼音</label>
                       <input type="submit" name="button" class="btnclick2" id="button" value="提交">         
                   </form>                
             	</td>

@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -11,9 +11,9 @@
 <!--#Include File = "Inc/Config.Asp"-->
 <!--#Include File = "inc/admin_function.asp"--> 
 <% 
-'asp服务器
+'asp服务器   的发生的111
 
-call openconn() 
+call openconn()    
 '=========
 
 
@@ -155,7 +155,13 @@ function handleAction(content)
             elseIf checkFunValue(action, "detailPosition ") = true then
                 action = XY_detailPosition(action) 
 
+			
 
+                '------------------- 会员 -----------------------
+			'关注 
+            elseIf checkFunValue(action, "thisArticleFollow ") = true then
+                action = XY_thisArticleFollow(action) 
+			
 
 
             '暂时不屏蔽
@@ -183,7 +189,8 @@ function XY_DisplayWebColumn(action)
     dim styleId, styleValue                                                         '样式ID与样式内容
     dim cssNameAddId 
     dim shopnavidwrap                                                               '是否显示栏目ID包
-
+	
+	isConcise=false		'简洁显示为假
     styleId = PHPTrim(rParam(action, "styleID")) 
     styleValue = PHPTrim(rParam(action, "styleValue")) 
     addSql = PHPTrim(rParam(action, "addSql")) 
@@ -201,13 +208,18 @@ function XY_DisplayWebColumn(action)
     if addSql <> "" then
         sql = getWhereAnd(sql, addSql) 
     end if 
-    if checkSql(sql) = false then call eerr("Sql", sql) 
+    if checkSql(sql) = false then 
+		call eerr("Sql", sql) 
+	end if
+	'【@是jsp显示@】try{
     rs.open sql, conn, 1, 1 
     dropDownMenu = LCase(rParam(action, "DropDownMenu")) 
     focusType = LCase(rParam(action, "FocusType")) 
     isConcise = IIF(LCase(rParam(action, "isConcise")) = "true", false, true) 
 
-    if isConcise = true then c = c & copyStr(" ", 4) & "<li class=left></li>" & vbCrLf 
+    if isConcise = true then 
+		c = c & copyStr(" ", 4) & "<li class=left></li>" & vbCrLf 
+	end if
     for i = 1 to rs.recordCount
 
         '【PHP】$rs=mysql_fetch_array($rsObj);                                            //给PHP用，因为在 asptophp转换不完善
@@ -231,10 +243,14 @@ function XY_DisplayWebColumn(action)
 
         c = c & copyStr(" ", 8) & "</li>" & vbCrLf 
 
-        if isConcise = true then c = c & copyStr(" ", 8) & "<li class=line></li>" & vbCrLf 
-    rs.moveNext : next : rs.close 
-    if isConcise = true then c = c & copyStr(" ", 8) & "<li class=right></li>" & vbCrLf 
-
+        if isConcise = true  then
+			c = c & copyStr(" ", 8) & "<li class=line></li>" & vbCrLf 
+    	end if
+	rs.moveNext : next : rs.close 
+	'【@是jsp显示@】}catch(Exception e){} 
+    if isConcise = true then 
+		c = c & copyStr(" ", 8) & "<li class=right></li>" & vbCrLf 
+	end if
     if styleId <> "" then
         c = "<ul class='nav" & styleId & cssNameAddId & "'>" & vbCrLf & c & vbCrLf & "</ul>" & vbCrLf 
     end if 
@@ -259,7 +275,13 @@ function replaceGlobleVariable(byVal content)
     content = handleRGV(content, "{$cfg_webSiteBottom$}", cfg_webSiteBottom)        '网站底部内容
 
     content = handleRGV(content, "{$glb_columnId$}", glb_columnId)                  '栏目Id
+    content = handleRGV(content, "{$glb_columnRootId$}", glb_columnRootId)                  '栏目主Id
+    content = handleRGV(content, "{$glb_columnRootName$}", glb_columnRootName)                  '栏目主名称
+    content = handleRGV(content, "{$glb_columnRootEnName$}", glb_columnRootEnName)                  '栏目主英文名称
+	
+	
     content = handleRGV(content, "{$glb_columnName$}", glb_columnName)              '栏目名称
+    content = handleRGV(content, "{$glb_columnEnName$}", glb_columnEnName)              '栏目英文名称
     content = handleRGV(content, "{$glb_columnType$}", glb_columnType)              '栏目类型
     content = handleRGV(content, "{$glb_columnENType$}", glb_columnENType)          '栏目英文类型
 
@@ -291,6 +313,20 @@ function replaceGlobleVariable(byVal content)
     content = handleRGV(content, "{$glb_aritcleBigImage$}", glb_aritcleBigImage)    '文章大图
     content = handleRGV(content, "{$glb_aritcleSmallImage$}", glb_aritcleSmallImage) '文章小图
     content = handleRGV(content, "{$glb_searchKeyWord$}", glb_searchKeyWord)        '首页显示网址
+	
+	
+	
+    content = handleRGV(content, "{$member_expiredatetime$}", getSession("member_expiredatetime"))        '首页显示网址
+    content = handleRGV(content, "{$member_user$}", getSession("member_user"))        '首页显示网址
+	
+	
+	
+    content = handleRGV(content, "{$pageInfo$}", gbl_PageInfo)        '首页显示网址
+    content = handleRGV(content, "{$detailTitle$}", glb_detailTitle)        '首页显示网址
+    content = handleRGV(content, "{$detailContent$}", glb_bodyContent)        '首页显示网址
+	
+	
+	 
 
 
     replaceGlobleVariable = content 
@@ -314,6 +350,7 @@ end function
 sub loadWebConfig()
     dim templatedir 
     call openconn() 
+	'【@是jsp显示@】try{
     rs.open "select * from " & db_PREFIX & "website", conn, 1, 1 
     if not rs.EOF then
         cfg_webSiteUrl = phptrim(rs("webSiteUrl"))                                      '网址
@@ -344,30 +381,10 @@ sub loadWebConfig()
             cfg_webTemplate = templatedir 
         end if  
     end if : rs.close 
+	'【@是jsp显示@】}catch(Exception e){} 
 end sub 
 
-'网站位置 待完善
-function thisPosition(content)
-    dim c 
-    c = "<a href=""" & getColumnUrl("首页", "type") & """>首页</a>" 
-    if glb_columnName <> "" then
-        c = c & " >> <a href=""" & getColumnUrl(glb_columnName, "name") & """>" & glb_columnName & "</a>" 
-    end if 
-    '20160330
-    if glb_locationType = "detail" then
-        c = c & " >> 查看内容" 
-    end if 
-    '尾部追加内容
-    c = c & positionEndStr 
 
-    'call echo("glb_locationType",glb_locationType)
-
-    content = replace(content, "[$detailPosition$]", c) 
-    content = replace(content, "[$detailTitle$]", glb_detailTitle) 
-    content = replace(content, "[$detailContent$]", glb_bodyContent) 
-
-    thisPosition = content 
-end function 
 
 '显示管理列表
 function getDetailList(action, content, actionName, lableTitle, byVal fieldNameList, nPageSize, sPage, addSql)
@@ -416,6 +433,7 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
         call errorLog("出错提示：<br>sql=" & sql & "<br>") 
         exit function 
     end if 
+	'【@是jsp显示@】try{
     rs.open sql, conn, 1, 1 
     '【PHP】删除rs
     nCount = rs.recordCount 
@@ -430,7 +448,8 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
     else
         url = getUrlAddToParam(getUrl(), "?page=[id]", "replace") 
     end if 
-    content = replace(content, "[$pageInfo$]", webPageControl(nCount, nPageSize, cstr(sPage), url, pageInfo)) 
+	gbl_PageInfo=webPageControl(nCount, nPageSize, cstr(sPage), url, pageInfo)
+    content = replace(content, "[$pageInfo$]", gbl_PageInfo) 
 
     if EDITORTYPE = "asp" then
         nX = getRsPageNumber(rs, nCount, nPageSize, sPage)                              '【@不是asp屏蔽@】   获得Rs页数      记录总数
@@ -455,19 +474,40 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
 		'【@是.netc显示@】	}
 		'【@是.netc显示@】} 
    
-    else 
-        if sPage <> "" then'【@是.netc屏蔽@】
-            nPage = cint(sPage) - 1 '【@是.netc屏蔽@】
-        end if '【@是.netc屏蔽@】
-        sql = "select * from " & db_PREFIX & "" & tableName & " " & addSql & " limit " & nPageSize * nPage & "," & nPageSize '【@是.netc屏蔽@】
-        rs.open sql, conn, 1, 1 '【@是.netc屏蔽@】
-        '【PHP】删除rs
-        nX = rs.recordCount '【@是.netc屏蔽@】
+	elseif EDITORTYPE = "jsp" then
+	
+		'【@是jsp显示@】int  nCountPage = getCountPage(nCount, nPageSize);
+		'【@是jsp显示@】rs = Conn.executeQuery(sql);			
+		'【@是jsp显示@】if(nPage<=1){
+		'【@是jsp显示@】	nX=nPageSize;
+		'【@是jsp显示@】	if(nX>nCount){
+		'【@是jsp显示@】		nX=nCount;
+		'【@是jsp显示@】	} 
+		'【@是jsp显示@】}else{
+		'【@是jsp显示@】	for(int nI2=0;nI2<nPageSize*(nPage-1);nI2++){
+		'【@是jsp显示@】		rs.next();
+		'【@是jsp显示@】	}
+		'【@是jsp显示@】	if(nPage<nCountPage){
+		'【@是jsp显示@】		nX=nPageSize;
+		'【@是jsp显示@】	}else{
+		'【@是jsp显示@】		nX=nCount-nPageSize*(nPage-1);
+		'【@是jsp显示@】	}
+		'【@是jsp显示@】}  
+
+	else									 
+		if nPage<>0 then'【@是.netc屏蔽@】'【@是jsp屏蔽@】
+			nPage = nPage - 1 '【@是.netc屏蔽@】'【@是jsp屏蔽@】
+		end if '【@是.netc屏蔽@】'【@是jsp屏蔽@】
+		sql = "select * from " & db_PREFIX & "" & tableName & " " & addSql & " limit " & nPageSize * nPage & "," & nPageSize '【@是.netc屏蔽@】'【@是jsp屏蔽@】
+		rs.open sql, conn, 1, 1 '【@是.netc屏蔽@】'【@是jsp屏蔽@】
+		'【PHP】删除rs
+		nX = rs.recordCount '【@是.netc屏蔽@】'【@是jsp屏蔽@】
     end if 
     'call echo("sql",sql)
     for i = 1 to nX
         '【PHP】$rs=mysql_fetch_array($rsObj);                                            //给PHP用，因为在 asptophp转换不完善
 		'【@是.netc显示@】rs.Read();
+		'【@是jsp显示@】rs.next();
         startStr = "[list-" & i & "]" : endStr = "[/list-" & i & "]" 
 
         '在最后时排序当前交点20160202
@@ -519,7 +559,12 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
                     if rs("titlecolor") <> "" then
                         abcolorStr = "color:" & rs("titlecolor") & ";" 
                     end if 
-                end if 
+                elseif inStr(fieldNameList, ",fontcolor,") > 0 then
+                    'A链接颜色
+                    if rs("fontcolor") <> "" then
+                        abcolorStr = "color:" & rs("fontcolor") & ";" 
+                    end if 
+                end if  
                 if inStr(fieldNameList, ",flags,") > 0 then
                     'A链接加粗
                     if inStr(rs("flags"), "|b|") > 0 then
@@ -547,6 +592,9 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
 
 
 
+				s = replaceValueParam(s, "i", i)                                                '循环编号
+				s = replaceValueParam(s, "编号", i)                                             '循环编号
+			
                 s = replaceValueParam(s, "url", url) 
                 s = replaceValueParam(s, "abcolor", abcolorStr)                                 'A链接加颜色与加粗
                 s = replaceValueParam(s, "atitle", atitleStr)                                   'A链接title
@@ -556,7 +604,7 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
 
             next 
         end if 
-        'call echo("tableName",tableName)
+		if EDITORTYPE <> "jsp" then
         idPage = getThisIdPage(db_PREFIX & tableName, rs("id"), 10) 
         '【留言】
         if tableName = "guestbook" then
@@ -567,9 +615,10 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
             url = WEB_ADMINURL & "?act=addEditHandle&actionType=ArticleDetail&lableTitle=分类信息&nPageSize=10&page=" & idPage & "&parentid=" & rs("parentid") & "&id=" & rs("id") & "&n=" & getRnd(11) 
         end if 
         s = handleDisplayOnlineEditDialog(url, s, "", "div|li|span") 
-
+		end if
         c = c & s 
     rs.moveNext : next : rs.close 
+	'【@是jsp显示@】}catch(Exception e){} 
     content = replace(content, "<!--#body start#-->" & defaultStr & "<!--#body end#-->", c) 
 
     if isMakeHtml = true then
@@ -631,9 +680,10 @@ function defaultListTemplate(sType, sName)
     defaultListTemplate = listTemplate 
 end function 
 
-call loadRun()                                                                  '【@是.netc屏蔽@】
+call loadRun()                                                                  '【@是.netc屏蔽@】'【@是jsp屏蔽@】
 '加载就运行
 sub loadRun()
+	dim c
     '这是为了给.net使用的，因为在.net里面全局变量不能有变量
 	WEB_CACHEFile=replace(replace(WEB_CACHEFile,"[adminDir]",adminDir),"[EDITORTYPE]",EDITORTYPE)	
 	
@@ -650,8 +700,8 @@ sub loadRun()
     '记录表前缀
     if request("db_PREFIX") <> "" then
         db_PREFIX = request("db_PREFIX") 
-    elseIf session("db_PREFIX") <> "" then
-        db_PREFIX = session("db_PREFIX") 
+    elseIf getsession("db_PREFIX") <> "" then
+        db_PREFIX = getsession("db_PREFIX") 
     end if 
     '加载网址配置
     call loadWebConfig() 
@@ -660,25 +710,34 @@ sub loadRun()
         isMakeHtml = true 
     end if 
     templateName = request("templateName")                                          '模板名称
+	
+	'是会员验证
+	if isMemberVerification=true and (request("act")<>"member" and request("style")="login") then
+		if getsession("member_user")="" then 
+			call rr("?")
+		end if
+	end if 
 
     '保存数据处理页
-    select case request("act")
-        case "savedata" : saveData(request("stype")) : response.end()                   '保存数据
-        ''站长统计 | 今日IP[653] | 今日PV[9865] | 当前在线[65]')
-        case "webstat" : webStat(adminDir & "/Data/Stat/") : response.end()             '网站统计
-
-        case "saveSiteMap" : isMakeHtml = true : saveSiteMap() : response.end()         '保存sitemap.xml
-
-        case "handleAction":
-            if request("ishtml") = "1" then
-                isMakeHtml = true 
-            end if
-            rwend(handleAction(request("content")))                                         '处理动作
-    end select
-
-
+	if request("act")= "savedata" then
+		call saveData(request("stype")) : response.end()                   '保存数据
+	''站长统计 | 今日IP[653] | 今日PV[9865] | 当前在线[65]')
+	elseif request("act")= "webstat" then 
+		call webStat(adminDir & "/Data/Stat/") : response.end()             '网站统计
+	
+	elseif request("act")= "saveSiteMap" then
+		isMakeHtml = true : call saveSiteMap() : response.end()         '保存sitemap.xml
+	
+	elseif request("act")= "member" then
+		call callMember()	:call eerr("","sdf")											'调用Member文件函数
+	
+	elseif request("act")= "handleAction" then
+		if request("ishtml") = "1" then
+			isMakeHtml = true 
+		end if
+		call rwend(handleAction(request("content")))                                         '处理动作 
     '生成html
-    if request("act") = "makehtml" then
+    elseif request("act") = "makehtml" then
         call echo("makehtml", "makehtml") 
         isMakeHtml = true 
         call makeWebHtml(" action actionType='" & request("act") & "' columnName='" & request("columnName") & "' id='" & request("id") & "' ") 
@@ -738,7 +797,17 @@ sub loadRun()
             call makeAllHtml(request("columnType"), request("columnName"), request("columnId")) 
         else
             call checkIDSQL(request("id")) 
-            call rw(makeWebHtml(" action actionType='" & request("act") & "' columnName='" & request("columnName") & "' columnType='" & request("columnType") & "' id='" & request("id") & "' npage='" & request("page") & "' ")) 
+			c=makeWebHtml(" action actionType='" & request("act") & "' columnName='" & request("columnName") & "' columnType='" & request("columnType") & "' id='" & request("id") & "' npage='" & request("page") & "' ")
+            
+			'测试用
+			if host()="http://aa/" then
+				'call echo("",host())
+				c=replace(c,"http://sharembweb.com/asptoLanguage/","")
+				c=replace(c,"http://sharembweb.com/AspToLanguage/","")
+				c=replace(c,"http://sharembweb.com/toolslist/","/toolslist/")
+				c=replace(c,"http://sharembweb.com/Tools/FormattingTools/","/函数/")
+			end if
+			call rw(c) 
         end if 
     end if 
     '开启缓冲html
@@ -758,6 +827,8 @@ end function
 function makeWebHtml(action)
     dim actionType, npagesize, npage, s, url, addSql, sortSql, sortFieldName, ascOrDesc 
     dim serchKeyWordName, parentid                                                  '追加于20160716 home
+	dim isOK,relatedtags,sortFieldValue,sql
+	isOK=false			'真假
     actionType = rParam(action, "actionType") 
     s = rParam(action, "npage") 
     s = getnumber(s) 
@@ -782,18 +853,19 @@ function makeWebHtml(action)
         end if 
         if glb_columnId <> "" then
             addSql = getWhereAnd(addSql, "where id=" & glb_columnId & "") 
-        end if 
-        'call echo("addsql",addsql)
+        end if 		
+		'【@是jsp显示@】try{
         rs.open "Select * from " & db_PREFIX & "webcolumn " & addSql, conn, 1, 1 
         if not rs.EOF then
-            glb_columnId = rs("id") 
-            glb_columnName = rs("columnname") 
+            glb_columnId = rs("id")
+            glb_columnName = rs("columnname")
+			glb_columnEnName=rs("columnenname")
             glb_columnType = rs("columntype") 
             glb_bodyContent = rs("bodycontent") 
             glb_detailTitle = glb_columnName 
             glb_flags = rs("flags") 
             npagesize = rs("npagesize")                                                     '每页显示条数
-            glb_isonhtml = IIF(rs("isonhtml") = true, true, false)                          '是否生成静态网页
+            glb_isonhtml = IIF(rs("isonhtml") = 0, false, true)                          '是否生成静态网页
             sortSql = " " & rs("sortsql")                                                   '排序SQL
 
             if rs("webTitle") <> "" then
@@ -813,12 +885,16 @@ function makeWebHtml(action)
                 end if 
             end if 
         end if : rs.close 
+		call handleColumnRoot(glb_columnId) 	'获得栏目主ID与主名称
+		
+		'【@是jsp显示@】}catch(Exception e){} 
         glb_columnENType = handleColumnType(glb_columnType) 
         glb_url = getColumnUrl(glb_columnName, "name") 
 
         '文章类列表
         if inStr("|产品|新闻|视频|下载|案例|", "|" & glb_columnType & "|") > 0 then
-            glb_bodyContent = getDetailList(action, defaultListTemplate(glb_columnType, glb_columnName), "ArticleDetail", "栏目列表", "*", npagesize, cstr(npage), "where parentid=" & glb_columnId & sortSql) 
+		
+            glb_bodyContent = getDetailList(action, defaultListTemplate(glb_columnType, glb_columnName), "ArticleDetail", "栏目列表", "*", npagesize, cstr(npage), "where parentid in("& getColumnIdList(glb_columnId,"addthis") &") " & sortSql) 
         '留言类列表
         elseIf inStr("|留言|", "|" & glb_columnType & "|") > 0 then
             glb_bodyContent = getDetailList(action, defaultListTemplate(glb_columnType, glb_columnName), "GuestBook", "留言列表", "*", npagesize, cstr(npage), " where isthrough<>0 " & sortSql) 
@@ -833,13 +909,19 @@ function makeWebHtml(action)
         end if 
     '细节
     elseIf actionType = "detail" then
-        glb_locationType = "detail" 
-        rs.open "Select * from " & db_PREFIX & "articledetail where id=" & rParam(action, "id"), conn, 1, 1 
+        glb_locationType = "detail"
+		sql="Select * from " & db_PREFIX & "articledetail where id=" & rParam(action, "id")
+		'【@是jsp显示@】try{
+        rs.open sql, conn, 1, 1 
         if not rs.EOF then
-            glb_columnName = getColumnName(rs("parentid")) 
+			isOK=true
+			
+            glb_columnId = rs("parentid") 
+			
+			
             glb_detailTitle = rs("title") 
             glb_flags = rs("flags") 
-            glb_isonhtml = rs("isonhtml")                                                   '是否生成静态网页
+            glb_isonhtml =IIF(rs("isonhtml") = 0, false, true)   
             glb_id = rs("id")                                                               '文章ID
             if isMakeHtml = true then
                 glb_url = getHandleRsUrl(rs("fileName"), rs("customAUrl"), "/detail/detail" & rs("id")) 
@@ -857,33 +939,50 @@ function makeWebHtml(action)
                 cfg_webDescription = rs("webDescription")                                       '网站描述
             end if 
 
+
+            glb_articleAuthor = rs("author") 
+            glb_articleAdddatetime = rs("adddatetime")
+			parentid=rs("parentid")
+			relatedtags=rs("relatedtags")
+			
+            glb_aritcleSmallImage = rs("smallimage") 
+            glb_aritcleBigImage = rs("bigimage") 
+            glb_articlehits = rs("hits") 
+ 
+            glb_bodyContent = rs("bodycontent") 
+			 
+            if templateName = "" then
+                if trim(rs("templatePath")) <> "" then
+                    templateName = rs("templatePath") 
+                else
+                    templateName = getDateilTemplate(rs("parentid"), "Detail") 
+                end if 
+            end if  
+        end if : rs.close 
+		if isOK=true then
+			call handleColumnRoot(glb_columnId) 	'获得栏目主ID与主名称
+		
             '改进20160628
             sortFieldName = "id" 
             ascOrDesc = "asc" 
-            addSql = trim(getWebColumnSortSql(rs("parentid"))) 
+            addSql = trim(getWebColumnSortSql(parentid)) 
             if addSql <> "" then
                 sortFieldName = trim(replace(replace(replace(addSql, "order by", ""), " desc", ""), " asc", "")) 
                 if instr(addSql, " desc") > 0 then
                     ascOrDesc = "desc" 
                 end if 
-            end if 
-            glb_articleAuthor = rs("author") 
-            glb_articleAdddatetime = rs("adddatetime") 
-            glb_upArticle = upArticle(rs("parentid"), sortFieldName, rs(sortFieldName), ascOrDesc) 
-            glb_downArticle = downArticle(rs("parentid"), sortFieldName, rs(sortFieldName), ascOrDesc) 
-            glb_aritcleRelatedTags = aritcleRelatedTags(rs("relatedtags")) 
-            glb_aritcleSmallImage = rs("smallimage") 
-            glb_aritcleBigImage = rs("bigimage") 
-            glb_articlehits = rs("hits") 
-            conn.execute("update " & db_PREFIX & "articledetail set hits=hits+1 where id=" & rs("id")) '更新点击数
-            '文章内容
-            'glb_bodyContent = "<div class=""articleinfowrap"">[$articleinfowrap$]</div>" & rs("bodycontent") & "[$relatedtags$]<ul class=""updownarticlewrap"">[$updownArticle$]</ul>"
-            '上一篇文章，下一篇文章
-            'glb_bodyContent = Replace(glb_bodyContent, "[$updownArticle$]", upArticle(rs("parentid"), "sortrank", rs("sortrank")) & downArticle(rs("parentid"), "sortrank", rs("sortrank")))
-            'glb_bodyContent = Replace(glb_bodyContent, "[$articleinfowrap$]", "来源：" & rs("author") & " &nbsp; 发布时间：" & format_Time(rs("adddatetime"), 1))
-            'glb_bodyContent = Replace(glb_bodyContent, "[$relatedtags$]", aritcleRelatedTags(rs("relatedtags")))
-
-            glb_bodyContent = rs("bodycontent") 
+            end if
+			'获得排序对应字符的值
+			rs.open sql,conn,1,1
+			if not rs.eof then
+				sortFieldValue=rs(sortFieldName) 
+			end if:rs.close
+			
+            glb_columnName = getColumnName(parentid) 
+            glb_upArticle = upArticle(parentid, sortFieldName, sortFieldValue, ascOrDesc) 
+            glb_downArticle = downArticle(parentid, sortFieldName, sortFieldValue, ascOrDesc) 
+            glb_aritcleRelatedTags = aritcleRelatedTags(relatedtags)
+            conn.execute("update " & db_PREFIX & "articledetail set hits=hits+1 where id=" & glb_id) '更新点击数
 
             '文章详细加控制
             if request("gl") = "edit" then
@@ -891,23 +990,17 @@ function makeWebHtml(action)
             end if 
             url = WEB_ADMINURL & "?act=addEditHandle&actionType=ArticleDetail&lableTitle=分类信息&nPageSize=10&page=&parentid=&id=" & rParam(action, "id") & "&n=" & getRnd(11) 
             glb_bodyContent = handleDisplayOnlineEditDialog(url, glb_bodyContent, "", "span") 
-
-            if templateName = "" then
-                if trim(rs("templatePath")) <> "" then
-                    templateName = rs("templatePath") 
-                else
-                    templateName = getDateilTemplate(rs("parentid"), "Detail") 
-                end if 
-            end if 
-
-        end if : rs.close 
-
+			
+		end if
+		'【@是jsp显示@】}catch(Exception e){} 
+	
     '单页
     elseIf actionType = "onepage" then
+		'【@是jsp显示@】try{
         rs.open "Select * from " & db_PREFIX & "onepage where id=" & rParam(action, "id"), conn, 1, 1 
         if not rs.EOF then
             glb_detailTitle = rs("title") 
-            glb_isonhtml = rs("isonhtml")                                                   '是否生成静态网页
+            glb_isonhtml = IIF(rs("isonhtml") = 0, false, true)                   '是否生成静态网页
             if isMakeHtml = true then
                 glb_url = getHandleRsUrl(rs("fileName"), rs("customAUrl"), "/page/page" & rs("id")) 
             else
@@ -945,6 +1038,7 @@ function makeWebHtml(action)
             end if 
 
         end if : rs.close 
+		'【@是jsp显示@】}catch(Exception e){}
 
     '搜索
     elseIf actionType = "Search" then
@@ -982,17 +1076,20 @@ function makeWebHtml(action)
     code = getftext(templateName) 
 
     code = handleAction(code)                                                       '处理动作
-    code = thisPosition(code)                                                       '位置
+    'code = thisPosition(code)                                                       '位置
     code = replaceGlobleVariable(code)                                              '替换全局标签
     code = handleAction(code)                                                       '处理动作    '再来一次，处理数据内容里动作
 
     'call die(code)
     code = handleAction(code)                                                       '处理动作
     code = handleAction(code)                                                       '处理动作
-    code = thisPosition(code)                                                       '位置
+    'code = thisPosition(code)                                                       '位置
     code = replaceGlobleVariable(code)                                              '替换全局标签
     code = delTemplateMyNote(code)                                                  '删除无用内容
     code = handleAction(code)                                                       '处理动作
+
+
+
 
     '格式化HTML
     if inStr(cfg_flags, "|formattinghtml|") > 0 then
@@ -1014,10 +1111,12 @@ function makeWebHtml(action)
 
     '在线编辑20160127
     if rq("gl") = "edit" then
-        if inStr(code, "</head>") > 0 then
+        if inStr(code, "<head>") > 0 then
             if inStr(lcase(code), "jquery.min.js") = false then
-                code = replace(code, "</head>", "<script src=""/Jquery/jquery.Min.js""></script></head>") 
+                code = replace(code, "<head>", "<head><script src=""/Jquery/jquery.Min.js""></script>") 
             end if 
+		end if
+		if inStr(code, "</head>") > 0 then
             code = replace(code, "</head>", "<script src=""/Jquery/Callcontext_menu.js""></script></head>") 
         end if 
         if inStr(code, "<body>") > 0 then
@@ -1030,8 +1129,9 @@ end function
 
 '获得默认细节模板页
 function getDateilTemplate(parentid, templateType)
-    dim templateName 
+    dim templateName,tempS
     templateName = "Main_Model.html" 
+	'【@是jsp显示@】try{
     rsx.open "select * from " & db_PREFIX & "webcolumn where id=" & parentid, conn, 1, 1 
     if not rsx.EOF then
         'call echo("columntype",rsx("columntype"))
@@ -1059,16 +1159,26 @@ function getDateilTemplate(parentid, templateType)
         elseIf rsx("columntype") = "留言" then
             '视频细节页
             if checkFile(cfg_webTemplate & "/GuestBook_" & templateType & ".html") = true then
-                templateName = "Video_" & templateType & ".html" 
+                templateName = "GuestBook_" & templateType & ".html" 
             end if 
-        elseIf rsx("columntype") = "文本" then
+        
+		elseIf rsx("columntype") = "文本" then
             '视频细节页
             if checkFile(cfg_webTemplate & "/Page_" & templateType & ".html") = true then
                 templateName = "Page_" & templateType & ".html" 
             end if 
-        end if 
+        end if  
+		if rsx("columntype") <> "文本" and templateType="List" then
+			'模板不存在则使用默认文章列表 20160920
+			if checkFile(cfg_webTemplate & templateName) = false then
+				tempS="Article_" & templateType & ".html"
+				if checkFile(cfg_webTemplate & tempS) = true then
+					templateName =tempS
+				end if
+			end if
+		end if
     end if : rsx.close 
-    'call echo(templateType,templateName)
+	'【@是jsp显示@】}catch(Exception e){}
     getDateilTemplate = templateName 
 
 end function 
@@ -1092,11 +1202,12 @@ sub makeAllHtml(columnType, columnName, columnId)
     if columnId <> "" then
         addSql = getWhereAnd(addSql, "where id in(" & columnId & ")") 
     end if 
+	'【@是jsp显示@】try{
     rss.open "select * from " & db_PREFIX & "webcolumn " & addSql & " order by sortrank asc", conn, 1, 1 
     while not rss.EOF
         glb_columnName = "" 
         '开启生成html
-        if rss("isonhtml") = true then
+        if rss("isonhtml") <>0 then
             if inStr("|产品|新闻|视频|下载|案例|留言|反馈|招聘|订单|", "|" & rss("columntype") & "|") > 0 then
                 if rss("columntype") = "留言" then
                     nCountSize = getRecordCount(db_PREFIX & "guestbook", "")                        '记录数
@@ -1149,6 +1260,7 @@ sub makeAllHtml(columnType, columnName, columnId)
             conn.execute("update " & db_PREFIX & "WebColumn set ishtml=true where id=" & rss("id")) '更新导航为生成状态
         end if 
     rss.moveNext : wend : rss.close 
+	'【@是jsp显示@】}catch(Exception e){} 
 
     '单独处理指定栏目对应文章
     if columnId <> "" then
@@ -1160,6 +1272,7 @@ sub makeAllHtml(columnType, columnName, columnId)
     if articleSql <> "" then
         '文章
         call echo("文章", "") 
+		'【@是jsp显示@】try{
         rss.open articleSql, conn, 1, 1 
         while not rss.EOF
             glb_columnName = "" 
@@ -1173,18 +1286,20 @@ sub makeAllHtml(columnType, columnName, columnId)
             s = "<a href=""" & glb_filePath & """ target='_blank'>" & glb_filePath & "</a>(" & rss("isonhtml") & ")" 
             call echo(action, s) 
             '文件不为空  并且开启生成html
-            if glb_filePath <> "" and rss("isonhtml") = true then
+            if glb_filePath <> "" and rss("isonhtml") <>0 then
                 call createDirFolder(getFileAttr(glb_filePath, "1")) 
                 call createFileGBK(glb_filePath, code) 
                 conn.execute("update " & db_PREFIX & "ArticleDetail set ishtml=true where id=" & rss("id")) '更新文章为生成状态
             end if 
             templateName = ""                                                               '清空模板文件名称
         rss.moveNext : wend : rss.close 
+		'【@是jsp显示@】}catch(Exception e){} 
     end if 
 
     if addSql = "" then
         '单页
         call echo("单页", "") 
+		'【@是jsp显示@】try{
         rss.open "select * from " & db_PREFIX & "onepage order by sortrank asc", conn, 1, 1 
         while not rss.EOF
             glb_columnName = "" 
@@ -1198,13 +1313,14 @@ sub makeAllHtml(columnType, columnName, columnId)
             s = "<a href=""" & glb_filePath & """ target='_blank'>" & glb_filePath & "</a>(" & rss("isonhtml") & ")" 
             call echo(action, s) 
             '文件不为空  并且开启生成html
-            if glb_filePath <> "" and rss("isonhtml") = true then
+            if glb_filePath <> "" and rss("isonhtml") <>0 then
                 call createDirFolder(getFileAttr(glb_filePath, "1")) 
                 call createFileGBK(glb_filePath, code) 
                 conn.execute("update " & db_PREFIX & "onepage set ishtml=true where id=" & rss("id")) '更新单页为生成状态
             end if 
             templateName = ""                                                               '清空模板文件名称
         rss.moveNext : wend : rss.close 
+		'【@是jsp显示@】}catch(Exception e){} 
 
     end if 
 end sub 
@@ -1212,9 +1328,12 @@ end sub
 '复制html到网站
 sub copyHtmlToWeb()
     dim webDir, toWebDir, toFilePath, filePath, fileName, fileList, splStr, content, s, s1, c, webImages, webCss, webJs, splJs 
-    dim webFolderName, jsFileList, setFileCode, nErrLevel, jsFilePath, url 
+    dim webFolderName, jsFileList, setFileCode, nErrLevel, jsFilePath, url,isSetFileNameType,isPinYin
 
     setFileCode = request("setcode")                                                '设置文件保存编码
+	
+	isSetFileNameType=request("isSetFileNameType")									'生成后的文件名称 是否把-转_
+	isPinYin=request("isPinYin")													'文件名转拼音
 
     call handlePower("复制生成HTML页面")                                            '管理权限处理
     call writeSystemLog("", "复制生成HTML页面")                                     '系统日志
@@ -1260,7 +1379,7 @@ sub copyHtmlToWeb()
     for each filePath in splStr
         if filePath <> "" then
             content = getftext(filePath) 
-            content = replace(content, cfg_webImages, "../images/") 
+            content = replace(content, cfg_webImages, "../Images") 
 
             content = deleteCssNote(content) 
             content = phptrim(content) 
@@ -1274,6 +1393,7 @@ sub copyHtmlToWeb()
     next 
     '复制栏目HTML
     isMakeHtml = true 
+	'【@是jsp显示@】try{
     rss.open "select * from " & db_PREFIX & "webcolumn where isonhtml=true", conn, 1, 1 
     while not rss.EOF
         glb_filePath = replace(getColumnUrl(rss("columnname"), "name"), cfg_webSiteUrl, "") 
@@ -1288,6 +1408,12 @@ sub copyHtmlToWeb()
                 fileList = glb_filePath & vbCrLf & fileList 
             end if 
             fileName = replace(glb_filePath, "/", "_") 
+			if isSetFileNameType="1" then
+            	fileName = replace(fileName, "-", "_") 
+			end if
+			if isPinYin="1" then
+				fileName=pinYin2(fileName)
+			end if
             toFilePath = webDir & fileName 
             call copyfile(glb_filePath, toFilePath) 
             call echo("导航", glb_filePath) 
@@ -1308,6 +1434,12 @@ sub copyHtmlToWeb()
                 fileList = glb_filePath & vbCrLf & fileList 
             end if 
             fileName = replace(glb_filePath, "/", "_") 
+			if isSetFileNameType="1" then
+            	fileName = replace(fileName, "-", "_") 
+			end if
+			if isPinYin="1" then
+				fileName=pinYin2(fileName)
+			end if
             toFilePath = webDir & fileName 
             call copyfile(glb_filePath, toFilePath) 
             call echo("文章" & rss("title"), glb_filePath) 
@@ -1328,11 +1460,20 @@ sub copyHtmlToWeb()
                 fileList = glb_filePath & vbCrLf & fileList 
             end if 
             fileName = replace(glb_filePath, "/", "_") 
+			if isSetFileNameType="1" then
+            	fileName = replace(fileName, "-", "_") 
+			end if
+			if isPinYin="1" then
+				fileName=pinYin2(fileName)
+			end if
             toFilePath = webDir & fileName 
             call copyfile(glb_filePath, toFilePath) 
             call echo("单页" & rss("title"), glb_filePath) 
         end if 
     rss.moveNext : wend : rss.close 
+	'【@是jsp显示@】}catch(Exception e){}
+	
+	 
     '批量处理html文件列表
     'call echo(cfg_webSiteUrl,cfg_webTemplate)
     'call rwend(fileList)
@@ -1340,7 +1481,14 @@ sub copyHtmlToWeb()
     splStr = split(fileList, vbCrLf) 
     for each filePath in splStr
         if filePath <> "" then
-            filePath = webDir & replace(filePath, "/", "_") 
+            filePath =  replace(filePath, "/", "_") 
+			if isSetFileNameType="1" then
+				filePath = replace(filePath, "-", "_") 
+			end if
+			if isPinYin="1" then
+				filePath=pinYin2(filePath)			'注意
+			end if
+            filePath = webDir & filePath
             call echo("filePath", filePath) 
             content = getftext(filePath) 
             for each s in splStr
@@ -1349,22 +1497,34 @@ sub copyHtmlToWeb()
                     s1 = left(s1, len(s1) - 11) & "/" 
                 end if 
                 sourceUrl = cfg_webSiteUrl & s1 
-                replaceUrl = cfg_webSiteUrl & replace(s, "/", "_") 
+				s=replace(s, "/", "_") 
+				if isSetFileNameType="1" then
+					s = replace(s, "-", "_") 
+				end if
+				if isPinYin="1" then
+					s=pinYin2(s)
+				end if
+                replaceUrl = cfg_webSiteUrl & s
+				
                 'Call echo(sourceUrl, replaceUrl)                             '屏蔽  否则大量显示20160613
                 content = replace(content, sourceUrl, replaceUrl) 
             next 
             content = replace(content, cfg_webSiteUrl, "")                                  '删除网址
             content = replace(content, cfg_webTemplate & "/", "")                           '删除模板路径 记
-
+			
+            content = replace(replace(content, "\Inc/YZM_7.asp", "Images/YZM_7.jpg"), "/Inc/YZM_7.asp", "Images/YZM_7.jpg")  '替换验证码20160916
+			content = replace(content, "/inc/yzm_7.asp", "Images/YZM_7.jpg")
+			
+			
             'content=nullLinkAddDefaultName(content)
             for each s in splJs
                 if s <> "" then
                     fileName = getFileName(s) 
-                    content = replace(content, "Images/" & fileName, "js/" & fileName) 
+                    content = replace(content, "Images/" & fileName, "Js/" & fileName) 
                 end if 
             next 
             if inStr(content, "/Jquery/Jquery.Min.js") > 0 then
-                content = replace(content, "/Jquery/Jquery.Min.js", "js/Jquery.Min.js") 
+                content = replace(content, "/Jquery/Jquery.Min.js", "Js/Jquery.Min.js") 
                 call copyfile("/Jquery/Jquery.Min.js", webJs & "/Jquery.Min.js") 
             end if 
             content = replace(content, "<a href="""" ", "<a href=""index.html"" ")    '让首页加index.html
@@ -1382,7 +1542,7 @@ sub copyHtmlToWeb()
     for each htmlFilePath in splHtmlFile
         content = getftext(htmlFilePath) 
         for each jsFileName in splJsFile
-            content = regExp_Replace(content, "Images/" & jsFileName, "js/" & jsFileName) 
+            content = regExp_Replace(content, "Images/" & jsFileName, "Js/" & jsFileName) 
         next 
 
         nErrLevel = 0 
@@ -1420,6 +1580,7 @@ sub copyHtmlToWeb()
     '浏览地址
     url = "http://10.10.10.57/" & toWebDir 
     call echo("浏览", "<a href='" & url & "' target='_blank'>" & url & "</a>") 
+    call echo("浏览", "<a href='" & toWebDir & "' target='_blank'>" & toWebDir & "</a>") 
 end sub 
 '使htmlWeb文件夹用php压缩
 function makeHtmlWebToZip(webDir)
@@ -1501,6 +1662,7 @@ sub saveSiteMap()
     c = c & vbTab & "<urlset xmlns=""http://www.sitemaps.org/schemas/sitemap/0.9"">" & vbCrLf 
     dim rsx : set rsx = createObject("Adodb.RecordSet")
         '栏目
+		'【@是jsp显示@】try{
         rsx.open "select * from " & db_PREFIX & "webcolumn where isonhtml<>0 order by sortrank asc", conn, 1, 1 
         while not rsx.EOF
             if rsx("nofollow") = 0 then
@@ -1522,9 +1684,11 @@ sub saveSiteMap()
                 call echo("栏目", "<a href=""" & url & """ target='_blank'>" & url & "</a>") 
             end if 
         rsx.moveNext : wend : rsx.close 
+		'【@是jsp显示@】}catch(Exception e){} 
 
         '文章
 		sql="select * from " & db_PREFIX & "articledetail  where isonhtml<>0 order by sortrank asc"
+		'【@是jsp显示@】try{
         rsx.open sql, conn, 1, 1 
         while not rsx.EOF
             if rsx("nofollow") = 0 then
@@ -1546,8 +1710,10 @@ sub saveSiteMap()
                 call echo("文章", "<a href=""" & url & """>" & url & "</a>") 
             end if 
         rsx.moveNext : wend : rsx.close 
+		'【@是jsp显示@】}catch(Exception e){} 
 
         '单页
+		'【@是jsp显示@】try{
         rsx.open "select * from " & db_PREFIX & "onepage where isonhtml<>0 order by sortrank asc", conn, 1, 1 
         while not rsx.EOF
             if rsx("nofollow") = 0 then
@@ -1569,6 +1735,7 @@ sub saveSiteMap()
                 call echo("单页", "<a href=""" & url & """>" & url & "</a>") 
             end if 
         rsx.moveNext : wend : rsx.close 
+		'【@是jsp显示@】}catch(Exception e){} 
         c = c & vbTab & "</urlset>" & vbCrLf 
         call loadWebConfig() 
         call createFile("sitemap.xml", c) 
@@ -1580,6 +1747,7 @@ sub saveSiteMap()
             c = "" 
             '第二种
             '栏目
+			'【@是jsp显示@】try{
             rsx.open "select * from " & db_PREFIX & "webcolumn order by sortrank asc", conn, 1, 1 
             while not rsx.EOF
                 if rsx("nofollow") = 0 then
@@ -1592,7 +1760,7 @@ sub saveSiteMap()
                     url = urlAddHttpUrl(cfg_webSiteUrl, url) 
 
                     '判断是否生成html
-                    if rsx("isonhtml") = true then
+                    if rsx("isonhtml") <>0 then
                         s = "<a href=""" & url & """>" & rsx("columnname") & "</a>" 
                     else
                         s = "<span>" & rsx("columnname") & "</span>" 
@@ -1612,7 +1780,7 @@ sub saveSiteMap()
                             end if 
                             url = urlAddHttpUrl(cfg_webSiteUrl, url) 
                             '判断是否生成html
-                            if rss("isonhtml") = true then
+                            if rss("isonhtml") <>0 then
                                 s = "<a href=""" & url & """>" & rss("title") & "</a>" 
                             else
                                 s = "<span>" & rss("title") & "</span>" 
@@ -1625,9 +1793,11 @@ sub saveSiteMap()
 
                 end if 
             rsx.moveNext : wend : rsx.close 
+			'【@是jsp显示@】}catch(Exception e){} 
 
             '单面
             c = c & "<li style=""width:20%;""><a href=""javascript:;"">单面列表</a>" & vbCrLf & "<ul>" & vbCrLf 
+			'【@是jsp显示@】try{
             rsx.open "select * from " & db_PREFIX & "onepage order by sortrank asc", conn, 1, 1 
             while not rsx.EOF
                 if rsx("nofollow") = 0 then
@@ -1639,7 +1809,7 @@ sub saveSiteMap()
                         url = "?act=onepage&id=" & rsx("id") 
                     end if 
                     '判断是否生成html
-                    if rsx("isonhtml") = true then
+                    if rsx("isonhtml") <>0 then
                         s = "<a href=""" & url & """>" & rsx("title") & "</a>" 
                     else
                         s = "<span>" & rsx("title") & "</span>" 
@@ -1648,6 +1818,8 @@ sub saveSiteMap()
                     c = c & "<li style=""width:20%;"">" & s & "</li>" & vbCrLf                'target=""_blank""  去掉
                 end if 
             rsx.moveNext : wend : rsx.close 
+			'【@是jsp显示@】}catch(Exception e){} 
+
             c = c & "</ul>" & vbCrLf & "</li>" & vbCrLf 
 
             dim templateContent 

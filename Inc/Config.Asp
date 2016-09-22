@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -59,7 +59,8 @@
 <!--#Include file = "2016_WebControl.Asp"-->   
 <!--#Include file = "2015_NewWebFunction.Asp"--> 
 <!--#Include file = "2016_SaveData.Asp"-->   
-<!--#Include file = "2015_ToMyPHP.Asp"-->   
+<!--#Include file = "2015_ToMyPHP.Asp"-->    
+<!--#Include file = "Member.Asp"-->    
  
 <% 
 
@@ -93,12 +94,16 @@ if checkFile(webDir & MDBPath) = false then
 end if
 dim isOnCacheHtml : isOnCacheHtml = false                                       '是否开启缓冲html
 
+dim readBlockList						'读块列表
 dim databaseType : databaseType = ""                                      '数据库类型，Access与SqlServer之分
 dim sqlServerHostIP : sqlServerHostIP = "localhost"                          'SQL主机IP地址（服务器名）在2008版本使用
 dim sqlServerUsername : sqlServerUsername = "sa"                                'SQL数据库用户名
 dim sqlServerPassword : sqlServerPassword = ""                                'SQL数据库用户密码
 dim sqlServerDatabaseName : sqlServerDatabaseName = "webdata"                   'SQL数据库名
-dim db_PREFIX : db_PREFIX = "x2asdy_"                                               '表前缀
+dim db_PREFIX : db_PREFIX = "xy_"                                               '表前缀
+
+dim incDir:incDir="/inc/"								'inc文件夹目录
+dim isMemberVerification:isMemberVerification=true						'为会员张验证
 '=========
 
 
@@ -133,7 +138,9 @@ dim moduleReplaceArray : moduleReplaceArray = array("", "")                     
 dim code, pubCode                                                               'html代码
 dim templateName                                                                '模板名称
 dim cfg_webSiteUrl, cfg_webTemplate, cfg_webImages, cfg_webCss, cfg_webJs, cfg_webTitle, cfg_webKeywords, cfg_webDescription, cfg_webSiteBottom, cfg_flags 
-dim glb_columnName, glb_columnId, glb_id, glb_columnType, glb_columnENType, glb_table, glb_detailTitle, glb_flags 
+dim glb_columnName,glb_columnEnName , glb_columnId, glb_id, glb_columnType, glb_columnENType, glb_table, glb_detailTitle, glb_flags 
+dim gbl_PageInfo					'页信息
+dim glb_columnRootId,glb_columnRootName,glb_columnRootEnName						'栏目主id
 'dim webTemplate                                                                 '网站模板路径
 dim glb_url, glb_filePath                                                       '当前链接网址,和文件路径
 dim glb_isonhtml                                                                '是否生成静态网页
@@ -205,7 +212,7 @@ function handleDisplayLanguage(c, sType)
     elseif sType = "loginok" then
         c = batchReplaceL(c, "后台地图|*|清除缓冲|*|超级管理员|*|当前位置|*|管理员信息|*|修改密码|*|最新访客信息|*|开发团队|*|版权所有|*|开发与支持团队") 
         c = batchReplaceL(c, "进入在线修改模式|*|系统信息|*|免费开源版|*|授权信息|*|服务器名称|*|服务器版本|*|交流群|*|相关链接|*|登录后台") 
-        c = batchReplaceL(c, "用户名|*|表前缀|*|帮助|*|退出|*|您好|*|首页|*|权限|*|端口|*|邮箱|*|官网|*|版|*|红尘云孙") 
+        c = batchReplaceL(c, "用户名|*|表前缀|*|帮助|*|退出|*|您好|*|首页|*|权限|*|端口|*|邮箱|*|官网|*|版|*|云孙World") 
         c = batchReplaceL(c, "系统管理|*|我的面板|*|栏目|*|模板|*|会员|*|生成|*|更多设置") 
 
         c = batchReplaceL(c, "站点配置|*|网站统计|*|生成|*|后台操作日志|*|后台管理员|*|网站栏目|*|分类信息|*|评论|*|搜索统计|*|单页|*|友情链接|*|招聘管理") 
@@ -385,7 +392,7 @@ function languageEN(str)
         c = "official website" 
     elseif str = "邮箱" then
         c = "Emai" 
-    elseif str = "红尘云孙" then
+    elseif str = "云孙World" then
         c = "Cloud" 
 
     elseif str = "版" then
@@ -397,6 +404,31 @@ function languageEN(str)
     languageEN = c 
 end function 
 %> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

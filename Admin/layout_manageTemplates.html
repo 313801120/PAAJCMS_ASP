@@ -4,10 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
 <title>{$Web_Title$} - :::企业后台管理系统,QQ:313801120:::</title>
-<link href="css/style.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="../Jquery/Jquery.Min.js"></script>
+<link href="Css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../Jquery/jquery.Min.js"></script>
 <script type="text/javascript" src="../Jquery/lhgdialog.min.js"></script>
-<script type="text/javascript" src="js/runAction.js"></script> 
+<script type="text/javascript" src="Js/runAction.js"></script> 
 </head>
 <body>
 <div id="positionwrap">
@@ -26,7 +26,7 @@
 		<table width="100%" border="0" cellpadding="2" cellspacing="1" bgcolor="#CFCFCF" align="center" style="margin-top:8px">
 		<tbody>
 		<tr bgcolor="#E7E7E7">
-			<td height="28" colspan="3" background="images/tbg.gif" style="padding-left:10px;"></tr>
+			<td height="28" colspan="3" background="Images/tbg.gif" style="padding-left:10px;"></tr>
 		<tr align="center" bgcolor="#FBFCE2" height="25">
 			<td>模板名称</td>
 			<td>模板路径</td>
@@ -35,20 +35,20 @@
         [list]
 		<tr align="center" height="26" bgcolor="#FFFFFF" onMouseMove="javascript:this.bgColor='#FCFDEE';" onMouseOut="javascript:this.bgColor='#FFFFFF';">
 		  <td>[$templatename$] </td>
-		  <td><a href="template.{$EDITORTYPE$}?act=templateFileList&dir=[$templatepath$]">[$templatepath2$]</a></td>
+		  <td><a href="{$incDir$}admin_template.{$EDITORTYPE$}?act=templateFileList&dir=[$templatepath$]">[$templatepath2$]</a></td>
 		  <td>
           <!--启用 start-->
           <a href="?act=isOpenTemplate&templatepath=[$templatepath$]&templatename=[$templatename$]" onClick="return new xyClass().myConfirm('你确定要使用当前模板？')">启用</a> 
           <!--启用 end-->
           
-          <a href="{$WEB_VIEWURL$}?templatedir=[$templatepath$]" target="_blank"><img src="images/icon/part-list.gif" title="预览" alt="预览" style="cursor:pointer" border="0" width="16" height="16"></a>
+          <a href="{$WEB_VIEWURL$}?templatedir=[$templatepath$]" target="_blank"><img src="Images/icon/part-list.gif" title="预览" alt="预览" style="cursor:pointer" border="0" width="16" height="16"></a>
           
           <!--恢复数据 start-->
           <a href="?act=setAccess&webdataDir=[$templatepath$]/WebData"  onClick="return new xyClass().myConfirm('你确定要恢复默认数据吗？\n操作后将不可恢复')">恢复数据</a>
           <!--恢复数据 end-->
           
           <!--删除模板 start-->
-          <a href="javascript:clickControl('?act=function&stype=delTemplate&templateDir=[$templatepath2$]','[$actionType$]','[$lableTitle$]','[$page$]','[$id$]')" onClick="return new xyClass().myConfirm('你确定要删除模板吗？\n操作后将不可恢复')"><img src="images/icon/gtk-del.png" title="删除" /></a>   
+          <a href="javascript:clickControl('?act=function&stype=delTemplate&templateDir=[$templatepath2$]','[$actionType$]','[$lableTitle$]','[$page$]','[$id$]')" onClick="return new xyClass().myConfirm('你确定要删除模板吗？\n操作后将不可恢复')"><img src="Images/icon/gtk-del.png" title="删除" /></a>   
           <!--删除模板 end-->
            
           </td>

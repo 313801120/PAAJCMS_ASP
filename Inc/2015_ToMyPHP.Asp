@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -120,16 +120,17 @@ End Function
 
 '显示文章列表
 Function XY_AP_ArticleList(action)
-    Dim sql, addSql, columnName, columnId, topNumb, idRand, splStr, s, columnIdList 
+    Dim sql, addSql, columnName, columnId, nTopNumb, idRand, splStr, s, columnIdList 
     action = replaceGlobleVariable(action)                                          '处理下替换标签
     sql = RParam(action, "sql") 
-    topNumb = RParam(action, "topNumb") 
+    s = RParam(action, "topNumb")
+	nTopNumb=IIF(s="",0,cInt(s))
 
 
     'id随机
     idRand = LCase(RParam(action, "rand")) 
     If idRand = "true" Or idRand = "1" Then
-        sql = sql & " where id in(" & getRandArticleId("", topNumb) & ")" 
+        sql = sql & " where id in(" & getRandArticleId("", nTopNumb) & ")" 
     End If 
 
     '栏目名称 对栏目数组处理如 模板分享下载[Array]CSS3[Array]HTML5
@@ -200,7 +201,7 @@ function XY_GetColumnId(action)
 end function
 '通用信息列表
 Function XY_AP_GeneralList(action, byval tableName, addSql)
-    Dim title, topNumb, nTop, isB, sql 
+    Dim title, topNumb, nTop, isB, sql ,tempS
     Dim columnName, columnEnName, aboutcontent, bodyContent, showTitle 
     Dim bannerImage, smallImage, bigImage, id 
     Dim defaultStr, i, j, s, c, startStr, endStr, url 
@@ -218,7 +219,9 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
     Dim atitleStr                                                                   'A链接的title20160407
     Dim anofollowStr                                                                'A链接的nofollow
     Dim splFieldName, fieldName, replaceStr, nI2,idPage 
+	dim member_followIdList,nRecordCount
 	
+    member_followIdList = RParam(action, "member_followIdList")  				'会员关注id列表
 	
 	tableName=lcase(tableName)		'转小写
     fieldNameList = getHandleFieldList(db_PREFIX & tableName, "字段列表") 
@@ -235,28 +238,36 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
             topNumb = " top " & topNumb & " " 
         End If 
         sql = "Select " & topNumb & "* From " & db_PREFIX & tableName 
-    End If 
+    End If
     '追加sql
     If addSql <> "" Then
         sql = getWhereAnd(sql, addSql) 
     End If 
+	if member_followIdList="1" or member_followIdList="true" then
+		tempS="-1," & getsession("member_followIdList")
+		sql = getWhereAnd(sql, " id in("& tempS &")") 
+	end if
     sql = replaceGlobleVariable(sql)                                                '替换全局变量
-
+     
     '检测SQL
     If checksql(sql) = False Then
         Call errorLog("出错提示：<br>action=" & action & "<hr>sql=" & sql & "<br>") 
         Exit Function 
     End If 
+	'【@是jsp显示@】try{
     rs.Open sql, conn, 1, 1 
-	'call echo(nTop,rs.RecordCount)
-    For i = 1 To rs.RecordCount
+	'【PHP】删除rs
+	nRecordCount=rs.recordCount
+	'【@是jsp显示@】rs = Conn.executeQuery(handleSqlTop(sql));
+    For i = 1 To nRecordCount
 		startStr = "" : endStr = ""
         'call echo(sql,i & "," & nTop)
         If i > nTop Then
             Exit For 
         End If 
-        '#【PHP】$rs=mysql_fetch_array($rsObj);                                            //给PHP用，因为在 asptophp转换不完善
+        '【PHP】$rs=mysql_fetch_array($rsObj);                                      //开启，因为要配合jsp里，把recrodcount单独拿出来，所以
 		 '【@是.netc显示@】rs.Read();
+		 '【@是jsp显示@】rs.next();
         isFocus = False                                                                 '交点为假
         id = rs("id") 
         '【导航】
@@ -274,7 +285,7 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
             If glb_columnName = "" And rs("columnType") = "首页" Then
                 glb_columnName = rs("columnName") 
             End If 
-            If rs("columnName") = glb_columnName Then
+            If rs("id") = glb_columnId or rs("id")=glb_columnRootId Then
                 isFocus = True 
             End If 
         '【文章】
@@ -299,6 +310,11 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
             If rs("titlecolor") <> "" Then
                 abcolorStr = "color:" & rs("titlecolor") & ";" 
             End If 
+		elseif inStr(fieldNameList, ",fontcolor,") > 0 then
+			'A链接颜色
+			if rs("fontcolor") <> "" then
+				abcolorStr = "color:" & rs("fontcolor") & ";" 
+			end if 
         End If 
         If InStr(fieldNameList, ",flags,") > 0 Then
             'A链接加粗
@@ -322,7 +338,7 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
 
         'A的nofollow
         If InStr(fieldNameList, ",nofollow,") > 0 Then
-            anofollowStr = IIF(rs("nofollow") <> 0, " rel=""nofollow""", "") 
+            anofollowStr = IIF(cint(rs("nofollow")) <> 0, " rel=""nofollow""", "") 
         End If 
 
         '交点判断(给栏目导航用的)
@@ -382,17 +398,48 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
 
 
             '开始位置加Dialog内容
-            startStr = "[list-" & i & " startdialog]" : endStr = "[/list-" & i & " startdialog]" 
+            startStr = "[list-" & i & " startdialog]" : endStr = "[/list-" & i & " startdialog]"
+			if i=nRecordCount then			
+            	startStr = "[list startdialog]" : endStr = "[/list startdialog]"
+			end if
             If InStr(defaultStr, startStr) > 0 And InStr(defaultStr, endStr) > 0 Then
                 s = strCut(defaultStr, startStr, endStr, 2) & s 
+			else 
+					 
+				For nModI = 6 To 2 Step - 1
+					If InStr(defaultStr, startStr) = False And (i-1) Mod nModI = 0 Then
+						startStr = "[list-mod" & nModI & " startdialog]" : endStr = "[/list-mod" & nModI & " startdialog]" 
+						If InStr(defaultStr, startStr) > 0 Then
+							s = strCut(defaultStr, startStr, endStr, 2) & s 
+							Exit For 
+						End If 
+					End If 
+				Next 
+				 
             End If 
             '结束位置加Dialog内容
             startStr = "[list-" & i & " enddialog]" : endStr = "[/list-" & i & " enddialog]" 
+			if i=nRecordCount then			
+            	startStr = "[list enddialog]" : endStr = "[/list enddialog]"
+			end if
             If InStr(defaultStr, startStr) > 0 And InStr(defaultStr, endStr) > 0 Then
                 s = s & strCut(defaultStr, startStr, endStr, 2) 
+                's = strCut(defaultStr, startStr, endStr, 2) & s 
+			else
+				For nModI = 6 To 2 Step - 1
+					If InStr(defaultStr, startStr) = False And i Mod nModI = 0 Then
+						startStr = "[list-mod" & nModI & " enddialog]" : endStr = "[/list-mod" & nModI & " enddialog]" 
+						If InStr(defaultStr, startStr) > 0 Then
+							s = s & strCut(defaultStr, startStr, endStr, 2) 
+							Exit For 
+						End If 
+					End If 
+				Next 
             End If 
 
             '加控制
+			'jsp里没有控制，因为jsp里不支持同时操作数据库
+			if EDITORTYPE<>"jsp" then
             '【导航】
             If tableName = "webcolumn" Then
                 url = WEB_ADMINURL & "?act=addEditHandle&actionType=WebColumn&lableTitle=网站栏目&nPageSize=10&page=&id=" & rs("id") & "&n=" & getRnd(11) 
@@ -412,9 +459,11 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
                 s = replaceValueParam(s, "columnname", getColumnName(rs("parentid")))           '文章对应栏目名称 20160304 
             End If  
             s = handleDisplayOnlineEditDialog(url, s, "", "div|li|span")                    '处理是否添加在线修改管理器
+			end if
             c = c & s 
         End If 
     rs.MoveNext : Next : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){} 
 
     '开始内容加Dialog内容
     startStr = "[dialog start]" : endStr = "[/dialog start]" 
@@ -459,6 +508,7 @@ Function XY_handleGetTableBody(action, tableName, fieldParamName, defaultFileNam
 
     content = getDefaultValue(action)   :defaultStr=content                                            '获得默认内容
     sql = "select * from " & db_PREFIX & tableName & addSql 
+	'【@是jsp显示@】try{
     rs.Open sql, conn, 1, 1 
     If not rs.EOF Then 
         id = rs("id") 
@@ -473,6 +523,7 @@ Function XY_handleGetTableBody(action, tableName, fieldParamName, defaultFileNam
             conn.Execute("insert into " & db_PREFIX & tableName & " (" & fieldParamName & "," & fieldName & intoFieldStr & ") values('" & fieldParamValue & "','" & ADSql(content) & "'"& valuesStr &")") 
         End If 
     End If : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){} 
 
     '删除Html
     delHtmlYes = RParam(action, "delHtml")                                          '是否删除Html
@@ -580,10 +631,12 @@ End Function
 '获得单个字段内容
 Function XY_AP_GetFieldValue(action, sql, fieldName)
     Dim title, content 
+	'【@是jsp显示@】try{
     rs.Open sql, conn, 1, 1 
     If Not rs.EOF Then
         content = rs(fieldName) 
     End If : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){} 
     XY_AP_GetFieldValue = content 
 End Function 
 
@@ -639,6 +692,7 @@ Function XY_Layout(action)
     Dim layoutName, s, c, sourceStr, replaceStr, splSource, splReplace, i 
 
     layoutName = RParam(action, "layoutname") 
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "weblayout where layoutname='" & layoutName & "'", conn, 1, 1 
     If Not rs.EOF Then
         c = rs("bodycontent") 
@@ -659,6 +713,7 @@ Function XY_Layout(action)
         Next 
     'call rwend(c)
     End If : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){} 
     XY_Layout = c 
 End Function 
 
@@ -666,6 +721,7 @@ End Function
 Function XY_Module(action)
     Dim moduleName, s, c, sourceStr, replaceStr, splSource, splReplace, i 
     moduleName = RParam(action, "modulename") 
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "webmodule where modulename='" & moduleName & "'", conn, 1, 1 
     If Not rs.EOF Then
         c = rs("bodycontent") 
@@ -687,6 +743,7 @@ Function XY_Module(action)
         Next 
     'call rwend(c)
     End If : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){} 
     XY_Module = c 
 End Function 
 
@@ -797,21 +854,40 @@ end function
 
 '文章位置显示信息{}为有动作的
 function XY_detailPosition(action)
-    Dim c,stype
+    Dim c,stype,splitS,id,i,parentid,cList
 	stype = rParam(action, "stype") 
 	stype="|"& stype &"|"
+	splitS=rParam(action, "splitS")
+	if splitS="" then
+		splitS=" >> "
+	end if
+	
+	
     c = "<a href="""& getColumnUrl("首页","type") &""">首页</a>" 
 	'call echo("type",getColumnUrl("首页","type"))
     If glb_columnName <> "" Then
-        c = c & " >> <a href=""" & getColumnUrl(glb_columnName, "name") & """>" & glb_columnName & "</a>" 
+		'call eerr(glb_columnId,glb_columnName)
+		id=glb_columnId
+		for i =1 to 9
+			rsTemp.open"select * from " & db_PREFIX & "WebColumn where id="& id &"",conn,1,1
+			if not rsTemp.eof then
+				id=rsTemp("parentid")
+				parentid=cstr(rsTemp("parentid"))
+				cList = splitS & "<a href=""" & getColumnUrl(rsTemp("columnname"), "name") & """>" & rsTemp("columnname") & "</a>" & cList
+			end if:rsTemp.close
+			if parentid="-1" then
+				exit for
+			end if
+		next
+		c=c & cList
     End If 
     '20160330
     If glb_locationType = "detail" Then
 		if instr(stype,"|显示文章标题|")>0 then
-			c = c & " >> " & glb_detailTitle 
+			c = c & splitS & glb_detailTitle 
 		elseif instr(stype,"|隐藏文章标题|")>0 then
 		else
-	        c = c & " >> 查看内容"  
+	        c = c & splitS & "查看内容"  
 		end if
     End If
     '尾部追加内容
@@ -820,6 +896,5 @@ function XY_detailPosition(action)
 end function
 
 %>           
-
 
 

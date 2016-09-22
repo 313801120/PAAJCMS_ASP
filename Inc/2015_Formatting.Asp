@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -228,7 +228,7 @@ function formatting(content, action)
                 '不为压缩HTML
                 if inStr(action, "|ziphtml|") = false and isPre = false then
                     if isA = false then
-                        if inStr("|a|strong|u|i|s|script|", "|" & labelName & "|") = false and "/" & labelName <> sNextLableName and inStr("|/a|/strong|/u|/i|/s|/script|", "|" & sNextLableName & "|") = false then
+                        if inStr("|a|strong|u|i|s|script|", "|" & labelName & "|") = false and sNextLableName<>"/" & labelName and inStr("|/a|/strong|/u|/i|/s|/script|", "|" & sNextLableName & "|") = false then
                             endLabelStr = endLabelStr & chr(10) 
                         end if 
                     end if 
@@ -244,7 +244,7 @@ function formatting(content, action)
                     '处理这个            aaaaa</span>
                     if isA = false and isYes = false and left(labelName, 1) = "/" and labelName <> "/script" and labelName <> "/a" then
                         '排除这种    <span>天天发团</span>     并且判断上一个字段不等于vbcrlf换行
-                        if "/" & parentLableName <> labelName and right(trim(c), 1) <> chr(10) then
+                        if labelName  <> "/" & parentLableName and right(trim(c), 1) <> chr(10) then
                             s = chr(10) & s 
                         end if 
                     end if 
@@ -326,5 +326,4 @@ end function
 
 
 %>     
-
 

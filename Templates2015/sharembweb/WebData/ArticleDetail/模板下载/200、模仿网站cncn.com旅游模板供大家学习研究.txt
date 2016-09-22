@@ -3,7 +3,7 @@
 【webtitle】模仿网站cncn.com旅游模板供大家学习研究 - 分享模板网站
 【webkeywords】模仿网站cncn.com旅游模板供大家学习研究 - 分享模板网站
 【webdescription】模仿网站cncn.com旅游模板供大家学习研究,分析研究学习别人优化的网站，好让自己能做出一个能优化非常好的网站 - 分享模板网站
-【sortrank】52
+【sortrank】200
 【author】sharembweb
 【adddatetime】2016-03-01 01:10:01
 【filename】/mobandown/copy-cncn.html
@@ -29,7 +29,7 @@
 
 <br>
 <p>本文版权归作者所有，转摘请注明作者和出处！<br />
-作者：红尘云孙<br />
+作者：云孙World<br />
 首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a></p>
 <br>
 

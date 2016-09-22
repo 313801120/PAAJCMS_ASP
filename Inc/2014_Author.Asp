@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -65,7 +65,7 @@ function handleAuthorInfo(fileInfo, sType)
     end if 
     c = aspS & phpS & "************************************************************" & vbCrLf 
     if fileInfo <> "" then c = c & aspS & "  文件：" & fileInfo & vbCrLf 
-    c = c & aspS & "作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)" & vbCrLf 
+    c = c & aspS & "作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)" & vbCrLf 
     c = c & aspS & "版权：源代码免费公开，各种用途均可使用。 " & vbCrLf 
     c = c & aspS & "创建：" & format_Time(now(), 2) & vbCrLf 
     c = c & aspS & "联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com" & vbCrLf 
@@ -94,5 +94,4 @@ function authorInfo2()
     authorInfo2 = c 
 end function 
 %>  
-
 

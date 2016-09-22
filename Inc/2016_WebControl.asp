@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -279,7 +279,11 @@ function replaceValueParam(content, paramName, replaceStr)
                 if s = "@ME" then
                     s = replaceStr 
                 end if 
-                replaceStr = getcolumnname(s) 
+				if EDITORTYPE = "jsp" then
+					replaceStr=s
+				else 	
+                	replaceStr = getcolumnname(s) 
+				end if
             end if 
             '获得栏目URL
             s = rParam(labelStr, "getcolumnurl") 
@@ -300,7 +304,7 @@ function replaceValueParam(content, paramName, replaceStr)
             ifStr = rParam(labelStr, "if") 
             elseIfStr = rParam(labelStr, "elseif") 
             valueStr = rParam(labelStr, "value") 
-			
+			 
             elseIfValue = rParam(labelStr, "elseifvalue") 
             elseValue = rParam(labelStr, "elsevalue") 
             instrStr = rParam(labelStr, "instr") 
@@ -312,7 +316,7 @@ function replaceValueParam(content, paramName, replaceStr)
             'call echo("elseIfStr",elseIfStr)
             'call echo("replaceStr",replaceStr)
             if ifStr <> "" or instrStr <> "" then
-                if(ifStr = CStr(replaceStr) and ifStr <> "") then
+                if ifStr = CStr(replaceStr) and ifStr <> ""  then
                     replaceStr = valueStr 
                 elseif elseIfStr = CStr(replaceStr) and elseIfStr <> "" then
                     replaceStr = valueStr 
@@ -465,5 +469,4 @@ end function
 
 
 %>  
-
 

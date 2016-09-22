@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -11,19 +11,19 @@
 <% 
 '常用函数大全 (2013,9,27Option Explicit)
  
-'成功永远都是缓慢的 2013,10,4,悟
+'成功永远都是缓慢的 2013,10,4,悟 
  
 '显示弹窗对话框20150312 
-sub msgBox(byVal content)
+sub msgBox(byVal content)    
     content = replace(replace(content, chr(10), "\n"), chr(13), "\n") 
-    response.write("<script>alert('" & content & "');</"&"script>") 
+    response.write("<script>alert('" & content & "');</"&"script>")  
 end sub 
 '提示20150729  
-sub MBInfo(title, content)
-    call msgBox(title)  
-end sub  
-'给Queststring赋值
-sub addRq(gookeName, valueStr) 
+sub MBInfo(title, content) 
+    call msgBox(title)   
+end sub   
+'给Queststring赋值  
+sub addRq(gookeName, valueStr)  
     response.queryString(gookeName) = valueStr   
 end sub  
 'ASP自带的跳转
@@ -42,12 +42,23 @@ end function
 function rfq(str)
     rfq = request(str) 
 end function 
+'处理Post获得内容处理 写入数据库 加强版20160819
 function ADSqlRf(inputName)
-    ADSqlRf = replace(request.form(inputName), "'", "''") 
+	dim s
+	s=replace(request.form(inputName), "'", "''")
+	if EDITORTYPE="jsp" then
+		s=replace(s,"\","\\")
+	end if
+    ADSqlRf =s  
 end function 
-'处理成Access数据库值   辅助上面
+'处理成Access数据库值   辅助上面   加强版20160819
 Function ADSql(valueStr) 
-    ADSql = Replace(valueStr, "'", "''") 
+	dim s
+	s=replace(valueStr, "'", "''")
+	if EDITORTYPE="jsp" then
+		s=replace(s,"\","\\")
+	end if
+    ADSql =s
 End Function 
 '替换Response.Write对象
 sub rw(str)
@@ -132,9 +143,9 @@ end sub
 sub doEvents()
     response.flush() 
 end sub 
-'功能:ASP里的IIF 如：IIf(1 = 2, "a", "b")
-function IIf(bExp, sVal1, sVal2)
-    if(bExp) then IIf = sVal1 else IIf = sVal2 
+'功能:ASP里的IIF 如：IIF(1 = 2, "a", "b")
+function IIF(bExp, sVal1, sVal2)
+    if(bExp) then IIF = sVal1 else IIf = sVal2 
 end function 
 'Hr
 sub hr()
@@ -172,7 +183,7 @@ end sub
 sub printEnd(byVal s)
     response.write(s) : response.end() 
 end sub 
-
+ 
 
 
 
@@ -215,5 +226,4 @@ function exec(byVal tStr)
 end function 
 
 %>   
-
 

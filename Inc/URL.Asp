@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -14,12 +14,12 @@
 'byref PubAHrefList, byref PubATitleList   为为什么要加上byref  是因为在转PHP时需要这个判断，请明它是地址传递 是关联变量
 
 'NOVBNet start
-'使用手册
+'使用手册 
 'call echo("'获得当前网址第一种（getUrl）",getUrl())
 'call echo("'获得当前网址第二种（getThisUrl）",getThisUrl())
 'call echo("'获得当前网址无参数（getThisUrlNoParam）",getThisUrlNoParam())
 'call echo("'获得来访网址（getGoToUrl）",getGoToUrl())
-'call echo("'获得来访网址无参数（getGoToUrlNoParam）",getGoToUrlNoParam())
+'call echo("'获得来访网址无参数（getGoToUrlNoParam）",getGoToUrlNoParam()) 
 'call echo("'获得来访网址无文件名称（getGoToUrlNoFileName）",getGoToUrlNoFileName())
 'call echo("'域名（webDoMain）",webDoMain())
 'call echo("'主机（host）",host())
@@ -140,7 +140,7 @@ function getHandleUrlValue(byval url, byval sType)
     getHandleUrlValue = url 
 end function 
 
-'获取客户端IP地址第二种
+'获取客户端IP地址第二种 
 function getIP2()
     on error resume next 
     dim x, y, addr 
@@ -171,6 +171,7 @@ end function
 function getServicerIP()
     getServicerIP = request.serverVariables("LOCAL_ADDR") 
 end function 
+ 
 
 '获得服务器IP   辅助
 function getRemoteIP()
@@ -220,7 +221,7 @@ function handleFileUrl(fileUrl)
             exit for 
         end if 
     next 
-    handleFileUrl = fileUrl 
+    handleFileUrl = fileUrl  
 end function 
 
 '处理网址完善性
@@ -230,7 +231,7 @@ function handleUrlComplete(httpurl)
     if inStr(httpurl, "?") > 0 then exit function                                   '有?符号则退出
     '网址最后没有/  判断如果为域名 则在最后加上/退出
     if right(httpurl, 1) <> "/" then
-        if httpurl & "/" = getWebSite(httpurl) then
+        if getWebSite(httpurl)=httpurl & "/" then
             handleUrlComplete = httpurl & "/" 
             exit function 
         end if 
@@ -254,13 +255,13 @@ function urlAddHttpUrl(httpurl, url)
             url = httpurl & url 
         end if 
     end if 
-    urlAddHttpUrl = url 
+    urlAddHttpUrl = url  
 end function 
 '获得主机端口号
 function getPort()
     dim port 
     port = CStr(request.serverVariables("SERVER_PORT")) 
-    if port <> "80" and port <> "8080" then
+    if port <> "80" and port <> "8080" and port<>"" then
         port = ":" & port 
     else
         port = "" 
@@ -385,7 +386,7 @@ function getWebSite(byVal httpurl)
     end if 
     is_WebSite = false                                                              '是域名为假
     c = ".com.hk|.sh.cn|.com.cn|.net.cn|.org.cn" 
-    c = c & "|.com|.net|.org|.tv|.cc|.info|.cn|.tw|:81|:99|.biz|.mobi|.hk|.us|.la|.gl|.in|.top|.win|.vip|.pw|.me|.wiki|.co" 
+    c = c & "|.com|.net|.org|.tv|.cc|.info|.cn|.tw|:81|:99|.biz|.mobi|.hk|.us|.la|.gl|.in|.top|.win|.vip|.pw|.me|.wiki|.co|.lu" 
     splStr = split(c, "|") 
     for each s in splStr
         if s <> "" then
@@ -642,10 +643,10 @@ function handleConentUrl(httpurl, content, sType, byref pubAHrefList, byref pubA
                 nLen = len(lalStr) - 1 
                 '替换关键词
                 if inStr(LCase(lalStr), "keywords") > 0 then
-                    c = c & handleLink(httpurl, lalStr, "content", webKeywords, "", pubAHrefList, pubATitleList) 
+                    c = c & handleLink(httpurl, lalStr, "content", cfg_webKeywords, "", pubAHrefList, pubATitleList) 
                 '替换网站描述
                 elseIf inStr(LCase(lalStr), "description") > 0 then
-                    c = c & handleLink(httpurl, lalStr, "content", webDescription, "", pubAHrefList, pubATitleList) 
+                    c = c & handleLink(httpurl, lalStr, "content", cfg_webDescription, "", pubAHrefList, pubATitleList) 
                 else
                     c = c & lalStr 
                 end if 
@@ -1177,8 +1178,10 @@ function getUrlAddToParam(byVal url, byVal addToUrl, sType)
         if inStr(s, "=") > 0 then
             splxx = split(s, "=") 
             paramName = splxx(0) 
-            paramValue = splxx(1) 
-
+			paramValue=""
+			'【@是jsp显示@】try{
+				paramValue = splxx(1) 
+			'【@是jsp显示@】}catch(Exception e){}
             isHandle = true 
 
             if LCase(sType) = "delete" or LCase(sType) = "del" then
@@ -1428,7 +1431,7 @@ function handleIsWebSite(byVal url1, byVal url2, sType)
     if sType = "子域名" then
         dim splStr, s, c 
         c = ".com.hk|.sh.cn|.com.cn|.net.cn|.org.cn" 
-        c = c & "|.com|.net|.org|.tv|.cc|.info|.cn|.tw|:81|:99|.biz|.mobi|.hk|.us|.la|.gl|.in" 
+        c = c & "|.com|.net|.org|.tv|.cc|.info|.cn|.tw|:81|:99|.biz|.mobi|.hk|.us|.la|.gl|.in|.so|" 
         splStr = split(c, "|") 
         for each s in splStr
             if s <> "" then
@@ -1617,55 +1620,52 @@ end function
 
 '获得url状态说明
 function getHttpUrlStateAbout(nState)
-    dim s, c 
-    s = cstr(trim(nState)) 
-    select case s
-        case "100" : c = "继续"
-        case "101" : c = "开关协议"
-        case "200" : c = "成功"
-        case "201" : c = "创建"
-        case "202" : c = "接受"
-        case "203" : c = "非权威信息"
-        case "204" : c = "不含内容"
-        case "205" : c = "重置内容"
-        case "206" : c = "部分内容"
-        case "300" : c = "多项选择"
-        case "301" : c = "移动永久"
-        case "302" : c = "暂时移动"
-        case "303" : c = "看其他的"
-        case "304" : c = "未修改"
-        case "305" : c = "使用代理"
-        case "307" : c = "临时重定向"
-
-        case "400" : c = "坏的要求"
-        case "401" : c = "未经授权"
-        case "402" : c = "付款要求"
-        case "403" : c = "禁止"
-        case "404" : c = "未找到"
-        case "405" : c = "不允许的方法"
-        case "406" : c = "不可接受"
-        case "407" : c = "代理验证所需"
-        case "408" : c = "请求超时"
-        case "409" : c = "冲突"
-        case "410" : c = "消失"
-        case "411" : c = "所需长度"
-        case "412" : c = "先决条件"
-        case "413" : c = "请求实体过大"
-        case "414" : c = "的请求URI太长"
-        case "415" : c = "不支持的媒体类型"
-        case "416" : c = "的请求范围不满足"
-        case "417" : c = "期望失败"
-
-        case "500" : c = "内部服务器错误"
-        case "501" : c = "未实施"
-        case "502" : c = "坏网关"
-        case "503" : c = "服务不可用"
-        case "504" : c = "网关超时"
-        case "505" : c = "的HTTP版本不支持"
-        case "509" : c = "带宽限制超过"
+    dim n, c 
+    n = cint(trim(nState)) 
+    select case n
+        case 100 : c = "继续"
+        case 101 : c = "开关协议"
+        case 200 : c = "成功"
+        case 201 : c = "创建"
+        case 202 : c = "接受"
+        case 203 : c = "非权威信息"
+        case 204 : c = "不含内容"
+        case 205 : c = "重置内容"
+        case 206 : c = "部分内容"
+        case 300 : c = "多项选择"
+        case 301 : c = "移动永久"
+        case 302 : c = "暂时移动"
+        case 303 : c = "看其他的"
+        case 304 : c = "未修改"
+        case 305 : c = "使用代理"
+        case 307 : c = "临时重定向"
+        case 400 : c = "坏的要求"
+        case 401 : c = "未经授权"
+        case 402 : c = "付款要求"
+        case 403 : c = "禁止"
+        case 404 : c = "未找到"
+        case 405 : c = "不允许的方法"
+        case 406 : c = "不可接受"
+        case 407 : c = "代理验证所需"
+        case 408 : c = "请求超时"
+        case 409 : c = "冲突"
+        case 410 : c = "消失"
+        case 411 : c = "所需长度"
+        case 412 : c = "先决条件"
+        case 413 : c = "请求实体过大"
+        case 414 : c = "的请求URI太长"
+        case 415 : c = "不支持的媒体类型"
+        case 416 : c = "的请求范围不满足"
+        case 417 : c = "期望失败"
+        case 500 : c = "内部服务器错误"
+        case 501 : c = "未实施"
+        case 502 : c = "坏网关"
+        case 503 : c = "服务不可用"
+        case 504 : c = "网关超时"
+        case 505 : c = "的HTTP版本不支持"
+        case 509 : c = "带宽限制超过"
     end select
     getHttpUrlStateAbout = c 
 end function 
 
 %> 
-

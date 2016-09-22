@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -14,9 +14,9 @@
 'http://127.0.0.1/函数/ClassAspCode.Asp?act=GetFileFunctionStrList    从这里面获得最新设置
 
 
-
+ 
 '**************************************** 给php用 通用 ****************************************
-
+  
 '替换参数值 2014  12 01
 function newReplaceValueParam(content, paramName, replaceStr)
     dim startStr, endStr, labelStr, sLen, sNTimeFormat, delHtmlYes, trimYes 
@@ -126,7 +126,7 @@ function handleToArray(content)
     'Call Rw("<hr>")
     for i = 0 to uBound(splStr)
         splStr(i) = strDQ(splStr(i)) 
-    'Call Echo(I,SplStr(I))
+    'Call Echo(I,SplStr(I)) 
     next 
     handleToArray = splStr 
 end function 
@@ -1810,10 +1810,10 @@ function rParam(byVal action, byVal lableStr)
     '大写 空
     if s = "" then
         s = handleRParam(action, uCase(lableStr), "") 
-    end if 
+    end if  
     '不要这个，要不不稳定(20151022)
     'if s=false then s=""
-    if s = "[#空*值_#]" then s = "" 
+    if s = "[#空*值_#]" then s = ""  
     rParam = s 
 end function 
 '处理 读单个参数值
@@ -2256,5 +2256,4 @@ function moduleFindContent(action, moduleName)
     moduleFindContent = defaultStr 
 end function 
 %>      
-
 

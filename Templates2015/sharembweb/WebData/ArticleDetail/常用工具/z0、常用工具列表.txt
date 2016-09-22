@@ -1,12 +1,16 @@
 【parentid】常用工具
 【title】格式化ASP
-【sortrank】0
+【sortrank】9
 【flags】|h|
 【author】sharembweb
 【adddatetime】2015-01-28 15:09:05
 【nofollow】0
 【isonhtml】0
 【customaurl】{$GetColumnUrl columnname='在线格式化ASP'$}
+【temptxt1】 asp
+【webtitle】格式化ASP_在线格式化ASP
+【webkeywords】格式化ASP_在线格式化ASP
+【webdescription】提供在线格式化ASP功能 QQ313801120
 -------------------------------
 【parentid】常用工具
 【title】格式化PHP
@@ -14,6 +18,7 @@
 【author】sharembweb
 【adddatetime】2015-03-21 15:09:05
 【filename】/asptophp/formatphp.html
+【temptxt1】 php
 【webtitle】格式化PHP_在线格式化PHP
 【webkeywords】格式化PHP_在线格式化PHP
 【webdescription】提供在线格式化PHP功能 QQ313801120
@@ -45,6 +50,7 @@ echo("else");
 【author】sharembweb
 【adddatetime】2015-03-21 15:09:05
 【filename】/asptophp/formatjs.html
+【temptxt1】 js
 【webtitle】格式化JS_在线格式化JS
 【webkeywords】格式化JS_在线格式化JS
 【webdescription】提供在线格式化JS功能 QQ313801120
@@ -74,6 +80,7 @@ document.write("else");
 【author】sharembweb
 【adddatetime】2015-03-21 15:09:05
 【filename】/asptophp/formathtml.html
+【temptxt1】 html
 【webtitle】格式化HTML_在线格式化HTML
 【webkeywords】格式化HTML_在线格式化HTML
 【webdescription】提供在线格式化HTML功能 QQ313801120
@@ -139,6 +146,10 @@ function do_js_beautify() {
 【isonhtml】0
 【target】_blank
 【customaurl】http://sharembweb.com/Tools/FormattingTools/Tools/CSS压缩格式化工具.html
+【temptxt1】 css
+【webtitle】在线ASP格式化CSS
+【webkeywords】在线ASP格式化CSS
+【webdescription】提供在线ASP格式化CSS功能 QQ313801120
 -------------------------------
 【parentid】常用工具
 【title】ASP代码混淆
@@ -146,6 +157,7 @@ function do_js_beautify() {
 【author】sharembweb
 【adddatetime】2015-03-21 15:09:05
 【filename】/asptophp/aspCodeConfusion.html
+【temptxt1】 asp
 【webtitle】ASP代码混淆_在线ASP代码混淆
 【webkeywords】ASP代码混淆_在线ASP代码混淆
 【webdescription】提供在线ASP代码混淆功能 QQ313801120
@@ -158,7 +170,7 @@ function do_js_beautify() {
 &lt;%
 function testfun(title,about,content)
 	dim authorName,authorQQ
-	authorName="红尘云孙"
+	authorName="云孙World"
 	authorQQ="313801120"
 	response.write("title=" & title & "<br>")
 	response.write("about=" & about & "<br>")
@@ -182,6 +194,7 @@ call testfun("测试标题","关于我们","更多内容")
 【author】sharembweb
 【adddatetime】2015-03-21 15:09:05
 【filename】/asptophp/jsCodeConfusion.html
+【temptxt1】 js
 【webtitle】JS代码混淆_在线JS代码混淆
 【webkeywords】JS代码混淆_在线JS代码混淆
 【webdescription】提供在线JS代码混淆功能 QQ313801120
@@ -197,7 +210,7 @@ function testfun(title,about,content){
     var authorName=''
 	var authorQQ='';
 	var aabbcc
-    authorName='红尘云孙';
+    authorName='云孙World';
     authorQQ='313801120';
 	aabbcc="eeeeee11\"11eeee";
     document.write('title=' + title + '<br />');
@@ -223,6 +236,7 @@ testfun('测试标题','关于我们','更多内容');
 【author】sharembweb
 【adddatetime】2015-03-21 15:09:05
 【filename】/asptophp/phpCodeConfusion.html
+【temptxt1】 php
 【webtitle】PHP代码混淆_在线PHP代码混淆
 【webkeywords】PHP代码混淆_在线PHP代码混淆
 【webdescription】提供在线PHP代码混淆功能 QQ313801120
@@ -235,7 +249,7 @@ testfun('测试标题','关于我们','更多内容');
 &lt;?PHP
 function testfun($title,$about,$content){
     $authorName='';$authorQQ='';
-    $authorName='红尘云孙';
+    $authorName='云孙World';
     $authorQQ='313801120';
     echo('title=' . $title . '<br />');
     echo('about=' . $about . '<br />');
@@ -260,70 +274,23 @@ testfun('测试标题','关于我们','更多内容');
 【adddatetime】2015-01-28 15:09:05
 【nofollow】0
 【isonhtml】0
-【customaurl】http://sharembweb.com/aspphpcms/online-make-Tags.html
+【customaurl】http://sharembweb.com/paajcms/online-make-Tags.html
+【webtitle】生成嵌套标签_在线生成嵌套标签
+【webkeywords】生成嵌套标签_在线生成嵌套标签
+【webdescription】在线生成嵌套标签 QQ313801120
 -------------------------------
 【parentid】常用工具
-【title】创建Asp函数
+【title】创建ASP函数
 【sortrank】60
 【author】sharembweb
 【adddatetime】2015-01-28 15:09:05
 【nofollow】1
 【isonhtml】0
+【temptxt1】 asp
+【webtitle】创建ASP函数
+【webkeywords】创建ASP函数
+【webdescription】创建ASP函数 QQ313801120
 【customaurl】http://sharembweb.com/Tools/FormattingTools/CreateFunction.Asp
--------------------------------
-【parentid】常用工具
-【title】在线ASP转JS
-【sortrank】70
-【flags】|h|
-【author】sharembweb
-【adddatetime】2015-03-21 15:09:05
-【filename】/asptophp/asptojs.html
-
-【webtitle】在线ASP转JS,在线ASP代码转JS代码,在线ASP程序转JS程序,AspToJs - 分享模板网站
-【webkeywords】在线ASP转JS,在线ASP代码转JS代码,在线ASP程序转JS程序,AspToJs - 分享模板网站
-【webdescription】提供ASP代码转换成JS代码服务 - 分享模板网站QQ313801120
-【bodycontent】
-
-<div class="divtip">输入你的ASP代码，提交后等待几秒即可生成JS代码：(更新于20160308)</div>
-
-<form name="form1" method="post" action="http://sharembweb.com/asptophp/asptophp.asp?act=handlecontent&language=js" target="_blank">
-  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;"><% 
-'作者：红尘云孙 QQ313801120  http://sharembweb.com/
-'这是一个测试程序
-if 1=1 then												'if判断
-	response.Write("1<hr>")
-elseif 1=2 then
-
-	response.Write("2<hr>")
-else
-	
-	response.Write("else<hr>")
-end if
-dim aa,bb,cc,splstr,s,i,c
-aa=1
-bb=2
-cc=3
-response.Write("aa=" & aa & "<br>")
-response.Write("bb=" & bb & "<br>")
-response.Write("cc=" & cc & "<br>")
-splstr=split("aa|bb|cc","|")
-for i=0 to ubound(splstr)
-	s=splstr(i)
-	response.Write(i & "、" & s & "<hr>")
-next
-%>  
-   
-
-  </textarea>
-<div class="clear10"></div>
-  <input type="submit" name="button" id="button" value="提交" class="mybtn">
-  <label for="isOpenImportFunction"><input name="isOpenImportFunction" type="checkbox" id="isOpenImportFunction" value="1" checked>导入函数</label>
-</form>
-
-<br>
-
-
-【/bodycontent】
 -------------------------------
 【parentid】常用工具
 【title】ASP源码下载
@@ -335,7 +302,10 @@ next
 【nofollow】1
 【isonhtml】0
 【customaurl】http://sharembweb.com/tools/codedown.asp?type=asp
-【/bodycontent】
+【temptxt1】 aspdown
+【webtitle】ASP源码下载
+【webkeywords】ASP源码下载
+【webdescription】ASP源码下载 QQ313801120
 -------------------------------
 【parentid】常用工具
 【title】PHP源码下载
@@ -347,7 +317,10 @@ next
 【nofollow】1
 【isonhtml】0
 【customaurl】http://sharembweb.com/tools/codedown.asp?type=php
-【/bodycontent】
+【temptxt1】 phpdown
+【webtitle】PHP源码下载
+【webkeywords】PHP源码下载
+【webdescription】PHP源码下载 QQ313801120
 -------------------------------
 【parentid】常用工具
 【title】在线GB2312字符转UTF8字符
@@ -356,7 +329,7 @@ next
 【author】sharembweb
 【adddatetime】2015-03-21 15:09:05
 【filename】/toolslist/online-gb2312-utf8.html
-
+【temptxt1】 html
 【webtitle】在线GB2312字符转UTF8字符 - 分享模板网站
 【webkeywords】在线GB2312字符转UTF8字符 - 分享模板网站
 【webdescription】在线GB2312字符转UTF8字符 - 分享模板网站QQ313801120
@@ -365,7 +338,7 @@ next
 <div class="divtip">输入你的ASP代码，提交后等待几秒即可生成PHP代码：(更新于20160308)</div>
 
 <form name="form1" method="post" action="http://sharembweb.com/toolslist/tools.asp?act=gbtoutf" target="_blank">
-  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">作者：红尘云孙 QQ313801120  http://sharembweb.com/
+  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">作者：云孙World QQ313801120  http://sharembweb.com/
 '这是一个测试程序
   
 aa
@@ -386,7 +359,7 @@ aa
 【author】sharembweb
 【adddatetime】2015-03-22 15:09:05
 【filename】/toolslist/onlin-Chinese-pinyin.html
-
+【temptxt1】 pinyin
 【webtitle】在线汉字转拼音工具，汉字转拼音，汉字到拼音 - 分享模板网站
 【webkeywords】在线汉字转拼音工具，汉字转拼音，汉字到拼音 - 分享模板网站
 【webdescription】在线汉字转拼音工具，汉字转拼音，汉字到拼音 - 分享模板网站 QQ313801120
@@ -395,7 +368,7 @@ aa
 <div class="divtip">输入汉字内容，提交后等待几秒即可生成(更新于20160322)</div>
 
 <form name="form1" method="post" action="http://sharembweb.com/toolslist/tools.asp?act=pinyin" target="_blank">
-  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">作者：红尘云孙 QQ313801120  http://sharembweb.com/
+  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">作者：云孙World QQ313801120  http://sharembweb.com/
 分享模板网站
   </textarea>
 <div class="clear10"></div>
@@ -414,7 +387,7 @@ aa
 【author】sharembweb
 【adddatetime】2016-06-27 15:09:05
 【filename】/toolslist/Simplified-and-complex-interaction.html
-
+【temptxt1】 html
 【webtitle】在线汉简体繁体互转
 【webkeywords】在线简体繁体互转
 【webdescription】在线简体繁体互转 QQ313801120
@@ -423,7 +396,7 @@ aa
 <div class="divtip">输入汉字内容，提交后等待几秒即可生成(更新于20160322)</div>
 
 <form name="form1" method="post" action="http://sharembweb.com/toolslist/tools.asp?act=simplifiedTab" target="_blank">
-  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">作者：红尘云孙 QQ313801120  http://sharembweb.com/
+  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">作者：云孙World QQ313801120  http://sharembweb.com/
 分享模板网站
   </textarea>
 <div class="clear10"></div>
@@ -443,7 +416,7 @@ aa
 【author】sharembweb
 【adddatetime】2015-03-22 15:09:05
 【filename】/toolslist/online-Calculator.html
-
+【temptxt1】 calculate
 【webtitle】在线计算器 - 分享模板网站
 【webkeywords】在线计算器 - 分享模板网站
 【webdescription】在线计算器 - 分享模板网站QQ313801120
@@ -481,7 +454,7 @@ function myevaljsq(str){
 【author】sharembweb
 【adddatetime】2015-03-22 15:09:05
 【filename】/toolslist/online-chat-robot.html
-
+【temptxt1】 android
 【webtitle】在线聊天机器人 - 分享模板网站
 【webkeywords】在线聊天机器人 - 分享模板网站
 【webdescription】在线聊天机器人 - 分享模板网站QQ313801120
@@ -519,7 +492,7 @@ function chatrobot(){
 【author】sharembweb
 【adddatetime】2015-03-22 15:09:05
 【filename】/toolslist/search-engine-fast-goto.html
-
+【temptxt1】 seo
 【webtitle】搜索引擎收录_快速查找搜索引擎收录情况
 【webkeywords】搜索引擎收录_快速查找搜索引擎收录情况
 【webdescription】输入你要搜索的内容，然后点击你想要在那个搜索引擎里搜索内容 QQ313801120
@@ -547,7 +520,7 @@ function chatrobot(){
 </div>
 <div>快速查的：<a href="javascript:displaySearchList('PAAJCMS')" class='ablue'>PAAJCMS</a>
 ，<a href="javascript:displaySearchList('在线ASP转PHP')" class='ablue'>在线ASP转PHP</a>
-，<a href="javascript:displaySearchList('作者：红尘云孙')" class='ablue'>作者：红尘云孙</a>
+，<a href="javascript:displaySearchList('作者：云孙World')" class='ablue'>作者：云孙World</a>
 ，<a href="javascript:displaySearchList('QQ313801120')" class='ablue'>QQ313801120</a>
 </div>
 本站：<a href='http://zhannei.baidu.com/cse/search?s=2053070418731876318&entry=1&q=' target='_blank' class='ablue'>百度站内搜索</a><br>
@@ -558,7 +531,7 @@ function chatrobot(){
 {$TitleInSearchEngineList divclass='article_lable'  title='site:sharembweb.com'$}
 
 </div>
-<script>
+<script language="javascript">
 
 function displaySearchList(title){
 	if(title==undefined){
@@ -590,16 +563,14 @@ function utf8(wide) {
 	var enc = "";
 	var i = 0;
 	while (i < wide.length) {
-		c = wide.charCodeAt(i++);
-		// handle UTF-16 surrogates
+		c = wide.charCodeAt(i++); 
 		if (c >= 0xDC00 && c < 0xE000) continue;
 		if (c >= 0xD800 && c < 0xDC00) {
 			if (i >= wide.length) continue;
 			s = wide.charCodeAt(i++);
 			if (s < 0xDC00 || c >= 0xDE00) continue;
 			c = ((c - 0xD800) << 10) + (s - 0xDC00) + 0x10000;
-		}
-		// output value
+		} 
 		if (c < 0x80) enc += String.fromCharCode(c);
 		else if (c < 0x800) enc += String.fromCharCode(0xC0 + (c >> 6), 0x80 + (c & 0x3F));
 		else if (c < 0x10000) enc += String.fromCharCode(0xE0 + (c >> 12), 0x80 + (c >> 6 & 0x3F), 0x80 + (c & 0x3F));

@@ -38,7 +38,7 @@
 
       <div class="item java">
         <h3>[$temptxt1$]</h3>
-        <div class="logo"><a href="[$url$]"></a></div>
+        <div class="logo"><a href="[$url$]"[$atarget$]></a></div>
         <div class="tips">[$temptxt2$]</div>
         [$labletitle$]
       </div>    
@@ -47,7 +47,7 @@
 
       <div class="item dotnet">
         <h3>[$temptxt1$]</h3>
-        <div class="logo"><a href="[$url$]"></a></div>
+        <div class="logo"><a href="[$url$]"[$atarget$]></a></div>
         <div class="tips">[$temptxt2$]</div>
         [$labletitle$]
       </div>
@@ -56,7 +56,7 @@
 
       <div class="item php">
         <h3>[$temptxt1$]</h3>
-        <div class="logo"><a href="[$url$]"></a></div>
+        <div class="logo"><a href="[$url$]"[$atarget$]></a></div>
         <div class="tips">[$temptxt2$]</div>
         [$labletitle$]
       </div>
@@ -65,7 +65,7 @@
 
       <div class="item asp">
         <h3>[$temptxt1$]</h3>
-        <div class="logo"><a href="[$url$]"></a></div>
+        <div class="logo"><a href="[$url$]"[$atarget$]></a></div>
         <div class="tips">[$temptxt2$]</div>
         [$labletitle$]
       </div>
@@ -73,7 +73,6 @@
 [/list-end]
 
 #-->
-
 <!--#test start#--> 
       <div class="item java">
         <h3>APAJ(JSP)版</h3>
@@ -102,37 +101,352 @@
     </div>
 <!--#test end#-->
   </div> 
+</div>
 <div class="clear10"></div>
   
 
     <div class="mainwrap">
-        <div class="toolswrap noselect" style="height:auto">
-        <a href="javascript:;" id="onOffTools">展示+</a>
-<!--#细节列表 ASPPHP通用#-->
-<!--#  addsql='where flags like\'%h%\''  #-->
-<sPAn class="testspan">{$ArticleList columnname='常用工具' topnumb='28'  default='[_2016年03月21日 13时28分]'$}</sPAn>
+
+
+
+        <div id="page">
+        
+
+
+<sPAn class="testspan">{$ArticleList columnname='常用工具' topnumb='28' addsql='order by sortrank'  default='[_2016年03月21日 13时28分]'$}</sPAn>
 <!--#[_2016年03月21日 13时28分]
-[list]<a href="[$url$]"[$atitle$][$atarget$][$abcolor$][$anofollow$]>[$title$]</a>[/list]
-[list-end]<a href="[$url$]" style="margin-right:0px;"[$atitle$][$atarget$][$abcolor$][$anofollow$]>[$title$]</a>[/list-end]
+[list]
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico [$temptxt1$]"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+[/list] 
 #-->
 
-<!--#test start#--> 
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
-<a href="http://sharembweb.com/formatasp/" title="格式化ASP">格式化ASP</a>
- <!--#test end#-->
+
+
+<!--#test start#-->
+
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico asp"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico php"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            
+            
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico js"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+
+
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico css"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            
+            
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico html"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            
+            
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico csharp"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            
+            
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico calculate"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico seo"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico aspdown"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico phpdown"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico jspdown"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico jsdown"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico cssdown"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-inner">
+                    <div class="item-hd">
+                    <a target="_blank" href="[$url$]" class="item-icon"><span class="ico jsp"></span></a>
+                        <h3><a target="_blank" href="[$url$]">[$title$]</a></h3>
+            
+                        <span class="item-category">[<a target="_blank" href="{$GetColumnUrl columnname='常用工具'$}">常用工具</a>]</span>
+                        <a title="喜欢" class="likeable" href="javascript:;" data-id="8"><i class="icon like"></i><var>1360</var>人喜欢</a> 
+                    </div>
+                    <div class="item-bd">
+                        <div class="item-desc">[$webtitle$]</div>
+                    </div>
+                    <div class="item-ft">
+                        <a target="_blank" class="item-link" href="[$url$]">[$url$]</a>
+                        <a target="_blank" class="item-btn" href="[$url$]">进入</a>
+                    </div>
+            
+                </div>
+            </div>
+            
+            
+<!--#test end#-->
+
+
+ 
+            
+            
         </div>
+        <div class="clear"></div>
         <div class="sidebarleft">
         </div> 
         <div class="sidebarright">
@@ -156,7 +470,7 @@
             <li class="title">模板下载<a href="{$GetColumnUrl columnname='模板下载'$}" class="more">更多&gt;&gt;</a></li>
             <li class="content"> 
             <!--#细节列表 ASPPHP通用#-->
-<sPAn class="testspan">{$ArticleList columnname='模板下载' topnumb='3' default='[_2016年03月07日 07时56分]'$}</sPAn>
+<sPAn class="testspan">{$ArticleList columnname='模板下载' topnumb='3' addsql='order by sortrank' default='[_2016年03月07日 07时56分]'$}</sPAn>
  
 <!--#[_2016年03月07日 07时56分]
 [list]
@@ -389,7 +703,7 @@
 <!--#test start#-->
             <span id="qqLoginBtn"></span>
             <div>
-            <img src="/Templates2015/sharembweb/Images/aspphpcmserweima.jpg" id="reweimaimg" alt="PAAJCMS二维码" title="PAAJCMS二维码"> 
+            <img src="/Templates2015/sharembweb/Images/aspphpcmsErWeiMa.jpg" id="reweimaimg" alt="PAAJCMS二维码" title="PAAJCMS二维码"> 
             </div>
             <div>扫描二维码，获得更多PAAJCMS相关知识<br>        
             </div>
@@ -399,7 +713,7 @@
 
             <span id="qqLoginBtn"></span>
             <div>
-            <img src="/Templates2015/sharembweb/Images/aspphpcmserweima.jpg" id="reweimaimg" alt="PAAJCMS二维码" title="PAAJCMS二维码"> 
+            <img src="/Templates2015/sharembweb/Images/aspphpcmsErWeiMa.jpg" id="reweimaimg" alt="PAAJCMS二维码" title="PAAJCMS二维码"> 
             </div>
             <div>扫描二维码，获得更多PAAJCMS相关知识<br>        
             </div>

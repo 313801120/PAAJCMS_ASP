@@ -1,0 +1,9 @@
+【parentid】常用工具
+【title】在线ASP转PHP 
+【sortrank】1 
+【customaurl】{$GetColumnUrl columnname='在线ASP转PHP'$}
+【isonhtml】0
+【temptxt1】 php
+【webtitle】在线ASP代码转PHP代码
+【webkeywords】在线ASP代码转PHP代码
+【webdescription】在线ASP代码转PHP代码 QQ313801120

@@ -36,15 +36,6 @@ function loadJs(name) {
 	document.write('<script src="'+name+'" type="text/javascript"></script>');
 }
  
- 
- 
- 
- 
-//颜色
-function set_title_color(color) {
-	$('#title').css('color',color);
-	$('#titlecolor').val(color);
-}
 //清除标题颜色
 function clear_title() {
 	$('#title').css('color','');

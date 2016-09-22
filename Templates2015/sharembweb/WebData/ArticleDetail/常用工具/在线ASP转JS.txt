@@ -1,0 +1,54 @@
+【parentid】常用工具
+【title】在线ASP转JS
+【sortrank】6
+【temptxt1】 js
+【author】sharembweb
+【adddatetime】2015-03-21 15:09:05
+【filename】/AspToJs/
+
+【webtitle】在线ASP转JS,在线ASP代码转JS代码,在线ASP程序转JS程序,AspToJs - 分享模板网站
+【webkeywords】在线ASP转JS,在线ASP代码转JS代码,在线ASP程序转JS程序,AspToJs - 分享模板网站
+【webdescription】提供ASP代码转换成JS代码服务 - 分享模板网站QQ313801120
+【bodycontent】
+
+<div class="divtip">输入你的ASP代码，提交后等待几秒即可生成JS代码：(更新于20160308)</div>
+
+<form name="form1" method="post" action="http://sharembweb.com/asptoLanguage/asptophp.asp?act=handlecontent&language=js" target="_blank">
+  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;"><% 
+'作者：云孙World QQ313801120  http://sharembweb.com/
+'这是一个测试程序
+if 1=1 then												'if判断
+	response.Write("1<hr>")
+elseif 1=2 then
+
+	response.Write("2<hr>")
+else
+	
+	response.Write("else<hr>")
+end if
+dim aa,bb,cc,splstr,s,i,c
+aa=1
+bb=2
+cc=3
+response.Write("aa=" & aa & "<br>")
+response.Write("bb=" & bb & "<br>")
+response.Write("cc=" & cc & "<br>")
+splstr=split("aa|bb|cc","|")
+for i=0 to ubound(splstr)
+	s=splstr(i)
+	response.Write(i & "、" & s & "<hr>")
+next
+%>  
+   
+
+  </textarea>
+<div class="clear10"></div>
+  <input type="submit" name="button" id="button" value="提交" class="mybtn">
+  <label for="isOpenImportFunction"><input name="isOpenImportFunction" type="checkbox" id="isOpenImportFunction" value="1" checked>导入函数</label>
+</form>
+
+<br>
+
+
+【/bodycontent】
+-------------------------------

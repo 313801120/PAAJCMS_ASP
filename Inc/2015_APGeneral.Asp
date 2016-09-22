@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -11,6 +11,70 @@
 <% 
 'ASP和PHP通用函数
 
+'处理主栏目信息
+function handleColumnRoot(byval id)
+	dim i,parentid
+	for i =1 to 9
+		rst.open"select * from " & db_PREFIX & "WebColumn where id="& id &"",conn,1,1
+		if not rst.eof then
+			parentid=cstr(rst("parentid"))
+			if parentid<>"-1" then
+				id=rst("parentid")
+			else
+				glb_columnRootName=rst("columnname")
+				glb_columnRootEnName=rst("columnenname")
+				glb_columnRootId=rst("id")
+				exit for		
+			end if
+		else
+			exit for
+		end if:rst.close
+	next
+end function
+
+'获得栏目主id
+function getColumnRootId(byval id)
+	dim parentid,i
+	for i =1 to 9
+		rst.open"select * from " & db_PREFIX & "WebColumn where id="& id &"",conn,1,1
+		if not rst.eof then
+			parentid=cstr(rst("parentid"))
+			if parentid<>"-1" then
+				id=rst("parentid")
+			else
+				exit for		
+			end if
+		else
+			exit for
+		end if:rst.close
+	next
+	getColumnRootId=id
+end function
+'获得子栏目id列表
+function getColumnIdList(byval id, sType)
+	dim parentid,c,splstr,s
+	if sType="addthis" then
+		c=id
+	end if
+	rsTemp.open"select * from " & db_PREFIX & "WebColumn where parentid="& id &"",conn,1,1
+	while not rsTemp.eof 
+		if c<>"" then
+			c=c & ","
+		end if
+		id=rsTemp("id")
+		c=c & rsTemp("id")
+	rsTemp.movenext:wend:rsTemp.close
+	splstr=split(c,",")
+	for each id in splstr
+		if id<>"" then
+			s=getColumnIdList(id,"")
+			if s<>"" then
+				c=c & "," & s
+			end if
+		end if
+	next 
+	getColumnIdList=c
+end function
 
 '文章相关标签 组  待改进
 function aritcleRelatedTags(relatedTags)
@@ -34,11 +98,13 @@ end function
 '获得随机文章id列表
 function getRandArticleId(addSql, nTopNumb)
     dim splStr, s, c, nIndex 
+	'【@是jsp显示@】try{	
     rs.open "select * from " & db_PREFIX & "articledetail " & addSql, conn, 1, 1 
     while not rs.EOF
         if c <> "" then c = c & "," 
         c = c & rs("id") 
     rs.moveNext : wend : rs.close 
+	'【@是jsp显示@】}catch(Exception e){}
     getRandArticleId = randomShow(c, ",", 4) 
     splStr = split(c, ",") : c = "" : nIndex = 0 
     for each s in splStr
@@ -52,11 +118,12 @@ end function
 '获得网站栏目排序SQL
 function getWebColumnSortSql(id)
     dim sql 
+	'【@是jsp显示@】try{
     tempRs2.open "select * from " & db_PREFIX & "webcolumn where id=" & id, conn, 1, 1 
     if not tempRs2.eof then
-
         sql = cstr(tempRs2("sortsql")) 
     end if : tempRs2.close 
+	'【@是jsp显示@】}catch(Exception e){}
     getWebColumnSortSql = sql 
 end function 
 
@@ -91,6 +158,7 @@ function handleUpDownArticle(lableTitle, sType, parentid, lableName, lableValue,
     end if 
 
     'call echo("sql",sql) 
+	'【@是jsp显示@】try{
     rsx.open sql, conn, 1, 1 
     if not rsx.EOF then
         target = rsx("target") 
@@ -110,6 +178,7 @@ function handleUpDownArticle(lableTitle, sType, parentid, lableName, lableValue,
     else
         c = lableTitle & "没有" 
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
     handleUpDownArticle = c 
 end function 
 '获得RS网址 配置上一页 下一页
@@ -154,6 +223,7 @@ end function
 '获得单页url 20160114
 function getOnePageUrl(title)
     dim url 
+	'【@是jsp显示@】try{
     rsx.open "select * from " & db_PREFIX & "onepage where title='" & title & "'", conn, 1, 1 
     if not rsx.EOF then
         if isMakeHtml = true then
@@ -165,12 +235,14 @@ function getOnePageUrl(title)
             end if 
         end if 
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 
     getOnePageUrl = url 
 end function 
 '获得文章URL
 function getArticleUrl(title)
     dim url 
+	'【@是jsp显示@】try{
     rsx.open "select * from " & db_PREFIX & "articledetail where title='" & title & "'", conn, 1, 1 
     if not rsx.EOF then
         if isMakeHtml = true then
@@ -182,6 +254,7 @@ function getArticleUrl(title)
             end if 
         end if 
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 
     getArticleUrl = url 
 end function 
@@ -198,18 +271,21 @@ function getColumnUrl(columnNameOrId, sType)
     else
         addSql = " where id=" & columnNameOrId & "" 
     end if 
+	'【@是jsp显示@】try{
     rsx.open "select * from " & db_PREFIX & "webcolumn" & addSql, conn, 1, 1 
     if not rsx.EOF then
         if isMakeHtml = true then
             url = getRsUrl(rsx("fileName"), rsx("customAUrl"), "/nav" & rsx("id")) 
 			'call echo(rsx("columnName"),url)
         else
-            url = handleWebUrl("?act=nav&columnName=" & rsx("columnname")) 
+            'url = handleWebUrl("?act=nav&columnName=" & rsx("columnname")) 		'这个在jquery.mobile里会有问题
+            url = handleWebUrl("?act=nav&id=" & rsx("id")) 
             if rsx("customAUrl") <> "" then
                 url = rsx("customAUrl") 
             end if 
         end if 
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 
     getColumnUrl = url 
 end function 
@@ -218,49 +294,59 @@ end function
 function getArticleId(title)
     title = replace(title, "'", "")                                                 '注意，这个不能留
     getArticleId = "-1" 
+	'【@是jsp显示@】try{
     rsx.open "Select * from " & db_PREFIX & "ArticleDetail where title='" & title & "'", conn, 1, 1 
     if not rsx.EOF then
         getArticleId = rsx("id")
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 end function 
 
 '获得栏目id
 function getColumnId(columnName)
     'columnName = Replace(columnName, "'", "")           '注意，这个不能留  因为sql里已经处理了 20160716 home 程序写得越来越深，逻辑越多
     getColumnId = "-1" 
+	'【@是jsp显示@】try{
     rsx.open "Select * from " & db_PREFIX & "webcolumn where columnName='" & columnName & "'", conn, 1, 1 
     if not rsx.EOF then
         getColumnId = rsx("id") 
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 end function
 
 '获得栏目名称
 function getColumnName(sID)
 	getColumnName=""
     if sID <> "" then
+	'【@是jsp显示@】try{
         rsx.open "Select * from " & db_PREFIX & "webcolumn where id=" & sID, conn, 1, 1 
         if not rsx.EOF then
             getColumnName = rsx("columnName") 
         end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
     end if 
 end function 
 
 '获得栏目类型
 function getColumnType(columnID)
 	getColumnType=""
+	'【@是jsp显示@】try{
     rsx.open "Select * from " & db_PREFIX & "webcolumn where id=" & columnID, conn, 1, 1 
     if not rsx.EOF then
         getColumnType = rsx("columnType") 
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 end function 
  
 '获得栏目内容
 function getColumnBodyContent(columnID)
-    rsx.open "Select * from " & db_PREFIX & "webcolumn where id=" & columnID, conn, 1, 1 
 	getColumnBodyContent=""
+	'【@是jsp显示@】try{
+    rsx.open "Select * from " & db_PREFIX & "webcolumn where id=" & columnID, conn, 1, 1 
     if not rsx.EOF then
         getColumnBodyContent = rsx("bodyContent") 
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 end function 
 
 
@@ -268,26 +354,30 @@ end function
 function getListMenuId(title)
     title = replace(title, "'", "")                                                 '注意，这个不能留
     getListMenuId = "-1" 
+	'【@是jsp显示@】try{
     rsx.open "Select * from " & db_PREFIX & "listmenu where title='" & title & "'", conn, 1, 1 
     if not rsx.EOF then
         getListMenuId = rsx("id")
     end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 end function 
 
 '获得后台菜单ID 
 function getListMenuName(sID) 
 	getListMenuName=""
     if sID <> "" then
+		'【@是jsp显示@】try{
         rsx.open "Select * from " & db_PREFIX & "listmenu where id=" & sID, conn, 1, 1 
         if not rsx.EOF then
             getListMenuName = rsx("title") 
         end if : rsx.close 
+		'【@是jsp显示@】}catch(Exception e){}
     end if 
 end function  
 
 '网站统计2014
 function webStat(folderPath)
-    dim dateTime, content, splStr 
+    dim sDateTime, content, splStr 
     dim thisUrl, goToUrl, caiShu, c, fileName, co, ie, xp 
 	call createDirFolder(folderPath)		'生成统计指定文件夹
     goToUrl = request.serverVariables("HTTP_REFERER") 
@@ -299,7 +389,7 @@ function webStat(folderPath)
     goToUrl = request("GoToUrl") 
     thisUrl = request("ThisUrl") 
     co = request.queryString("co") 
-    dateTime = now() 
+    sDateTime = now() 
     content = request.serverVariables("HTTP_USER_AGENT") 
     content = replace(content, "MSIE", "Internet Explorer") 
     content = replace(content, "NT 5.0", "2000") 
@@ -312,7 +402,7 @@ function webStat(folderPath)
     if right(xp, 1) = ")" then xp = mid(xp, 1, len(xp) - 1) 
     c = "来访" & goToUrl & vbCrLf 
     c = c & "当前：" & thisUrl & vbCrLf 
-    c = c & "时间：" & dateTime & vbCrLf 
+    c = c & "时间：" & sDateTime & vbCrLf 
     c = c & "IP:" & getIP() & vbCrLf 
     c = c & "IE:" & getBrType("") & vbCrLf 
     c = c & "Cookies=" & co & vbCrLf 
@@ -387,5 +477,4 @@ function setHtmlParam(content, paramList)
     setHtmlParam = c 
 end function 
 %>       
-
 

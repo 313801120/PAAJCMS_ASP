@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -12,32 +12,44 @@
  
 
 '调用function2文件函数
-Function callFunction2()
-    Select Case Request("stype")
-        Case "runScanWebUrl" : runScanWebUrl()                                          '运行扫描网址
-        Case "scanCheckDomain" : scanCheckDomain()                                      '检测域名有效
-        Case "bantchImportDomain" : bantchImportDomain()                                '批量导入域名
-		case "scanDomainHomePage" : scanDomainHomePage()								'扫描域名首页
-		case "scanDomainHomePageSize" : scanDomainHomePageSize()								'扫描域名首页大小与标题
-		case "isthroughTrue" : isthroughTrue()											'让审核全部为真
-		case "printOKWebSite" : printOKWebSite()										'打印有效网址
-		case "printAspServerWebSite" : printAspServerWebSite()										'打印asp类型网站
-		
-		case "clearAllData" : fun2_clearAllData()										'清除全部数据
-
-		case "function2test" : function2test()											'测试
-        Case Else : Call eerr("function2页里没有动作", Request("stype"))
-    End Select
-End Function
+function callFunction2()
+    dim sType 
+    sType = request("stype") 
+    if sType = "runScanWebUrl" then
+        call runScanWebUrl()          '运行扫描网址
+    elseif sType = "scanCheckDomain" then
+        call scanCheckDomain()        '检测域名有效
+    elseif sType = "bantchImportDomain" then
+        call bantchImportDomain()     '批量导入域名
+    elseif sType = "scanDomainHomePage" then
+        call scanDomainHomePage()     '扫描域名首页
+    elseif sType = "scanDomainHomePageSize" then
+        call scanDomainHomePageSize() '扫描域名首页大小与标题
+    elseif sType = "isthroughTrue" then
+        call isthroughTrue()          '让审核全部为真
+    elseif sType = "printOKWebSite" then
+        call printOKWebSite()         '打印有效网址
+    elseif sType = "printAspServerWebSite" then
+        call printAspServerWebSite()  '打印asp类型网站
+    elseif sType = "clearAllData" then
+        call fun2_clearAllData()      '清除全部数据
+    elseif sType = "function2test" then
+        call function2test()          '测试
+    else 
+		call eerr("function2页里没有动作", request("stype"))
+    end if 
+end function
 
 '测试
 function function2test()
-    Call openconn() 									
+    Call openconn() 		
+	'【@是jsp显示@】try{							
     rs.Open "select * from " & db_PREFIX & "webdomain where isdomain=true", conn, 1, 1
 	call echo("共",rs.recordcount)
     While Not rs.EOF
 		call echo(rs("isdomain"),rs("website"))
 	rs.movenext:wend:rs.close
+	'【@是jsp显示@】}catch(Exception e){}
 end function
 '清除全部数据
 function fun2_clearAllData()
@@ -48,6 +60,7 @@ end function
 '打印有效网址
 function printOKWebSite()	
     Call openconn()
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "webdomain where isdomain=true", conn, 1, 1 
 	call echo("共",rs.recordcount)
     Call echo("操作完成", "<a href='?act=dispalyManageHandle&actionType=WebDomain&addsql=order by id desc&lableTitle=网站域名'>OK</a>") 
@@ -55,10 +68,12 @@ function printOKWebSite()
 		'call echo(rs("isdomain"),rs("website"))
 		call rw(rs("website") & "<br>")
 	rs.movenext:wend:rs.close
+	'【@是jsp显示@】}catch(Exception e){}
 end function
 '打印asp类型网站
 function printAspServerWebSite()	
     Call openconn()
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "webdomain where isasp=true and (isaspx=false and isphp=false)", conn, 1, 1 
 	call echo("共",rs.recordcount)
     Call echo("操作完成", "<a href='?act=dispalyManageHandle&actionType=WebDomain&addsql=order by id desc&lableTitle=网站域名'>OK</a>") 
@@ -66,6 +81,7 @@ function printAspServerWebSite()
 		'call echo(rs("isdomain"),rs("website"))
 		call rw(rs("website") & "<br>")
 	rs.movenext:wend:rs.close
+	'【@是jsp显示@】}catch(Exception e){}
 end function
 
 '让审核全部为真
@@ -78,7 +94,7 @@ end function
 '扫描首页大小
 Function scanDomainHomePageSize()
     Dim url, nSetTime, isdomain, htmlDir, txtFilePath,homePageList,nThis,nCount
-	dim splstr,s,c,website,nState,nWebSize,content,startTime,webtitle,webkeywords,webdescription
+	dim splstr,s,c,website,nState,longWebSize,content,startTime,webtitle,webkeywords,webdescription
 	  
 	if request("nThis")="" then
 		nThis=0
@@ -88,6 +104,7 @@ Function scanDomainHomePageSize()
 	
     nSetTime = 3 
     Call openconn() 
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "webdomain where website<>'' and websize=0 and isdomain=true", conn, 1, 1 
 	
 	if request("nCount")="" then
@@ -125,10 +142,10 @@ Function scanDomainHomePageSize()
 		webdescription=getHtmlValue(content,"webdescription")
 		
 		
-		nWebSize=getfsize(txtFilePath)
+		longWebSize=getfsize(txtFilePath)
 		call echo("webtitle",webtitle)
         '这样写是给转PHP时方便
-        conn.Execute("update " & db_PREFIX & "webdomain  set webtitle='"& ADSql(webtitle) &"',webkeywords='"& webkeywords &"',webdescription='"& webdescription &"',websize="& nWebSize &",isthrough=false,updatetime='" & Now() & "'  where id=" & rs("id") & "")
+        conn.Execute("update " & db_PREFIX & "webdomain  set webtitle='"& ADSql(webtitle) &"',webkeywords='"& webkeywords &"',webdescription='"& webdescription &"',websize="& longWebSize &",isthrough=false,updatetime='" & Now() & "'  where id=" & rs("id") & "")
 
 		
 		if request("startTime")="" then
@@ -143,6 +160,7 @@ Function scanDomainHomePageSize()
         Call rw(jsTiming(url, nSetTime)) 
         Response.End() 
     rs.MoveNext : Wend : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){}
     Call echo("操作完成", "<a href='?act=dispalyManageHandle&actionType=WebDomain&addsql=order by id desc&lableTitle=网站域名'>OK，共("& nThis &")条</a>") 
 End Function 
 
@@ -161,6 +179,7 @@ Function scanDomainHomePage()
 	
     nSetTime = 3 
     Call openconn() 
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "webdomain where website<>'' and homepagelist='' and isdomain=true", conn, 1, 1 
 	
 	if request("nCount")="" then
@@ -237,6 +256,7 @@ Function scanDomainHomePage()
         Call rw(jsTiming(url, nSetTime)) 
         Response.End() 
     rs.MoveNext : Wend : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){}
     Call echo("操作完成", "<a href='?act=dispalyManageHandle&actionType=WebDomain&addsql=order by id desc&lableTitle=网站域名'>OK，共("& nThis &")条</a>") 
 End Function 
 
@@ -250,6 +270,7 @@ Function bantchImportDomain()
     For Each url In splStr
         webSite = getwebsite(url) 
         If webSite <> "" Then
+			'【@是jsp显示@】try{
             rs.Open "select * from " & db_PREFIX & "webdomain where website='" & webSite & "'", conn, 1, 1 
             If rs.EOF Then
                 conn.Execute("insert into " & db_PREFIX & "webdomain(website,isthrough,isdomain) values('" & webSite & "',true,false)") 
@@ -258,6 +279,7 @@ Function bantchImportDomain()
             Else
                 Call echo("website", webSite) 
             End If : rs.Close 
+			'【@是jsp显示@】}catch(Exception e){}
         End If 
     Next 
     Call echo("操作完成", "<a href='?act=dispalyManageHandle&actionType=WebDomain&addsql=order by id desc&lableTitle=网站域名'>OK 共(" & nOK & ")条</a>") 
@@ -273,6 +295,7 @@ Function scanCheckDomain()
 		nThis=request("nThis")
 	end if
     Call openconn()
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "webdomain where isthrough=true", conn, 1, 1 
 	
 	if request("nCount")="" then
@@ -311,6 +334,7 @@ Function scanCheckDomain()
         Call rw(jsTiming(url, nSetTime)) 
         Response.End() 
     rs.MoveNext : Wend : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){}
     Call echo("操作完成", "<a href='?act=dispalyManageHandle&actionType=WebDomain&addsql=order by id desc&lableTitle=网站域名'>OK，共("& nThis &")条</a>") 
 End Function 
 
@@ -336,8 +360,8 @@ Function runScanWebUrl()
 	end if
 	
     Call openconn() 
-    rs.Open "select * from " & db_PREFIX & "weburlscan", conn, 1, 1 
-	
+	'【@是jsp显示@】try{
+    rs.Open "select * from " & db_PREFIX & "weburlscan", conn, 1, 1 	
 	if request("nCount")="" then
 		nCount=rs.recordcount
 	else
@@ -346,7 +370,9 @@ Function runScanWebUrl()
     If rs.EOF Then
         conn.Execute("insert into " & db_PREFIX & "weburlscan(httpurl,title,isthrough,charset) values('" & httpUrl & "','home',true,'" & setCharSet & "')") 
     End If : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){} 
     '循环
+	'【@是jsp显示@】try{
     rsx.Open "select * from " & db_PREFIX & "weburlscan where isThrough=true", conn, 1, 1 
     If Not rsx.EOF Then
 		nThis=nThis+1
@@ -369,17 +395,20 @@ Function runScanWebUrl()
         Call rw(jsTiming(url, nSetTime)) 
         Response.End()
     End If : rsx.Close  
+	'【@是jsp显示@】}catch(Exception e){}
     Call echo("操作完成", "<a href='?act=dispalyManageHandle&actionType=WebUrlScan&addsql=order by id desc&lableTitle=网址扫描'>OK，共("& nThis &")条</a>") 
     '输入报告
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "weburlscan where webstate=404", conn, 1, 1 
     While Not rs.EOF
         Call echo("<a href='" & rs("httpurl") & "' target='_blank'>" & rs("httpurl") & "</a>", "<a href='" & rs("tohttpurl") & "' target='_blank'>" & rs("tohttpurl") & "</a>") 
     rs.MoveNext : Wend : rs.Close 
+	'【@是jsp显示@】}catch(Exception e){}
 End Function 
 '扫描网址
 Function scanUrl(httpUrl, toTitle, codeset)
-    Dim splStr, i, s, content, PubAHrefList, PubATitleList, splUrl, spltitle, title, url, htmlDir, htmlFilePath, nOK, arrayData, nWebState, u, iniDir, iniFilePath ,nWebSize
-    Dim nSetTime, startTime, nOpenSpeed, isLocal, nIsThrough
+    Dim splStr, i, s, content, PubAHrefList, PubATitleList, splUrl, spltitle, title, url, htmlDir, htmlFilePath, nOK, arrayData, nWebState, u, iniDir, iniFilePath ,longWebSize
+    Dim nSetTime, startTime, longOpenSpeed, isLocal, nIsThrough
     htmlDir = "/../网站UrlScan/" & setFileName(getwebsite(httpUrl)) 
     Call createDirFolder(htmlDir) 
     htmlFilePath = htmlDir & "/" & setFileName(httpUrl) & ".html" 
@@ -391,7 +420,7 @@ Function scanUrl(httpUrl, toTitle, codeset)
 
     nWebState = 0 
     nSetTime = 1 
-    nOpenSpeed = 0 
+    longOpenSpeed = 0 
     If checkFile(htmlFilePath) = False Then
         startTime = Now() 
         Call echo("codeset", codeset) 
@@ -400,11 +429,11 @@ Function scanUrl(httpUrl, toTitle, codeset)
         '【PHP】$content=toGB2312Char($content);                                            //给PHP用，转成gb2312字符
 
         nWebState = cint(arrayData(1)) 
-        nOpenSpeed = DateDiff("s", startTime, Now()) 
+        longOpenSpeed = DateDiff("s", startTime, Now()) 
         'content=gethttpurl(httpurl,codeset)
         'call createfile(htmlFilePath,content)
         Call writeToFile(htmlFilePath, content, codeset) 
-        Call createFile(iniFilePath, nWebState & vbCrLf & nOpenSpeed) 
+        Call createFile(iniFilePath, nWebState & vbCrLf & longOpenSpeed) 
         nSetTime = 3 
         isLocal = false
     Else
@@ -413,16 +442,18 @@ Function scanUrl(httpUrl, toTitle, codeset)
 		 '【PHP】$content=toGB2312Char($content);                                            //给PHP用，转成gb2312字符
         splStr = Split(getftext(iniFilePath), vbCrLf) 
         nWebState = CInt(splStr(0)) 
-        nOpenSpeed = CInt(splStr(0)) 
+        longOpenSpeed = CInt(splStr(0)) 
         isLocal = true 
     End If 
-	nWebSize=getFSize(htmlFilePath)
+	longWebSize=getFSize(htmlFilePath)
     Call echo("isLocal", isLocal) 
+	'【@是jsp显示@】try{
     rs.Open "select * from " & db_PREFIX & "weburlscan where httpurl='" & httpUrl & "'", conn, 1, 1 
     If rs.EOF Then
         conn.Execute("insert into " & db_PREFIX & "weburlscan(httpurl,title,charset) values('" & httpUrl & "','" & toTitle & "','" & codeset & "')") 
     End If : rs.Close 
-    conn.Execute("update " & db_PREFIX & "weburlscan  set webstate=" & nWebState & ",websize=" & nWebSize & ",openspeed=" & nOpenSpeed & ",charset='" & codeset & "'  where httpurl='" & httpUrl & "'") 
+	'【@是jsp显示@】}catch(Exception e){} 
+    conn.Execute("update " & db_PREFIX & "weburlscan  set webstate=" & nWebState & ",websize=" & longWebSize & ",openspeed=" & longOpenSpeed & ",charset='" & codeset & "'  where httpurl='" & httpUrl & "'") 
 
 	'strLen(content)  不用这个，不精准
 
@@ -450,6 +481,7 @@ Function scanUrl(httpUrl, toTitle, codeset)
             url = handleScanUrlList(httpUrl, url) 
             url = handleWithWebSiteList(httpUrl, url) 
             If url <> "" Then
+				'【@是jsp显示@】try{
                 rs.Open "select * from " & db_PREFIX & "weburlscan where httpurl='" & url & "'", conn, 1, 1 
                 If rs.EOF Then
                     u = LCase(url)
@@ -464,6 +496,7 @@ Function scanUrl(httpUrl, toTitle, codeset)
                 Else
                     Call echo(title, url) 
                 End If : rs.Close 
+				'【@是jsp显示@】}catch(Exception e){} 
             End If 
         End If 
     Next
@@ -473,5 +506,4 @@ End Function
 
 
 %>                  
-
 

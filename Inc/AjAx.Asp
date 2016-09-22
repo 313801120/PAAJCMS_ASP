@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -143,7 +143,7 @@ Sub MobileArticleList()
 	'Call Rw(GetFText("/2.xml"))
 	Dim C,Sql,nCount,I
 	Call OpenConn()
-	If Session("ShowMobileArticleNumb") = "" Then Session("ShowMobileArticleNumb")=12
+	If getSession("ShowMobileArticleNumb") = "" Then getSession("ShowMobileArticleNumb")=12
 	nCount = 0
     C=C & "<?xml version=""1.0"" encoding=""gb2312"" ?> " & vbCrlf
     C=C & "<clists> " & vbCrlf
@@ -151,12 +151,12 @@ Sub MobileArticleList()
 	Rs.Open Sql,Conn,1,1
 	For I =1 To Rs.RecordCount
 		If nCount>10 Then Exit For
-		If I > Session("ShowMobileArticleNumb") then
+		If I > getSession("ShowMobileArticleNumb") then
 			nCount=nCount+1
 		    C=C & "<clist id="""& Rs("ID") &""" title="""& Rs("Title") &""" image=""0"" time="""& Rs("AddDateTime") &"""/>" & vbCrlf
 		End If
 	Rs.MoveNext:Next:Rs.Close
-	Session("ShowMobileArticleNumb")=Session("ShowMobileArticleNumb")+nCount 
+	call setSession("ShowMobileArticleNumb",cint(getSession("ShowMobileArticleNumb"))+nCount) 
     C=C & "</clists>" & vbCrlf
 	Call Rw(C)
 End Sub
@@ -189,8 +189,8 @@ Sub UserReg()
 			Rs.Update
 			Response.Cookies("PassWord")=PassWord
 			Response.Cookies("PassWord").Expires=date+10
-			Session("Email")=Rs("Email")
-			Session("MyMoney")=CLng(Rs("MyMoney"))
+			call setSession("Email",Rs("Email"))
+			call setSession("MyMoney",CLng(Rs("MyMoney")))
 			Call Rw("OK")
 		End If
 		Response.End()
@@ -218,10 +218,9 @@ Sub UserLogin()
 		If Rs("Pwd")<>PassWord Then
 			Call Rw("密码不正确")
 		Else
-			Response.Cookies("PassWord")=PassWord
-			Response.Cookies("PassWord").Expires=date+10
-			Session("Email")=Rs("Email")
-			Session("MyMoney")=CLng(Rs("MyMoney"))
+			call setCookie("PassWord",PassWord,60*60*24*10)
+			call setSession("Email",Rs("Email"))
+			call setSession("MyMoney",CLng(Rs("MyMoney")))
 			Call Rw("OK")
 		End If
 	End If:Rs.Close

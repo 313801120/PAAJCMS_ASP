@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -368,71 +368,6 @@ function sqlInUrl(byVal httpurl)
     if isTrue1 = 200 and isTrue2 = 500 then sqlInUrl = true 
 end function 
 
-'处理注入网址，配置获得网站注意网址
-function handlUrlCanShu(httpurl)
-    dim url, splStr, i, s, s1, s2 
-    splStr = split(httpurl, "=") 
-    for i = 0 to uBound(splStr)
-        s = splStr(i) 
-        if url <> "" then url = url & "=" 
-        if inStr(s, "&") then
-            s1 = mid(s, 1, inStr(s, "&") - 1) 
-            s2 = mid(s, inStr(s, "&")) 
-            s = escape(s1) & s2 
-        elseIf i = uBound(splStr) then
-            s = escape(s) 
-        end if 
-        url = url & s 
-    next 
-    handlUrlCanShu = url 
-end function 
-
-
-'处理字符编码 20150723
-function handleStrCharSet(sSetChar)
-    if sSetChar = "1" or uCase(sSetChar) = "GB2312" or sSetChar = "" then
-        sSetChar = "GB2312" 
-    elseIf sSetChar = "0" or uCase(sSetChar) = "UTF-8" then
-        sSetChar = "UTF-8" 
-    elseIf sSetChar = "2" or uCase(sSetChar) = "UNICODE" then
-        sSetChar = "UNICODE" 
-    end if 
-    handleStrCharSet = sSetChar 
-end function 
-
-
-'URL加密  自己写得不再使用，UTF8_urlEncoding没有它好用
-function urlEncoding(str)
-    '追加可不要
-    str = replace(str, "1", "%31") 
-    str = replace(str, "0", "%30") 
-    str = replace(str, "A", "%41") 
-    str = replace(str, "我", "%CE%D2") 
-    str = replace(str, "#", "%23") 
-    '原始
-    str = replace(str, "a", "%61") 
-    str = replace(str, "n", "%6E") 
-    str = replace(str, "d", "%64") 
-    str = replace(str, " ", "%20") 
-    str = replace(str, "=", "%3D") 
-    str = replace(str, "e", "%65") 
-    str = replace(str, "x", "%78") 
-    str = replace(str, "i", "%69") 
-    str = replace(str, "s", "%73") 
-    str = replace(str, "t", "%74") 
-    str = replace(str, "(", "%28") 
-    str = replace(str, ")", "%29") 
-    str = replace(str, "l", "%6C") 
-    str = replace(str, "c", "%63") 
-    str = replace(str, "*", "%2A") 
-    str = replace(str, "f", "%66") 
-    str = replace(str, "r", "%72") 
-    str = replace(str, "o", "%6F") 
-    str = replace(str, "m", "%6D") 
-    str = replace(str, "w", "%77") 
-    str = replace(str, "h", "%68") 
-    urlEncoding = str 
-end function 
 
 
 
@@ -499,4 +434,3 @@ end function
 
 
 %>      
-

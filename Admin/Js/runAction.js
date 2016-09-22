@@ -1,4 +1,7 @@
 //xy类V1.0  相当于asp里  class xyClass     直接引用 alert(new xyClass().setCookie('cname','11bb'))  
+/*
+javascript:alert(new xyClass().delCookie('PAAJCMSGW'))
+*/
 // javascript:history.go(-1)
 function xyClass(){
 	this.UNDEFINED				//undefined 
@@ -989,6 +992,14 @@ var JS2015 = (function () {
 				}
 			})	
 		})	 
+		
+		//官方
+		  $("#iframePAAJCMSGW").on("load",function(){
+			alert(111)
+			//加载完成，需要执行的代码
+			alert($(this).contents())
+			alert($(this).contents().html())
+		});
 		
 		
 	}

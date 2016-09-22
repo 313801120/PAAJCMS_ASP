@@ -1,15 +1,18 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
 '************************************************************
 %>
-<!--#Include File = "../Inc/Config.asp"-->
-<!--#Include File = "function.asp"--> 
+<!--#Include File = "Config.asp"-->
+<!--#Include File = "admin_function.asp"-->  
+<!--#Include File = "admin_function2.asp"-->      
+<!--#Include File = "admin_function_cai.asp"-->
+<!--#Include File = "admin_setAccess.asp"-->   
 <!DOCTYPE html> 
 <html xmlns="http://www.w3.org/1999/xhtml"> 
 <head> 
@@ -52,31 +55,37 @@ function checkDel()
     else 
     return false; 
 } 
-</script> 
+</script>
 <% 
-
-If Session("adminusername") = "" Then
-    Call eerr("提示", "未登录，请先登录") 
-End If 
- 
-call openconn()
-Select Case Request("act")
-    Case "templateFileList" : displayTemplateDirDialog(Request("dir")) : templateFileList(Request("dir"))'模板列表
-    Case "delTemplateFile" : Call delTemplateFile(Request("dir"), Request("fileName")) : displayTemplateDirDialog(Request("dir")) : templateFileList(Request("dir"))		'删除模板文件
-    Case "addEditFile" : displayTemplateDirDialog(Request("dir")) : Call addEditFile(Request("dir"), Request("fileName"))'显示添加修改文件
-    Case Else : displayTemplateDirDialog(Request("dir"))                                        '显示模板目录面板
-End Select
+call loadRun()    '【@是.netc屏蔽@】'【@是jsp屏蔽@】 
+'加载就运行
+sub loadRun()	
+	If getSession("adminusername") = "" Then
+		Call eerr("提示", "未登录，请先登录") 
+	End If 
+	 
+	call openconn()
+	if Request("act")="templateFileList" then
+		call displayTemplateDirDialog(Request("dir")) : templateFileList(Request("dir"))'模板列表
+	elseif Request("act")="delTemplateFile" then
+		Call delTemplateFile(Request("dir"), Request("fileName")) : displayTemplateDirDialog(Request("dir")) : templateFileList(Request("dir"))		'删除模板文件
+	elseif Request("act")= "addEditFile" then
+		call displayTemplateDirDialog(Request("dir")) : Call addEditFile(Request("dir"), Request("fileName"))'显示添加修改文件
+	Else 
+		call displayTemplateDirDialog(Request("dir"))                                        '显示模板目录面板
+	End if
+end sub
 
 '模板文件列表
 Sub templateFileList(dir)
     Dim content, splStr, fileName, s,fileType ,folderName,filePath
 	
-	if  Session("adminusername") = "PAAJCMS"  then 
-		content = getDirFolderNameList(dir,"")
+	if  getSession("adminusername") = "PAAJCMS"  then 
+		content = getDirFolderNameList(dir)
     	splStr = Split(content, vbCrLf) 	
 		For Each folderName In splStr
 			s="<a href='?act=templateFileList&dir="& dir & "/" & folderName &"'>"& folderName &"</a>" 
-			Call echo("<img src='Images/file/folder.gif'>",s)
+			Call echo("<img src='"& adminDir &"Images/file/folder.gif'>",s)
 		next
 		content = getDirFileNameList(dir,"")
 	else
@@ -92,7 +101,7 @@ Sub templateFileList(dir)
 			end if
 			 
 			s = "<a href=""../aspweb.asp?templatedir=" & escape(dir) & "&templateName=" & fileName & """ target='_blank'>预览</a> " 
-			Call echo("<img src='Images/file/"& fileType &".gif'>" & fileName & "（"& printSpaceValue(getFSize(filePath)) &"）", s & "| <a href='?act=addEditFile&dir=" & dir & "&fileName=" & fileName & "'>修改</a> | <a href='?act=delTemplateFile&dir=" & Request("dir") & "&fileName=" & fileName & "' onclick='return checkDel()'>删除</a>") 
+			Call echo("<img src='"& adminDir &"Images/file/"& fileType &".gif'>" & fileName & "（"& printSpaceValue(getFSize(filePath)) &"）", s & "| <a href='?act=addEditFile&dir=" & dir & "&fileName=" & fileName & "'>修改</a> | <a href='?act=delTemplateFile&dir=" & Request("dir") & "&fileName=" & fileName & "' onclick='return checkDel()'>删除</a>") 
 		end if
     Next 
 	
@@ -129,7 +138,7 @@ end function
 Function addEditFile(dir, fileName)
     Dim filePath,promptMsg
 	
-    If Right(LCase(fileName), 5) <> ".html" and Session("adminusername") <> "PAAJCMS" Then
+    If Right(LCase(fileName), 5) <> ".html" and getSession("adminusername") <> "PAAJCMS" Then
         fileName = fileName & ".html" 
     End If 
     filePath = dir & "/" & fileName
@@ -183,4 +192,3 @@ Function displayTemplateDirDialog(dir)
   </table> 
 </form> 
 <% End Function%>
-

@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -12,15 +12,15 @@
 '保存数据   ?act=saveData
 Function saveData(sType)
 	
-	if session("yzm")="" then
+	if getsession("yzm")="" then
 		call eerr("提示","验证码失效")
 	end if
 	
 	'if instr("|"& getFormFieldList() &"|","|yzm|") then		 
-	if session("yzm")<>request.Form("yzm") then
+	if getsession("yzm")<>request.Form("yzm") then
 		call eerr("提示","验证码错误")
 	end if
-	session("yzm")=""			'清空验证码
+	call setsession("yzm","")			'清空验证码
 	  
 
     '保存文章评论
@@ -89,8 +89,11 @@ Function getPostSql(sID, tableName, fieldNameList)
 			'call echo("fieldConfig",fieldConfig)
             splxx = Split(fieldConfig & "|||", "|") 
             fieldName = splxx(0)                                                            '字段名称
+			fieldSetType="":defaultFieldValue=""
+			'【@是jsp显示@】try{
             fieldSetType = splxx(1)                                                         '字段设置类型
-            defaultFieldValue = splxx(2)                                                    '默认字段值
+            defaultFieldValue = splxx(2)                                                    '默认字段值			
+			'【@是jsp显示@】}catch(Exception e){}
             fieldValue = ADSqlRf(fieldName)                                                 '代替上面，因为它处理了'符号
             'call echo("fieldValue",fieldValue)
 			'排序密码不处理
@@ -139,9 +142,9 @@ Function getPostSql(sID, tableName, fieldNameList)
 				Else
 					fieldValue = "'" & fieldValue & "'" 
 				End If 
-				
-				fieldValue=unescape(fieldValue)			'解码20160418
-			
+				if EDITORTYPE <> "asp" then
+					fieldValue=unescape(fieldValue)			'解码20160418   把+处理掉了为为什么要解码？可能在php里get方式发送时(20160810) 
+				end if
 				If valueStr <> "" Then 
 					valueStr = valueStr & "," 
 					editValueStr = editValueStr & "," 
@@ -163,8 +166,11 @@ Function getPostSql(sID, tableName, fieldNameList)
         If InStr(s, "|") > 0 Then
             splxx = Split(s & "|||", "|") 
             fieldName = splxx(0)                                                            '字段名称
+			fieldSetType="":fieldValue="" 
+			'【@是jsp显示@】try{
             fieldSetType = splxx(1)                                                         '字段设置类型
             fieldValue = splxx(2)                                                           '默认字段值
+			'【@是jsp显示@】}catch(Exception e){}
 
             If InStr(systemFieldList, "," & fieldName & "|") > 0 And InStr("," & fieldList & ",", "," & fieldName & ",") = False Then
 			  
@@ -192,10 +198,10 @@ Function getPostSql(sID, tableName, fieldNameList)
     If sID = "" Then
         sql = "insert into " & db_PREFIX & "" & tableName & " (" & fieldList & ",updatetime) values(" & valueStr & ",'" & Now() & "')" 
     Else
+		'call echo("editValueStr",editValueStr)
         sql = "update " & db_PREFIX & "" & tableName & " set " & editValueStr & ",updatetime='" & Now() & "' where id=" & sID 
     End If 
     getPostSql = sql 
 End Function 
 %> 
-
 

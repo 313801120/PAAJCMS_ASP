@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -205,8 +205,14 @@ function replaceCssImgPath(byval cssStr, byval imgPath)
     splStr = split(content, "$Array$") 
     for each s in splStr
         if s <> "" then
+			'对等号前面不处理，如   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (enabled=true, sizingMethod=scale, src='../images/ad-gallery/opa75.png');}
+			if instr(s,"=")>0 then
+				s=mid(s,instrrev(s,"=")+1) 
+			end if
             lCaseS = lcase(s) 
             fileName = trim(getFileAttr(s, "2")) 
+			'call echo("css s",s)
+			'call echo("css filename",fileName)
             '引用图片 基础判断方法，有待改进，改进也是成长的一部分20160719
             if instr(lCaseS, "data:image") = 0 and(instr(lCaseS, ".jpg") > 0 or instr(lCaseS, ".gif") > 0 or instr(lCaseS, ".png") > 0 or instr(lCaseS, ".bmp") > 0) then
                 '修复于20160719
@@ -559,4 +565,3 @@ function handleCssPX(byVal sValue)
 end function 
 
 %>   
-

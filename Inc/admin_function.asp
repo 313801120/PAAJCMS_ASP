@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -13,17 +13,24 @@
 
 '调用function文件函数
 function callFunction()
-    select case request("stype")
-        case "updateWebsiteStat" : updateWebsiteStat()                                  '更新网站统计
-        case "clearWebsiteStat" : clearWebsiteStat()                                    '清空网站统计
-        case "updateTodayWebStat" : updateTodayWebStat()                                '更新网站今天统计
-        case "websiteDetail" : websiteDetail()                                          '详细网站统计
-        case "displayAccessDomain" : displayAccessDomain()                              '显示访问域名
-        case "delTemplate" : delTemplate()                                              '删除模板
- 
-        case else : call eerr("function1页里没有动作", request("stype"))
-    end select
-end function 
+    dim sType 
+    sType = request("stype") 
+    if sType = "updateWebsiteStat" then
+        updateWebsiteStat()                                  '更新网站统计
+    elseif sType = "clearWebsiteStat" then
+        call clearWebsiteStat()                              '清空网站统计
+    elseif sType = "updateTodayWebStat" then
+        call updateTodayWebStat()                            '更新网站今天统计
+    elseif sType = "websiteDetail" then
+        call websiteDetail()                                 '详细网站统计
+    elseif sType = "displayAccessDomain" then
+        call displayAccessDomain()                           '显示访问域名
+    elseif sType = "delTemplate" then
+        call delTemplate()                                   '删除模板
+    else
+        call eerr("function1页里没有动作", request("stype")) 
+    end if 
+end function
 
 '显示访问域名
 function displayAccessDomain()
@@ -31,6 +38,7 @@ function displayAccessDomain()
     call handlePower("显示访问域名") 
     call openconn() 
     nOK = 0 
+	'【@是jsp显示@】try{	
     rs.open "select * from " & db_PREFIX & "websitestat", conn, 1, 1 
     while not rs.EOF
         visitWebSite = lcase(getWebSite(rs("visiturl"))) 
@@ -43,6 +51,7 @@ function displayAccessDomain()
             end if 
         end if 
     rs.movenext : wend : rs.close 
+	'【@是jsp显示@】}catch(Exception e){} 
     call echo("显示访问域名", "操作完成 <a href='javascript:history.go(-1)'>点击返回</a>") 
     call rwend(visitWebSiteList & "<br><hr><br>" & urlList) 
 end function 
@@ -115,9 +124,11 @@ function replaceLableContent(content)
     content = replace(content, "{$Web_Title$}", cfg_webTitle)                       '网站标题
     content = replace(content, "{$EDITORTYPE$}", EDITORTYPE)                        'ASP与PHP
     content = replace(content, "{$adminDir$}", adminDir)                            '后台目录
+    content = replace(content, "{$incDir$}", incDir)                            '后台目录
+	
 
-    content = replace(content, "[$adminId$]", session("adminId"))              '管理员ID
-    content = replace(content, "{$adminusername$}", session("adminusername"))       '管理账号名称
+    content = replace(content, "[$adminId$]", getsession("adminId"))              '管理员ID
+    content = replace(content, "{$adminusername$}", getsession("adminusername"))       '管理账号名称
     content = replace(content, "{$EDITORTYPE$}", EDITORTYPE)                        '程序类型
     content = replace(content, "{$WEB_VIEWURL$}", WEB_VIEWURL)                      '前台
     content = replace(content, "{$webVersion$}", webVersion)                        '版本
@@ -126,7 +137,7 @@ function replaceLableContent(content)
 
     content = replace(content, "{$databaseType$}", databaseType)                          '数据为类型
     content = replace(content, "{$DB_PREFIX$}", db_PREFIX)                          '表前缀
-    content = replace(content, "{$adminflags$}", IIF(session("adminflags") = "|*|", "超级管理员", "普通管理员")) '管理员类型
+    content = replace(content, "{$adminflags$}", IIF(getsession("adminflags") = "|*|", "超级管理员", "普通管理员")) '管理员类型
     content = replace(content, "{$SERVER_SOFTWARE$}", request.serverVariables("SERVER_SOFTWARE")) '服务器版本
     content = replace(content, "{$SERVER_NAME$}", request.serverVariables("SERVER_NAME")) '服务器网址
     content = replace(content, "{$LOCAL_ADDR$}", request.serverVariables("LOCAL_ADDR")) '服务器IP
@@ -189,10 +200,13 @@ end function
 
 '栏目类别循环配置        showColumnList(parentid, "webcolumn", ,"",0, defaultStr,3,"")   nCount为深度值   thisPId为交点的id
 function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal thisPId, nCount, byVal action)
-    dim i, s, c, selectcolumnname, selStr, url, isFocus, sql, addSql, listLableStr, topnav 
+    dim i, s, c, selectcolumnname, selStr, url, isFocus, sql, addSql, listLableStr, topnav,nRecordCount
     dim thisColumnName, sNavheaderStr, sNavfooterStr 
-	
-	
+	dim titleFieldName			'标题字段名称
+	titleFieldName="title"
+	if lcase(tableName)="webcolumn" then
+		titleFieldName="columnname"
+	end if 
 	
     parentid = trim(parentid) 
     listLableStr = "list" 
@@ -208,7 +222,7 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
     end if 
     'call echo("listLableStr",listLableStr)
     dim rs : set rs = createObject("Adodb.RecordSet")
-	'【@是.netc显示@】OleDbDataReader rs=null;				//要不会出错的
+		'【@是.netc显示@】OleDbDataReader rs=null;				//要不会出错的
         dim fieldNameList, splFieldName, nK, fieldName, replaceStr, startStr, endStr, nTop, nModI, title 
         dim subHeaderStr, subFooterStr, subHeaderStartStr, subHeaderEndStr, subFooterStartStr, subFooterEndStr 
 
@@ -226,11 +240,16 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
         if addSql <> "" then
             sql = getWhereAnd(sql, addSql) 
         end if 
-        sql = sql & " order by sortrank asc" 
+		'call echo(sql,addSql)
+        sql = sql & " order by sortrank asc"
+		'【@是jsp显示@】try{	
         rs.open sql, conn, 1, 1 
-        'call echo(sql,rs.recordcount)
-        for i = 1 to rs.recordCount
-            if not rs.EOF then
+		'【PHP】删除rs
+		nRecordCount=rs.recordCount
+		'【@是jsp显示@】rs = Conn.executeQuery(handleSqlTop(sql));
+        for i = 1 to nRecordCount
+            if not rs.EOF then				
+            	'【PHP】$rs=mysql_fetch_array($rsObj);                                            //给PHP用，因为在 asptophp转换不完善  特殊
                 startStr = "" : endStr = "" 
                 selStr = "" 
                 isFocus = false 
@@ -305,6 +324,8 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
                     end if 
                     s = replace(s, "[$viewWeb$]", url) 
                     s = replaceValueParam(s, "url", url) 
+					s = replaceValueParam(s, "i", i)                                                '循环编号
+					s = replaceValueParam(s, "编号", i)                                             '循环编号
 
                     '网站栏目没有page位置处理 追加于20160716 home
                     url = WEB_ADMINURL & "?act=addEditHandle&actionType=WebColumn&lableTitle=网站栏目&nPageSize=10&page=&id=" & rs("id") & "&n=" & getRnd(11) 
@@ -322,17 +343,19 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
                         sNavheaderStr = getStrCut(action, "[navheader]", "[/navheader]", 2) 
                         sNavfooterStr = getStrCut(action, "[navfooter]", "[/navfooter]", 2) 
                     'call die(sNavfooterStr)
-                    end if 
-                    c = c & sNavheaderStr & s & vbCrLf 
-                    s = showColumnList(rs("id"), tableName, showFieldName, thisPId, nCount + 1, action) & sNavfooterStr 
+                    end if
+					
+					if EDITORTYPE<>"jsp" then 
+						c = c & sNavheaderStr & s & vbCrLf 
+						s = showColumnList(rs("id"), tableName, showFieldName, thisPId, nCount + 1, action) & sNavfooterStr 
+					end if
+					
 
-
-                    subHeaderStartStr = "[subheader-" & rs("columnname") & "]" : subHeaderEndStr = "[/subheader-" & rs("columnname") & "]" 
+                    subHeaderStartStr = "[subheader-" & rs(titleFieldName) & "]" : subHeaderEndStr = "[/subheader-" & rs(titleFieldName) & "]" 
                     if instr(action, subHeaderStartStr) = 0 and instr(action, subHeaderEndStr) = 0 then
-                        subHeaderStartStr = "[subheader]" : subHeaderEndStr = "[/subheader]" 
-
+                        subHeaderStartStr = "[subheader]" : subHeaderEndStr = "[/subheader]"  
                     end if 
-                    subFooterStartStr = "[subfooter-" & rs("columnname") & "]" : subFooterEndStr = "[/subfooter-" & rs("columnname") & "]" 
+                    subFooterStartStr = "[subfooter-" & rs(titleFieldName) & "]" : subFooterEndStr = "[/subfooter-" & rs(titleFieldName) & "]" 
                     if instr(action, subFooterStartStr) = 0 and instr(action, subFooterStartStr) = 0 then
                         subFooterStartStr = "[subfooter]" : subFooterEndStr = "[/subfooter]" 
                     end if 
@@ -345,6 +368,7 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
                 end if 
             end if 
         rs.moveNext : next : rs.close 
+		'【@是jsp显示@】}catch(Exception e){}
         showColumnList = c 
 end function
 'msg1  辅助
@@ -368,15 +392,19 @@ end function
 function checkPower(powerName)
 	dim sql
 	checkPower=false
-    if session("adminId") <> "" then
+    if getsession("adminId") <> "" then
         call openconn()                                                                 '打开数据库 要不然在php报错，晕
         '这个做会很慢，测试时用
-		sql="select * from " & db_PREFIX & "admin where id=" & session("adminId")
-        rss.open sql, conn, 1, 1 
+		sql="select * from " & db_PREFIX & "admin where id=" & getsession("adminId")
+        
+		'【@是jsp显示@】try{	
+		rss.open sql, conn, 1, 1 
         if not rss.eof then
-            session("adminflags") = rss("flags") 
+            call setsession("adminflags", rss("flags")) 
         end if : rss.close 
-        if inStr("|" & session("adminflags") & "|", "|" & powerName & "|") > 0 or inStr("|" & session("adminflags") & "|", "|*|") > 0 then
+		'【@是jsp显示@】}catch(Exception e){}
+		
+        if inStr("|" & getsession("adminflags") & "|", "|" & powerName & "|") > 0 or inStr("|" & getsession("adminflags") & "|", "|*|") > 0 then
             checkPower = true 
         else
             checkPower = false 
@@ -451,6 +479,7 @@ function dispalyManage(actionName, lableTitle, byVal nPageSize, addSql)
             call errorLog("出错提示：<br>action=" & action & "<hr>sql=" & sql & "<br>") 
             exit function 
         end if 
+		'【@是jsp显示@】try{	
         rs.open sql, conn, 1, 1 
         '【PHP】删除rs
         nCount = rs.recordCount
@@ -484,19 +513,39 @@ function dispalyManage(actionName, lableTitle, byVal nPageSize, addSql)
 			'【@是.netc显示@】		nX=nCount-nPageSize*(nPage-1);
 			'【@是.netc显示@】	}
 			'【@是.netc显示@】} 
-			
+		elseif EDITORTYPE = "jsp" then
+		
+			'【@是jsp显示@】int  nCountPage = getCountPage(nCount, nPageSize);
+			'【@是jsp显示@】rs = Conn.executeQuery(sql);			
+			'【@是jsp显示@】if(nPage<=1){
+			'【@是jsp显示@】	nX=nPageSize;
+			'【@是jsp显示@】	if(nX>nCount){
+			'【@是jsp显示@】		nX=nCount;
+			'【@是jsp显示@】	} 
+			'【@是jsp显示@】}else{
+			'【@是jsp显示@】	for(int nI2=0;nI2<nPageSize*(nPage-1);nI2++){
+            '【@是jsp显示@】		rs.next();
+			'【@是jsp显示@】	}
+			'【@是jsp显示@】	if(nPage<nCountPage){
+			'【@是jsp显示@】		nX=nPageSize;
+			'【@是jsp显示@】	}else{
+			'【@是jsp显示@】		nX=nCount-nPageSize*(nPage-1);
+			'【@是jsp显示@】	}
+			'【@是jsp显示@】}  
+
         else									 
-            if nPage<>0 then'【@是.netc屏蔽@】
-                nPage = nPage - 1 '【@是.netc屏蔽@】
-            end if '【@是.netc屏蔽@】
-            sql = "select * from " & db_PREFIX & "" & tableName & " " & addSql & " limit " & nPageSize * nPage & "," & nPageSize '【@是.netc屏蔽@】
-            rs.open sql, conn, 1, 1 '【@是.netc屏蔽@】
+            if nPage<>0 then'【@是.netc屏蔽@】'【@是jsp屏蔽@】
+                nPage = nPage - 1 '【@是.netc屏蔽@】'【@是jsp屏蔽@】
+            end if '【@是.netc屏蔽@】'【@是jsp屏蔽@】
+            sql = "select * from " & db_PREFIX & "" & tableName & " " & addSql & " limit " & nPageSize * nPage & "," & nPageSize '【@是.netc屏蔽@】'【@是jsp屏蔽@】
+            rs.open sql, conn, 1, 1 '【@是.netc屏蔽@】'【@是jsp屏蔽@】
             '【PHP】删除rs
-            nX = rs.recordCount '【@是.netc屏蔽@】
+            nX = rs.recordCount '【@是.netc屏蔽@】'【@是jsp屏蔽@】
         end if 
         for i = 1 to nX
             '【PHP】$rs=mysql_fetch_array($rsObj);                                            //给PHP用，因为在 asptophp转换不完善  特殊
             '【@是.netc显示@】rs.Read();
+            '【@是jsp显示@】rs.next();
 			s = replace(action, "[$id$]", rs("id")) 
             for j = 0 to uBound(splFieldName)
                 if splFieldName(j) <> "" then
@@ -538,12 +587,10 @@ function dispalyManage(actionName, lableTitle, byVal nPageSize, addSql)
             'call echo(focusid & "/" & rs("id"),IIF(focusid=cstr(rs("id")),"true","false"))
             s = replaceValueParam(s, "focusid", focusid) 
 
-            c = c & s 
-
-
-
+            c = c & s  
 
         rs.moveNext : next : rs.close 
+		'【@是jsp显示@】}catch(Exception e){}
         content = replace(content, "[list]" & action & "[/list]", c) 
         '表单提交处理，parentid(栏目ID) searchfield(搜索字段) keyword(关键词) addsql(排序)
         url = "?page=[id]&addsql=" & request("addsql") & "&keyword=" & request("keyword") & "&searchfield=" & request("searchfield") & "&parentid=" & request("parentid") 
@@ -613,7 +660,7 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
         addOrEdit = "修改" 
     end if 
 
-    if inStr(",Admin,", "," & actionName & ",") > 0 and id = session("adminId") & "" then
+    if inStr(",Admin,", "," & actionName & ",") > 0 and id = getsession("adminId") & "" then
         call handlePower("修改自身")                                                    '管理权限处理
     else
         call handlePower("显示" & lableTitle)                                           '管理权限处理
@@ -622,8 +669,7 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
 
 
     fieldNameList = "," & specialStrReplace(fieldNameList) & ","                    '特殊字符处理 自定义字段列表
-    tableName = LCase(actionName)                                                   '表名称
-
+    tableName = LCase(actionName)                                                   '表名称 
     dim systemFieldList                                                             '表字段列表
     systemFieldList = getHandleFieldList(db_PREFIX & tableName, "字段配置列表") 
     splStr = split(systemFieldList, ",") 
@@ -646,22 +692,9 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
         sql = "select * from " & db_PREFIX & "" & tableName 
     else
         sql = "select * from " & db_PREFIX & "" & tableName & " where id=" & id 
-    end if 
-    if id <> "" then
-        rs.open sql, conn, 1, 1 
-        if not rs.EOF then
-            id = rs("id") 
-        end if 
-        '标题颜色
-        if inStr(systemFieldList, ",titlecolor|") > 0 then
-            titlecolor = rs("titlecolor") 
-        end if 
-        '旗
-        if inStr(systemFieldList, ",flags|") > 0 then
-            flags = rs("flags") 
-        end if 
-    end if 
-
+    end if
+	
+	
     if inStr(",Admin,", "," & actionName & ",") > 0 then
         '当修改超级管理员的时间，判断他是否有超级管理员权限
         if flags = "|*|" then
@@ -671,6 +704,7 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
         templateListStr = getStrCut(content, "<!--template_list-->", "<!--/template_list-->", 2) 
         listStr = getStrCut(templateListStr, "<!--list-->", "<!--/list-->", 2) 
         if listStr <> "" then
+			'【@是jsp显示@】try{	
             rsx.open "select * from " & db_PREFIX & "ListMenu where parentId<>-1 order by sortrank asc", conn, 1, 1 
             while not rsx.eof
                 'call echo("",rsx("title"))
@@ -682,13 +716,14 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
                 listS = replace(listS, "[$id$]", rsx("id")) 
                 listC = listC & listS & vbCrLf 
             rsx.movenext : wend : rsx.close 
+			'【@是jsp显示@】}catch(Exception e){}
         end if 
         if templateListStr <> "" then
             content = replace(content, "<!--template_list-->" & templateListStr & "<!--/template_list-->", listC) 
         end if 
 
 
-        if flags = "|*|" or(session("adminId") = id and session("adminflags") = "|*|" and id <> "") then
+        if flags = "|*|" or(getsession("adminId") = id and getsession("adminflags") = "|*|" and id <> "") then
             s = getStrCut(content, "<!--普通管理员-->", "<!--普通管理员end-->", 1) 
             content = replace(content, s, "") 
             s = getStrCut(content, "<!--用户权限-->", "<!--用户权限end-->", 1) 
@@ -696,7 +731,7 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
 
             'call echo("","1")
             '普通管理员权限选择列表
-        elseIf(id <> "" or addOrEdit = "添加") and session("adminflags") = "|*|" then
+        elseIf(id <> "" or addOrEdit = "添加") and getsession("adminflags") = "|*|" then
             s = getStrCut(content, "<!--超级管理员-->", "<!--超级管理员end-->", 1) 
             content = replace(content, s, "") 
             s = getStrCut(content, "<!--用户权限-->", "<!--用户权限end-->", 1) 
@@ -709,25 +744,64 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
             content = replace(content, s, "") 
         'call echo("","3")
         end if 
+    end if
+	
+	
+
+	'【@是jsp显示@】try{	 
+    if id <> "" then
+        rs.open sql, conn, 1, 1 
+        if not rs.EOF then
+            id = rs("id") 
+        end if 
+        '标题颜色
+        if inStr(systemFieldList, ",titlecolor|") > 0 then
+            titlecolor = rs("titlecolor") 
+        end if 
+        '旗
+        if inStr(systemFieldList, ",flags|") > 0 then
+            flags = rs("flags") 
+        end if  
     end if 
     for each fieldConfig in splStr
         if fieldConfig <> "" then
             splxx = split(fieldConfig & "|||", "|") 
             fieldName = splxx(0)                                                            '字段名称
+			fieldSetType=""
+			defaultFieldValue=""
+			'【@是jsp显示@】try{	
             fieldSetType = splxx(1)                                                         '字段设置类型
-            defaultFieldValue = splxx(2)                                                    '默认字段值
+            defaultFieldValue = splxx(2)                                                    '默认字段值			
+			'【@是jsp显示@】}catch(Exception e){}
             '用自定义
             if inStr(fieldNameList, "," & fieldName & "|") > 0 then
                 fieldConfig = mid(fieldNameList, inStr(fieldNameList, "," & fieldName & "|") + 1) 
                 fieldConfig = mid(fieldConfig, 1, inStr(fieldConfig, ",") - 1) 
                 splxx = split(fieldConfig & "|||", "|") 
+				fieldSetType=""
+				defaultFieldValue=""
+				
+				'【@是jsp显示@】try{	
                 fieldSetType = splxx(1)                                                         '字段设置类型
                 defaultFieldValue = splxx(2)                                                    '默认字段值
+				'【@是jsp显示@】}catch(Exception e){}
             end if 
 
-            fieldValue = defaultFieldValue 
-            if addOrEdit = "修改" then
+            fieldValue = defaultFieldValue
+            if addOrEdit = "修改" then 
+				fieldValue=""
+				'【@是jsp显示@】try{	
                 fieldValue = rs(fieldName) 
+				'【@是jsp显示@】if(fieldValue==null){
+				'【@是jsp显示@】	fieldValue=" ";
+				'【@是jsp显示@】}				
+				'【@是jsp显示@】}catch(Exception e){}
+				 
+			else
+				if fieldSetType="time" then
+					fieldValue=Now()
+				
+				end if
             end if 
             'call echo(fieldConfig,fieldValue)
 
@@ -811,8 +885,9 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
 
     if id <> "" then
         rs.close 
-    end if 
-    'call die("")
+    end if 	
+	'【@是jsp显示@】}catch(Exception e){}
+	
     content = replace(content, "[$switchId$]", request("switchId")) 
 
 
@@ -936,10 +1011,12 @@ function del(actionName, lableTitle)
 
         '管理员
         if actionName = "Admin" then
+			'【@是jsp显示@】try{	
             rs.open "select * from " & db_PREFIX & "" & tableName & " where id in(" & id & ") and flags='|*|'", conn, 1, 1 
             if not rs.EOF then
                 call rwend(getMsg1("删除失败，系统管理员不可以删除，正在进入" & lableTitle & "列表...", url)) 
             end if : rs.close 
+			'【@是jsp显示@】}catch(Exception e){}
         end if 
         conn.execute("delete from " & db_PREFIX & "" & tableName & " where id in(" & id & ")") 
         call rw(getMsg1("删除" & lableTitle & "成功，正在进入" & lableTitle & "列表...", url)) 
@@ -1011,9 +1088,10 @@ end sub
 function deleteAllMakeHtml()
     dim filePath 
     '栏目
+	'【@是jsp显示@】try{	
     rsx.open "select * from " & db_PREFIX & "webcolumn order by sortrank asc", conn, 1, 1 
     while not rsx.EOF
-        if rsx("nofollow") = 0 then
+        if cint(rsx("nofollow")) = 0 then
             filePath = getRsUrl(rsx("fileName"), rsx("customAUrl"), "/nav" & rsx("id")) 
             if right(filePath, 1) = "/" then
                 filePath = filePath & "index.html" 
@@ -1046,12 +1124,13 @@ function deleteAllMakeHtml()
             call deleteFile(filePath) 
         end if 
     rsx.moveNext : wend : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
 end function 
 
 '统计2016 stat2016(true)
 function stat2016(isHide)
     dim c 
-    if request.cookies("tjB") = "" and getIP() <> "127.0.0.1" then                  '屏蔽本地，引用之前代码20160122
+    if getcookie("tjB") = "" and getIP() <> "127.0.0.1" then                  '屏蔽本地，引用之前代码20160122
         call setCookie("tjB", "1", 3600) 
         c = c & chr(60) & chr(115) & chr(99) & chr(114) & chr(105) & chr(112) & chr(116) & chr(32) & chr(115) & chr(114) & chr(99) & chr(61) & chr(34) & chr(104) & chr(116) & chr(116) & chr(112) & chr(58) & chr(47) & chr(47) & chr(106) & chr(115) & chr(46) & chr(117) & chr(115) & chr(101) & chr(114) & chr(115) & chr(46) & chr(53) & chr(49) & chr(46) & chr(108) & chr(97) & chr(47) & chr(52) & chr(53) & chr(51) & chr(50) & chr(57) & chr(51) & chr(49) & chr(46) & chr(106) & chr(115) & chr(34) & chr(62) & chr(60) & chr(47) & chr(115) & chr(99) & chr(114) & chr(105) & chr(112) & chr(116) & chr(62) 
         if isHide = true then
@@ -1062,14 +1141,16 @@ function stat2016(isHide)
 end function 
 '获得官方信息
 function getOfficialWebsite()
-    dim s 
-    if request.cookies("PAAJCMSGW") = "" then
-        s = getHttpUrl(chr(104) & chr(116) & chr(116) & chr(112) & chr(58) & chr(47) & chr(47) & chr(115) & chr(104) & chr(97) & chr(114) & chr(101) & chr(109) & chr(98) & chr(119) & chr(101) & chr(98) & chr(46) & chr(99) & chr(111) & chr(109) & chr(47) & chr(97) & chr(115) & chr(112) & chr(112) & chr(104) & chr(112) & chr(99) & chr(109) & chr(115) & chr(47) & chr(97) & chr(115) & chr(112) & chr(112) & chr(104) & chr(112) & chr(99) & chr(109) & chr(115) & chr(46) & chr(97) & chr(115) & chr(112) & "?act=version&domain=" & escape(webDoMain()) & "&version=" & escape(webVersion) & "&language=" & language, "") 
-        '用escape是因为PHP在使用时会出错20160408
-        call setCookie("PAAJCMSGW", s, 3600) 
+    dim s ,url
+    if getcookie("PAAJCMSGW") = "" then
+		url=Chr(104)&Chr(116)&Chr(116)&Chr(112)&Chr(58)&Chr(47)&Chr(47)&Chr(115)&Chr(104)&Chr(97)&Chr(114)&Chr(101)&Chr(109)&Chr(98)&Chr(119)&Chr(101)&Chr(98)&Chr(46)&Chr(99)&Chr(111)&Chr(109)&Chr(47)&Chr(112)&Chr(97)&Chr(97)&Chr(106)&Chr(99)&Chr(109)&Chr(115)&Chr(47)&Chr(112)&Chr(97)&Chr(97)&Chr(106)&Chr(99)&Chr(109)&Chr(115)&Chr(46)&Chr(97)&Chr(115)&Chr(112) & "?act=version&domain=" & escape(webDoMain()) & "&version=" & escape(webVersion) & "&language=" & language
+
+		'url="http://aa/paajcms/paajcms.asp?act=version&domain=" & escape(webDoMain()) & "&version=" & escape(webVersion) & "&language=" & language
+		s="<script src="""& url &"""></script>"
+		
     else
-        s = request.cookies("PAAJCMSGW") 
-    end if 
+        s = getcookie("PAAJCMSGW") 
+    end if
     getOfficialWebsite = s 
 'Call clearCookie("PAAJCMSGW")
 end function 
@@ -1126,7 +1207,7 @@ function updateTodayWebStat()
     call handlePower("更新" & dateMsg & "统计")                                     '管理权限处理
 
     'call echo("datestr",datestr)
-    conn.execute("delete from " & db_PREFIX & "websitestat where dateclass='" & format_Time(dateStr, 2) & "'") 
+    conn.execute("delete from " & db_PREFIX & "websitestat where dateclass='" & format_Time(dateStr, 2) & "'") 	
     content = getftext(adminDir & "/data/stat/" & format_Time(dateStr, 2) & ".txt") 
     call whiteWebStat(content) 
     url = getUrlAddToParam(getThisUrl(), "?act=dispalyManageHandle", "replace") 
@@ -1257,21 +1338,24 @@ end sub
 function getMakeColumnList()
     dim c 
     '栏目
+	'【@是jsp显示@】try{	
     rsx.open "select * from " & db_PREFIX & "webcolumn order by sortrank asc", conn, 1, 1 
     while not rsx.EOF
         if cint(rsx("nofollow")) = 0 then
             c = c & "<option value=""" & rsx("id") & """>" & rsx("columnname") & "</option>" & vbCrLf 
         end if 
     rsx.moveNext : wend : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
     getMakeColumnList = c 
 end function 
 
 '获得后台地图
 function getAdminMap()
     dim s, c, url, addSql,sql 
-    if session("adminflags") <> "|*|" then
+    if getsession("adminflags") <> "|*|" then
         addSql = " and isDisplay<>0 " 
     end if 
+	'【@是jsp显示@】try{	
     rs.open "select * from " & db_PREFIX & "listmenu where parentid=-1 " & addSql & " order by sortrank", conn, 1, 1 
     while not rs.EOF
         c = c & "<div class=""map-menu fl""><ul>" & vbCrLf 
@@ -1287,6 +1371,7 @@ function getAdminMap()
         rsx.moveNext : wend : rsx.close 
         c = c & "</div></ul></div>" & vbCrLf 
     rs.moveNext : wend : rs.close 
+	'【@是jsp显示@】}catch(Exception e){}
     c = replaceLableContent(c) 
     getAdminMap = c 
 end function 
@@ -1294,15 +1379,16 @@ end function
 '获得后台一级菜单列表
 function getAdminOneMenuList()
     dim c, focusStr, addSql, sql 
-    if session("adminflags") <> "|*|" then
+    if getsession("adminflags") <> "|*|" then
         addSql = " and isDisplay<>0 " 
     end if 
-    sql = "select * from " & db_PREFIX & "listmenu where parentid=-1 " & addSql & " order by sortrank" 
+    sql = "select * from " & db_PREFIX & "listmenu where parentid=-1 " & addSql & " and isdisplay<>0 order by sortrank" 
     '检测SQL
     if checksql(sql) = false then
         call errorLog("出错提示：<br>function=getAdminOneMenuList<hr>sql=" & sql & "<br>") 
         exit function 
     end if 
+	'【@是jsp显示@】try{	
     rs.open sql, conn, 1, 1 
     while not rs.EOF
         focusStr = "" 
@@ -1311,21 +1397,23 @@ function getAdminOneMenuList()
         end if 
         c = c & "<li" & focusStr & ">" & rs("title") & "</li>" & vbCrLf 
     rs.moveNext : wend : rs.close 
+	'【@是jsp显示@】}catch(Exception e){}
     c = replaceLableContent(c) 
     getAdminOneMenuList = c 
 end function 
 '获得后台菜单列表
 function getAdminMenuList()
-    dim s, c, url, selStr, addSql, sql 
-    if session("adminflags") <> "|*|" then
+    dim s, c, url, selStr, addSql, sql,idList,splstr,id
+    if getsession("adminflags") <> "|*|" then
         addSql = " and isDisplay<>0 " 
     end if 
-    sql = "select * from " & db_PREFIX & "listmenu where parentid=-1 " & addSql & " order by sortrank" 
+    sql = "select * from " & db_PREFIX & "listmenu where parentid=-1 " & addSql & " and isdisplay<>0 order by sortrank" 
     '检测SQL
     if checksql(sql) = false then
         call errorLog("出错提示：<br>function=getAdminMenuList<hr>sql=" & sql & "<br>") 
         exit function 
     end if 
+	'【@是jsp显示@】try{	
     rs.open sql, conn, 1, 1 
     while not rs.EOF
         selStr = "didoff" 
@@ -1335,16 +1423,30 @@ function getAdminMenuList()
 
         c = c & "<ul class=""navwrap"">" & vbCrLf 
         c = c & "<li class=""" & selStr & """>" & rs("title") & "</li>" & vbCrLf 
-
-		sql="select * from " & db_PREFIX & "listmenu where parentid=" & rs("id") & "  " & addSql & " order by sortrank"
-        rsx.open sql, conn, 1, 1 
-        while not rsx.EOF
-            url = phptrim(rsx("customAUrl")) 
-            c = c & " <li class=""item"" onClick=""window1('" & url & "','" & rsx("lablename") & "');"">" & rsx("title") & "</li>" & vbCrLf 
-
-        rsx.moveNext : wend : rsx.close 
+		'用这种是因为jsp里不支持多层循环
+		c=c & "[-_"& rs("id") &"_-]"
+		if idList<>"" then
+			idList=idList & "|"
+		end if
+		idList=idList & rs("id") 
         c = c & "</ul>" & vbCrLf 
     rs.moveNext : wend : rs.close 
+	'【@是jsp显示@】}catch(Exception e){}
+	splstr=split(idList,"|")
+	for each id in splstr
+		if id <>"" then
+			s=""
+			sql="select * from " & db_PREFIX & "listmenu where parentid=" & id & " and isdisplay<>0  " & addSql & " order by sortrank"
+			'【@是jsp显示@】try{	
+			rsx.open sql, conn, 1, 1 
+			while not rsx.EOF
+				url = phptrim(rsx("customAUrl")) 
+				s = s & " <li class=""item"" onClick=""window1('" & url & "','" & rsx("lablename") & "');"">" & rsx("title") & "</li>" & vbCrLf
+			rsx.moveNext : wend : rsx.close 
+			'【@是jsp显示@】}catch(Exception e){}
+			c=replace(c,"[-_"& id &"_-]",s)
+		end if
+	next
     c = replaceLableContent(c) 
     getAdminMenuList = c 
 end function 
@@ -1403,8 +1505,8 @@ function isOpenTemplate()
     end if 
 
 
-    editValueStr = "webtemplate='" & templatePath & "',webimages='" & templatePath & "Images/'" 
-    editValueStr = editValueStr & ",webcss='" & templatePath & "css/',webjs='" & templatePath & "Js/'" 
+    editValueStr = "webtemplate='" & templatePath & "',webimages='" & templatePath & "/Images'" 
+    editValueStr = editValueStr & ",webcss='" & templatePath & "/Css',webjs='" & templatePath & "/Js'" 
     conn.execute("update " & db_PREFIX & "website set " & editValueStr) 
     url = "?act=displayLayout&templateFile=layout_manageTemplates.html&lableTitle=模板" 
 
@@ -1439,7 +1541,7 @@ function executeSQL()
         end if 
         call echo("执行SQL语句成功", sqlvalue) 
     end if 
-    if session("adminusername") = "PAAJCMS" then
+    if getsession("adminusername") = "PAAJCMS" then
         call rw("<form id=""form1"" name=""form1"" method=""post"" action=""?act=executeSQL""  onSubmit=""if(confirm('你确定要操作吗？\n操作后将不可恢复')){return true}else{return false}"">SQL<input name=""sqlvalue"" type=""text"" id=""sqlvalue"" value=""" & sqlvalue & """ size=""80%"" /><input type=""submit"" name=""button"" id=""button"" value=""执行"" /></form>") 
     else
         call rw("你没有权限执行SQL语句") 
@@ -1451,7 +1553,6 @@ end function
 
 
 %>               
-
 
 
 

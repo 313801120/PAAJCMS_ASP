@@ -18,7 +18,7 @@
  
 [&html转码&]
 <% 
-'作者：红尘云孙 QQ313801120  http://sharembweb.com/
+'作者：云孙World QQ313801120  http://sharembweb.com/
 '循环类
 Class whileclass
     Function myfun(nNumb)
@@ -213,7 +213,7 @@ End Sub
 <pre class="brush: php;">
 [&html转码&]
 <?PHP
-//作者：红尘云孙 QQ313801120  http://sharembweb.com/
+//作者：云孙World QQ313801120  http://sharembweb.com/
 //循环类
 class whileclass{
     function myfun($nNumb){

@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -98,10 +98,12 @@ end function
 '获得总记录
 function nGetRecordCount(tableName,addsql)
 	nGetRecordCount=0
+	'【@是jsp显示@】try{
 	rsx.open"select * from " & tableName & " " & addsql,conn,1,1
 	if not rsx.eof then
 		nGetRecordCount=cint(rsx.recordcount)
 	end if:rsx.close
+	'【@是jsp显示@】}catch(Exception e){} 
 end function
 
 
@@ -109,6 +111,13 @@ end function
 'SqlServer表的创建要求比较高，空格只能为''而不能用""还有就是数值与字符类型区别
 function handleSqlServer(byVal content)
     dim i, s, tempS, tempS2, c, splStr 
+	
+	if EDITORTYPE="jsp" then
+		handleSqlServer=handleMySql(content)
+		exit function
+	end if
+	
+	
     splStr = split(content, ",") 
     for each content in splStr
 
@@ -141,10 +150,38 @@ function handleSqlServer(byVal content)
                 c = c & s 
             end if 
         next 
-        c = c & "," 
+        c = c & ","   
     next 
     if c <> "" then c = left(c, len(c) - 1) 
     handleSqlServer = c 
 end function 
+'处理mysql生成sql
+function handleMySql(byval content)
+	
+	content=replace(replace(replace(content,"""首页""",""""""),"""内页""","""""") ,"""详细页""","""""") 
+	content= replace(content,"""男""","""""") 
+	content= replace(replace(content,"""\Templates""","""""") ,"""\Skins\Default\""","""""") 
+	content= replace(replace(content,"""\Skins\Default\Images\""","""""") ,"""\Skins\Default\Css\""","""""")  
+	content= replace( replace(content,"""\Skins\Default\Js\""","""""") ,"""test3""","""""") 
+	 
+	
+	
+	 
+	content=replace(content," Text Default """""," mediumtext ") 
+	content=replace(content,"Identity(0,1)","auto_increment,")
+	content=replace(content,"Key,","Key(Id),")
+	content=replace(content," VarChar "," varchar(255) ")
+	content=replace(content," """""," ''")
+	content=replace(content," YesNo "," tinyint(1) ") 
+	content=replace(content," Int "," int(8) ") 
+	content=replace(content," Now()"," ''") 
+	content=replace(content," Date()"," ''") 
+	content=replace(content," DateTime"," varchar(255)")  
+	content=replace(content," Yes"," 1")
+	content=replace(content," No"," 0") 
+	
+	content=content & "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+	
+	handleMySql=content
+end function
 %> 
-

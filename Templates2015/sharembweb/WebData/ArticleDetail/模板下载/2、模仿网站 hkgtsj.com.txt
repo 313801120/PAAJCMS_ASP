@@ -1,0 +1,43 @@
+【parentid】模板下载
+【title】模仿网站 hkgtsj.com
+【webtitle】模仿网站 hkgtsj.com - 分享模板网站
+【webkeywords】模仿网站 hkgtsj.com - 分享模板网站
+【webdescription】模仿网站 hkgtsj.com,分析研究学习别人优化的网站，好让自己能做出一个能优化非常好的网站 - 分享模板网站
+【sortrank】2
+【author】sharembweb
+【adddatetime】2016-03-04 12:07:32
+【filename】/mobandown/copy-hkgtsj.html
+【smallimage】[$cfg_webimages$]/mf_hkgtsj.com.jpg
+【flags】|
+【relatedtags】模板下载
+【bodycontent】
+ 
+
+ 模仿网址：http://www.hkgtsj.com/<br>
+下载整站：<a class="href1" href="https://github.com/313801120/template_hkgtsj" rel="nofollow" target="_blank">Github下载</a>
+<br>
+视频教程：<a href="http://www.tudou.com/programs/view/jTpR4TwPYnc/" target='_blank' class="ablue">安装PAAJCMS</a><br> 
+视频教程：<a href="http://www.tudou.com/programs/view/jTpR4TwPYnc/" target='_blank' class="ablue">网站操作教程</a><br> 
+<br> 
+
+<b>模仿hkgtsj.com步骤：</b><br>
+1、使用在线&nbsp;<a href="http://sharembweb.com/fangzhan/" target='_blank' class="ablue">在线仿部</a>&nbsp;下载HTML单面<br>
+2、使用PAAJCMS内容管理系统，给网页添加模板标签<br>
+3、给WebData/文件夹写入默认配置数据<br>
+<br>
+
+<b>模仿hkgtsj.com收获：</b><br>
+1、<br>
+2、<br>
+3、
+<br> 
+
+<br>
+<p>本文版权归作者所有，转摘请注明作者和出处！<br />
+作者：云孙World<br />
+首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a></p>
+<br>
+
+{$TitleInSearchEngineList divclass='article_lable'  title='模仿网站 hkgtsj.com'$}
+【/bodycontent】
+ 

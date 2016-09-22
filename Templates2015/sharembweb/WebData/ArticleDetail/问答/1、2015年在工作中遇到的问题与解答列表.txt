@@ -57,7 +57,7 @@ http://www.cnblogs.com/yanzhen/archive/2012/01/07/iis7-wei-jing-tai.html    web.
 答：右键图层》导出内容
 
 本文版权归作者所有，转摘请注明作者和出处！
-作者：红尘云孙 
+作者：云孙World 
 首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a> 
 
 问：Microsoft Visual Studio 2010

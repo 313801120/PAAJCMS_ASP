@@ -3,22 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 <title>{$Web_Title$} - :::企业后台管理系统,QQ:313801120:::</title>
-<link href="css/style.css" rel="stylesheet"  type="text/css">
+<link href="Css/style.css" rel="stylesheet"  type="text/css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
-<script type="text/javascript" src="../Jquery/Jquery.Min.js"></script>
-<script src="js/runAction.js"></script>
+<script type="text/javascript" src="../Jquery/jquery.Min.js"></script>
+<script src="Js/runAction.js"></script>
 </head>
 <body>
-<script charset="utf-8" src="Keditor/kindeditor.js"></script> 
-<script charset="utf-8" src="Keditor/lang/zh_CN.js"></script>
-<link rel="stylesheet" href="Keditor/themes/default/default.css" />
+<script charset="utf-8" src="KEditor/kindeditor.js"></script> 
+<script charset="utf-8" src="KEditor/lang/zh_CN.js"></script>
+<link rel="stylesheet" href="KEditor/themes/default/default.css" />
 <script language="javascript">
 KindEditor.ready(function(K) {
 	//<!--#editor start#-->
 	var editor1 = K.create('textarea[name="bodycontent"]', {		//处理让文本域
-		cssPath : 'Keditor/plugins/code/prettify.css',
-		uploadJson : 'Keditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
-		fileManagerJson : 'Keditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		cssPath : 'KEditor/plugins/code/prettify.css',
+		uploadJson : 'KEditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		fileManagerJson : 'KEditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
 		allowFileManager : true,
 		afterCreate : function() {
 			var self = this;
@@ -35,8 +35,8 @@ KindEditor.ready(function(K) {
 	//<!--#editor end#-->
 	
 	var editor2 = K.editor({
-		uploadJson : 'Keditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
-		fileManagerJson : 'Keditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		uploadJson : 'KEditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		fileManagerJson : 'KEditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
 		allowFileManager : true
 	});
 
@@ -111,10 +111,10 @@ KindEditor.ready(function(K) {
                         <td>标题名称</td>
                         <td align="left" style="padding:3px;"><input name='title' type='text' id='title' value="[$title$]" style='color:[$titlecolor$];width:66%;[$flags instr='|b|' value='font-weight:bold'$]' class='measure-input' alt='请输入标题'>
 <input name="titlecolor" type="hidden" id="titlecolor" value="[$titlecolor$]" />
-<script language="javascript" type="text/javascript" src="js/colorpicker.js"></script>
-<img src="images/colour.png" width="15" height="16" onClick="colorpicker('title_colorpanel','set_title_color');" style="cursor:hand">
+<script language="javascript" type="text/javascript" src="Js/colorpicker.js"></script>
+<img src="Images/colour.png" width="15" height="16" onClick="colorpicker('title_colorpanel','set_title_color');" style="cursor:hand">
 <span id="title_colorpanel" style="position:absolute; z-index:200" class="colorpanel"></span>
-<img src="images/bold.png" width="10" height="10" onClick="input_font_bold()" style="cursor:hand">                        </td>
+<img src="Images/bold.png" width="10" height="10" onClick="input_font_bold()" style="cursor:hand">                        </td>
                         <td>title</td>
                     </tr>
                     
@@ -214,6 +214,6 @@ KindEditor.ready(function(K) {
             <input name="重置" type="reset" class="mybtn2 radius5" value="重置"  />
         </div>    </div>
 </form>
-<script language="javascript" type="text/javascript" src="js/formBottom.js"></script>
+<script language="javascript" type="text/javascript" src="Js/formBottom.js"></script>
 </body>
 </html> 

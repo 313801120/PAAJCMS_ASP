@@ -15,7 +15,7 @@ ASP转PHP程序 v1.0 是一款可以把ASP代码快速转换成PHP代码。
 ASP转PHP源程序已经放到Github上，并且不断的在更新当中，如果你有需要的话，可以去Github上下载，也可以在各大搜索引擎里搜索“ASP转PHP v1.0”。
 
 本文版权归作者所有，转摘请注明作者和出处！
-作者：红尘云孙
+作者：云孙World
 首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a>
 
 <img src="[$cfg_webimages$]/asptophp.jpg" title="ASP转PHP程序 v1.0" alt="ASP转PHP程序 v1.0" width="100%">

@@ -1,0 +1,137 @@
+【parentid】常用工具
+【title】在线ASP转CSharp
+【sortrank】2
+【filename】/AspToCSharp/
+【labletitle】在线ASP代码转CSharp代码
+【target】 
+【temptxt1】 csharp
+
+【webtitle】在线ASP转CSharp_在线ASP转CSharp工具_CSharp代码转CSharp_ASP转CSharp_AspToCSharp
+【webkeywords】在线ASP转CSharp_在线ASP转CSharp工具_CSharp代码转CSharp_ASP转CSharp_AspToCSharp
+【webdescription】提供在线ASP代码转CSharp代码服务 QQ313801120
+【bodycontent】
+
+<div class="divtip">输入你的ASP代码，提交后等待几秒即可生成CSharp代码：(更新于20160412)<br> 
+需要Inc_csharp/文件夹里文件请到<a href="https://github.com/313801120/PAAJCMS_CSharp" rel="nofollow" class="ablue" target="_blank">Githuth网站下载</a>
+</div>
+
+<form name="form1" method="post" action="http://sharembweb.com/asptoLanguage/asptoaspx.asp?act=handlecontent" target="_blank">
+  <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">
+[&html转码&]<% 
+'作者：云孙World QQ313801120  http://sharembweb.com/
+ 
+
+'截取字符串 更新20160114
+'c=作者小云[A]sharembweb.com[/A]QQ313801120
+'0=sharembweb.com
+'1=[A]sharembweb.com[/A]
+'3=[A]sharembweb.com
+'4=sharembweb.com[/A]
+'截取字符串 更新20160114
+'c=[A]abbccdd[/A]
+'0=abbccdd
+'1=[A]abbccdd[/A]
+'3=[A]abbccdd
+'4=abbccdd[/A]
+'截取字符串
+function strCut_new(byVal content, byVal startStr, byVal endStr, byVal nType)
+    dim nS1, s1Str, nS2, nS3, c, tempContent, tempStartStr, tempEndStr ,cutType
+    tempStartStr = startStr 
+    tempEndStr = endStr 
+    tempContent = content 
+    cutType = "|" & nType & "|" 
+    '不区分大小写
+    if inStr(cutType, "|lu|") > 0 then
+        content = LCase(content) 
+        startStr = LCase(startStr) 
+        endStr = LCase(endStr) 
+    end if 
+    if inStr(content, startStr) = false or inStr(content, endStr) = false then
+        c = "" 
+        exit function 
+    end if 
+    if inStr(cutType, "|1|") > 0 then
+        nS1 = inStr(content, startStr) 
+        s1Str = mid(content, nS1 + len(startStr)) 
+        nS2 = nS1 + inStr(s1Str, endStr) + len(startStr) + len(endStr) - 1                '为什么要减1
+    else
+        nS1 = inStr(content, startStr) + len(startStr) 
+        s1Str = mid(content, nS1) 
+        'nS2 = InStr(nS1, content, EndStr)
+        nS2 = nS1 + inStr(s1Str, endStr) - 1 
+    end if 
+    nS3 = nS2 - nS1 
+    if nS3 >= 0 then
+        c = mid(tempContent, nS1, nS3) 
+    else
+        c = "" 
+    end if 
+    if inStr(cutType, "|3|") > 0 then
+        c = tempStartStr & c 
+    end if 
+    if inStr(cutType, "|4|") > 0 then
+        c = c & tempEndStr 
+    end if 
+    strCut_new = c 
+end function 
+ 
+'测试实例
+sub testcase()
+
+    Dim c 
+    c = "作者小云[A]sharembweb.com[/A]QQ313801120" 
+    
+    Response.Write("c=" & c & "<br />") 
+    
+    Response.Write("0=" & strCut_new(c, "[A]", "[/A]", 0) & "<br />" & vbCrLf) 
+    Response.Write("1=" & strCut_new(c, "[A]", "[/A]", 1) & "<br />" & vbCrLf) 
+    'response.Write("2=" & strCut_newTest(c,"[A]","[/A]",2) & "<br />" & vbcrlf)
+    Response.Write("3=" & strCut_new(c, "[A]", "[/A]", 3) & "<br />" & vbCrLf) 
+    Response.Write("4=" & strCut_new(c, "[A]", "[/A]", 4) & "<br />" & vbCrLf) 
+
+end sub
+
+call loadRun()                                                                  '【@是.netc屏蔽@】
+'加载就运行
+sub loadRun()
+    '选择
+    Select Case Request("act")
+        'Case "testwhile" : testwhile()                                        '测试循环
+        'Case "testif" : testif()                                              '测试判断
+        'Case "testzd" : testzd()                                              '测试字典
+        Case "testcase" : testcase()                                              '测试实例
+        
+    
+        Case Else : displayDefault()                                          '显示默认
+    End Select
+end sub
+
+
+
+'显示默认
+Sub displayDefault()
+    'Response.Write("<a href='?act=testwhile'>测试循环</a> <br />") 
+    'Response.Write("<a href='?act=testif'>测试判断</a> <br />") 
+    'Response.Write("<a href='?act=testzd'>测试字典</a> <br />") 
+    Response.Write("<a href='?act=testcase'>测试实例</a> <br />") 
+End Sub
+%>[&html转码end&]
+
+  </textarea>
+<div class="clear10"></div>
+  <input type="submit" name="button" id="button" value="提交" class="mybtn">
+<!--#
+  <select name="language" id="language" class="inputstyle">
+  <option value="php" selected="selected">转CSharp</option>
+  <option value=".netc">转.net C#</option>
+  <option value="js">转javascript</option>
+  <option value="as">转Flash as</option>
+</select>
+  <label for="isOpenImportFunction"><input name="isOpenImportFunction" type="checkbox" id="isOpenImportFunction" value="1" checked>导入函数</label>
+#-->
+</form>
+
+<br>
+
+
+【/bodycontent】

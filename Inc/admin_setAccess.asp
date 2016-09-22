@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -13,14 +13,16 @@
 
 '调用callfile_setAccess文件函数
 function callfile_setAccess()
-    select case request("stype")
-        case "backupDatabase" : backupDatabase()                                        '备份数据库
-        case "recoveryDatabase" : recoveryDatabase()                                    '恢复数据库
-
-
-        case else : call eerr("setAccess页里没有动作", request("stype"))
-    end select
-end function 
+    dim sType 
+    sType = request("stype") 
+    if sType = "backupDatabase" then
+        call backupDatabase()                                '备份数据库
+    elseif sType = "recoveryDatabase" then
+        call recoveryDatabase()                              '恢复数据库
+    else
+        call eerr("setAccess页里没有动作", request("stype")) 
+    end if 
+end function
 
 '恢复数据库
 function recoveryDatabase()
@@ -84,13 +86,14 @@ function backupDatabase()
         if isOK = true then
             fieldConfig = lcase(getFieldConfigList(tableName)) 
             call echo(tableName, fieldConfig) 
+			'【@是jsp显示@】try{
             rs.open "select * from " & tableName, conn, 1, 1 
             c = c & "【table】" & mid(tableName, len(db_PREFIX) + 1) & vbCrLf 
             while not rs.eof
                 splField = split(fieldConfig, ",") 
                 for each s in splField
                     if instr(s, "|") > 0 then
-                        splxx = split(s, "|") 
+                        splxx = split(s & "|", "|") 
                         fieldName = splxx(0) 
                         fieldType = splxx(1) 
                         fieldValue = rs(fieldName) 
@@ -114,6 +117,7 @@ function backupDatabase()
                 next 
                 c = c & "-------------------------------" & vbCrLf 
             rs.movenext : wend : rs.close 
+			'【@是jsp显示@】}catch(Exception e){} 
             c = c & "===============================" & vbCrLf 
         end if 
     next 
@@ -147,7 +151,7 @@ sub resetAccessData()
     call batchImportDirTXTData(webdataDir, db_PREFIX & "WebColumn" & vbCrLf & getTableList()) '加webcolumn是因为webcolumn必需新导入数据，因为后台文章类型要从里获得20160711
 
     call echo("提示", "恢复数据完成") 
-    call rw("<hr><a href='../" & EDITORTYPE & "web." & EDITORTYPE & "' target='_blank'>进入首页</a> | <a href=""?"" target='_blank'>进入后台</a>") 
+    call rw("<hr><a href='"& WEB_VIEWURL &"' target='_blank'>进入首页</a> | <a href=""?"" target='_blank'>进入后台</a>") 
 
 
 
@@ -197,6 +201,7 @@ function nImportTXTData(content, tableName, sType)
     '这样做是为了从GitHub下载时它把vbcrlf转成 chr(10)  20160409
     if instr(content, vbCrLf) = false then
         content = replace(content, chr(10), vbCrLf) 
+		content=replace(content,vbcrlf & vbcrlf, vbcrlf)
     end if 
     fieldConfigList = lcase(getFieldConfigList(db_PREFIX & tableName)) 
     splStr = split(fieldConfigList, ",") 
@@ -211,7 +216,7 @@ function nImportTXTData(content, tableName, sType)
         if s <> "1" and s <> "true" then
             for each fieldStr in splStr
                 if fieldStr <> "" then
-                    splxx = split(fieldStr, "|") 
+                    splxx = split(fieldStr & "| ", "|")			'必需加上| 在jsp里必需这样，不知道为什么？ 不过没关系，不影响下面执行结束 
                     fieldName = splxx(0) 
                     fieldType = splxx(1) 
                     if instr(listStr, "【" & fieldName & "】") > 0 then
@@ -225,7 +230,7 @@ function nImportTXTData(content, tableName, sType)
 'call echo(fieldName,fieldType)
 'doevents
                         fieldValue = newGetStrCut(listStr, fieldName) 
-                        if fieldType = "textarea" then
+                        if fieldType = "textarea" or ( EDITORTYPE="jsp" and fieldType="") then
                             fieldValue = contentTranscoding(fieldValue) 
 						'加这个是为了让数子类型不要出现true 或 false 给  sqlserver用  20160803
 						elseif fieldType = "yesno" or fieldType = "numb" then
@@ -387,6 +392,12 @@ function contentTranscoding(byVal content)
     dim splStr, i, s, c, isTranscoding, isBR 
     isTranscoding = false 
     isBR = false 
+	
+    '这样做是为了从GitHub下载时它把vbcrlf转成 chr(10)  20160409
+    if instr(content, vbCrLf) = false then
+        content = replace(content, chr(10), vbCrLf) 
+    end if 
+	
     splStr = split(content, vbCrLf) 
     for each s in splStr
         if inStr(s, "[&html转码&]") > 0 then

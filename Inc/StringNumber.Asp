@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -14,8 +14,8 @@
 function isStrTransferred(content)
     dim splStr, i, s, nCount 
     nCount = 0 
-    isStrTransferred = false 
-    for i = 0 to len(content) - 1  
+    isStrTransferred = false  
+    for i = 0 to len(content) - 1   
         s = mid(content, len(content) - i, 1) 
         if s = "\" then
             nCount = nCount + 1 
@@ -23,13 +23,13 @@ function isStrTransferred(content)
             isStrTransferred = IIF(nCount mod 2 = 1, true, false) 
             exit function 
         end if 
-    next 
+    next  
 end function 
 
 '计算比率，游戏开发中用到 20150601
 function getBL(nSetWidth, nSetHeight, nDanFuXianZhi)
     dim arrNSplStr(3) 
-    dim nWidthZheFu : nWidthZheFu = 1                                               '宽正负
+    dim nWidthZheFu : nWidthZheFu = 1                                               '宽正负 
     dim nHeightZheFu : nHeightZheFu = 1                                             '高正负
     dim nBFB                                                                        '百分比
     dim nXXFBX                                                                      '每个百分比，因为要判断他不能超过10
@@ -42,17 +42,17 @@ function getBL(nSetWidth, nSetHeight, nDanFuXianZhi)
         nHeightZheFu = -1 
     end if 
     if nSetWidth > nSetHeight then
-        nBFB = formatNumber(nSetWidth / nSetHeight, 2)                                  '//长宽 百分比
+        nBFB = cint(formatNumber(nSetWidth / nSetHeight, 2))                                  '//长宽 百分比
         arrNSplStr(0) = nBFB 
         arrNSplStr(1) = 1 
     else
-        nBFB = formatNumber(nSetHeight / nSetWidth, 2)                                  '//高宽 百分比
+        nBFB = cint(formatNumber(nSetHeight / nSetWidth, 2))                                  '//高宽 百分比
         arrNSplStr(0) = 1 
         arrNSplStr(1) = nBFB 
     end if 
     '每步超出指定值，处理
     'if nBFB>=nDanFuXianZhi then
-    nXXFBX = formatNumber(nDanFuXianZhi / nBFB, 2) 
+    nXXFBX = cint(formatNumber(nDanFuXianZhi / nBFB, 2)) 
     arrNSplStr(0) = arrNSplStr(0) * nXXFBX 
     arrNSplStr(1) = arrNSplStr(1) * nXXFBX 
     'end if
@@ -147,12 +147,12 @@ function phpRand(nMinimum, nMaximum)
     end if 
 end function 
 
-'引用上面，为什么？因为我老写错这个单词
+'引用上面，为什么？因为我老写错这个单词 
 function phpRnd(nMinimum, nMaximum)
     phpRnd = phpRand(nMinimum, nMaximum) 
 end function 
 
-
+ 
 '删除重复内容  20141220
 function deleteRepeatStr(content, sSplType)
     dim splStr, s, c 
@@ -335,18 +335,18 @@ end function
 '内容加Tab
 function contentAddTab(byVal content, nNumb)
     contentAddTab = copyStr("    ", nNumb) & join(split(content, vbCrLf), vbCrLf & copyStr("    ", nNumb)) 
-end function 
+end function  
 
-'删除最后指定字符20150228 Content=DeleteEndStr(Content,2)
+'删除最后指定字符20150228 Content=DeleteEndStr(Content,2) 
 function deleteEndStr(content, nLen)
     if content <> "" then content = left(content, len(content) - nLen) 
     deleteEndStr = content 
 end function 
-
+    
 
 'StringNumber (2013,9,27)
 function toNumber(byVal n, byVal nD)
-    toNumber = formatNumber(n, nD, - 1)   
+    toNumber = cint(formatNumber(n, nD, - 1))   
 end function  
 
 '处理成数字
@@ -438,11 +438,16 @@ function getNumber(byVal content)
 end function 
 
 '检测是否为数字
-function checkNumb(s)
-	checkNumb = false 
-    if inStr("0123456789.", s) > 0 then
-        checkNumb = true
-    end if 
+function checkNumb(c)
+	dim s,i
+	checkNumb = true
+	for i = 1 to len(c)
+		s=mid(c,i,1)
+		if inStr("0123456789.", s) =0 then
+			checkNumb = false
+			exit function
+		end if 
+	next
 end function 
 
 '获得有小数点数字
@@ -543,7 +548,7 @@ end function
 '将字符类型转成数字类型
 function val(byVal s)
 	val = cint(s) 
-    if s & "" = "" or not isNumeric(s) then
+    if s = "" or not isNumeric(s) then
         val = 0  
     end if 
 end function 
@@ -775,5 +780,4 @@ function encodeJP(str)
     encodeJP = str 
 end function 
 %>   
-
 

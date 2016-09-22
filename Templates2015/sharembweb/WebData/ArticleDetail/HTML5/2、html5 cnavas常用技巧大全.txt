@@ -168,7 +168,7 @@ ctx.stroke();
 [&全部换行end&]
 <br>
 <p>本文版权归作者所有，转摘请注明作者和出处！<br />
-作者：红尘云孙<br />
+作者：云孙World<br />
 首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a></p>
 <br>
 

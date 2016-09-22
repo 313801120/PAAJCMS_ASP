@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -196,7 +196,17 @@ function editField(tableName, fieldName, toFieldName)
             if err.number <> 0 then msgBox(tableName & vbCrLf & fieldName & vbCrLf & toFieldName & "类型" & fieldType) 
         end if 
     end if 
-end function 
+end function
+'追加字符
+function addField(tableName,fieldName,fieldType)
+	if fieldType="" then
+		fieldType="VarChar"
+	end if
+	if checkField(tableName,fieldName) = false then
+		conn.execute("Alter Table [" & tableName & "] Add [" & fieldName & "] " & fieldType & "") '添加字段
+	end if
+
+end function
 '获得字段属性
 function getFieldAlt(tableName, fieldName)
     dim n, fn, fld, rs 
@@ -364,10 +374,10 @@ end function
 sub exportToExcel(tableContent)
     response.contentType = "application/vnd.ms-Excel" 
     response.addHeader "Content-Disposition", "attachment;Filename=Results.xls" 
-    response.write("<body>") & vbCrLf 
-    response.write(tableContent) & vbCrLf 
-    response.write("</body>") & vbCrLf 
-    response.write("</html>") & vbCrLf 
+    response.write("<body>" & vbCrLf) 
+    response.write(tableContent & vbCrLf) 
+    response.write("</body>" & vbCrLf) 
+    response.write("</html>" & vbCrLf) 
 end sub 
 '导入到数据库里 待完善
 sub importToDatabase()
@@ -610,5 +620,4 @@ function showAccessStream(conn, tableName, fieldName, id, addSql)
         end if : rs.close 
 end function
 %>      
-
 

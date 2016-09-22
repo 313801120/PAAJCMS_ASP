@@ -3,7 +3,7 @@
 【webtitle】模仿网站ufoer.com模板供大家学习研究,企业网站模板,企业网页模板,免费网站模板,网站模板下载,免费网页模板,优秀企业网站模板 - 分享模板网站
 【webkeywords】模仿网站ufoer.com模板供大家学习研究,企业网站模板,企业网页模板,免费网站模板,网站模板下载,免费网页模板,优秀企业网站模板 - 分享模板网站
 【webdescription】模仿网站ufoer.com模板供大家学习研究,分析研究学习别人优化的网站，好让自己能做出一个能优化非常好的网站 - 分享模板网站
-【sortrank】51
+【sortrank】201
 【author】sharembweb
 【adddatetime】2016-01-20 11:10:05
 【filename】/mobandown/copy-ufoer.html
@@ -35,7 +35,7 @@
 
 <br>
 <p>本文版权归作者所有，转摘请注明作者和出处！<br />
-作者：红尘云孙<br />
+作者：云孙World<br />
 首发：<a href="http://sharembweb.com/" target="_blank" class="ablue">http://sharembweb.com</a></p>
 <br>
 

@@ -490,6 +490,43 @@ body{background-color:#F9F9F9}
 .email_input{margin:10px 0}
 a.href1{DISPLAY:inline-block;ZOOM:1;BACKGROUND:url(/Templates2015/sharembweb/Images/bg.download.1.gif) left center no-repeat;PADDING-LEFT:20px;COLOR:#0092e0;TEXT-ALIGN:left;TRANSITION:all .3s ease;-WEBKIT-TRANSITION:all .3s ease}
 a.href1:hover{COLOR:#ff8400;TEXT-DECORATION:none}
+#page{}
+#page .item{width:285px;float:left;margin:0 13px 13px 0;border:1px solid #CCC;background-image:-webkit-linear-gradient(top,#FFF,#F9F9F9);position:static}
+#page .item-inner{padding:10px 15px 10px 8px;position:relative;_position:static}
+#page .item a{color:#333;display:inline-block;text-decoration:none}
+#page .item .item-icon{float:left;margin-right:10px}
+#page .item .item-category{float:right}
+#page .item h3{font-size:16px;font-weight:bold;margin:0;line-height:1.4;margin-bottom:5px;height:22px;overflow:hidden}
+#page .item .item-desc{border-top:1px solid #DDD;margin-top:8px;padding:10px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#page .item .item-bd a{margin-right:4px}
+#page .item .item-ft{text-align:right}
+#page .item .item-link{float:left;margin-top:3px;color:#999;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#page .item a.item-btn{display:inline-block;padding:3px 12px;text-decoration:none;position:relative}
+#page .item a.item-btn::before{content:"";position:absolute;transition:all .2s ease-in-out;left:50%;right:50%;bottom:0;border-bottom:2px solid transparent}
+#page .item a.item-btn:hover::before{left:0;right:0;border-bottom-color:#009a61}
+#page .item a.item-btn:hover,#page .item a.item-btn:active{}
+#page .item .icon,.aside .icon{display:inline-block;width:14px;height:14px;-webkit-transition-property:background-position;-webkit-transition-duration:0.5s;-moz-transition-property:background-position;-moz-transition-duration:0.5s;transition-property:background-position;transition-duration:0.5s}
+#page .item .icon.like,#page .item .icon.liked,#page .aside .icon.like,#page .aside .icon.liked{background-image:url(/Templates2015/sharembweb/Images/heart.png)}
+#page .item .icon.like,#page .aside .icon.like{background-position:0 0}
+#page .item a:hover .icon.like,#page .aside a:hover .icon.like{background-position:0 -14px}
+#page .item .icon.liked,#page .aside .icon.liked{background-position:0 -28px}
+#page .item .ico{background-image:url(/Templates2015/sharembweb/Images/icolist.gif);background-repeat:no-repeat;background-position:0px -150px;width:48px;height:48px;display:block}
+#page .item .asp{background-position:0px -450px}
+#page .item .js{background-position:0px 0px}
+#page .item .css{background-position:-50px 0px}
+#page .item .php{background-position:-100px 0px}
+#page .item .html{background-position:-150px 0px}
+#page .item .csharp{background-position:-50px -450px}
+#page .item .jsp{background-position:-100px -150px}
+#page .item .calculate{background-position:-200px -350px}
+#page .item .seo{background-position:-100px -450px}
+#page .item .android{background-position:-150px -450px}
+#page .item .pinyin{background-position:-200px -450px}
+#page .item .aspdown{background-position:0px -500px}
+#page .item .phpdown{background-position:-50px -500px}
+#page .item .jspdown{background-position:-100px -500px}
+#page .item .jsdown{background-position:-150px -500px}
+#page .item .cssdown{background-position:-200px -500px}
 /*index_model.tpl end*/
 /*main_model.tpl start*/
 /*main_model.tpl end*/

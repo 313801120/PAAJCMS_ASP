@@ -3,10 +3,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 <title>{$Web_Title$} - :::企业后台管理系统,QQ:313801120:::</title>
-<link href="css/style.css" rel="stylesheet"  type="text/css">
+<link href="Css/style.css" rel="stylesheet"  type="text/css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
-<script type="text/javascript" src="../Jquery/Jquery.Min.js"></script> 
-<script src="js/runAction.js"></script>
+<script type="text/javascript" src="../Jquery/jquery.Min.js"></script> 
+<script src="Js/runAction.js"></script>
 </head>
 <body>
 
@@ -69,10 +69,43 @@
                         <td>loginip</td>
                     </tr>
                     <tr align="center" height="25" bgcolor="#ffffff">
+                      <td>上一级会员id</td>
+                      <td align="left" style="padding:3px;"><input name="parentid" type="text" id="parentid" value="[$parentid$]" alt="上一级会员不是数值类型{Array}[数字]" style="width:20%;" class="input-text"></td>
+                      <td>parentid</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                      <td>到期时间</td>
+                      <td align="left" style="padding:3px;">
+                      
+            <div class="clear10"></div>
+ 			<link rel="stylesheet" type="text/css" href="Js/calendar/jscal2.css"/>
+			<link rel="stylesheet" type="text/css" href="Js/calendar/border-radius.css"/>
+			<link rel="stylesheet" type="text/css" href="Js/calendar/win2k.css"/>
+            <script type="text/javascript" src="Js/calendar/calendar.js"></script>
+            <script type="text/javascript" src="Js/calendar/lang/en.js"></script> 
+            <input type="text" name="expiredatetime" id="expiredatetime" value="[$expiredatetime$]" size="21" class="date input-text" readonly="">
+			<script type="text/javascript">
+			Calendar.setup({
+			weekNumbers: true,
+		    inputField : "expiredatetime",
+		    trigger    : "expiredatetime",
+		    dateFormat: "%Y-%m-%d",
+		    showTime: true,
+		    minuteStep: 1,
+		    onSelect   : function() {this.hide();}
+			});
+        </script>         </td>
+                      <td>expiredatetime</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                      <td>关注列表</td>
+                      <td align="left" style="padding:3px;">[$input_followidlist$]</td>
+                      <td>followidlist</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
                         <td>审核通过</td>
                         <td align="left" style="padding:3px;">
-                        <label for='isthrough'><input type='checkbox' name='isthrough' id='isthrough' [$isthrough if='False' elseif='0' value='' elsevalue=' checked'$]  value='1'>通过</label>                          
-                        </td>
+                        <label for='isthrough'><input type='checkbox' name='isthrough' id='isthrough' [$isthrough if='False' elseif='0' value='' elsevalue=' checked'$]  value='1'>通过</label>                        </td>
                         <td>isonhtml</td>
                     </tr>
                 </tbody> 
@@ -90,7 +123,7 @@
             <input name="重置" type="reset" class="mybtn2 radius5" value="重置"  />
         </div>    </div>
 </form>
-<script language="javascript" type="text/javascript" src="js/formBottom.js"></script>
+<script language="javascript" type="text/javascript" src="Js/formBottom.js"></script>
 </body>
 </html>
 

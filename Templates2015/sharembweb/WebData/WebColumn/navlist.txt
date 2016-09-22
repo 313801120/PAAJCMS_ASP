@@ -38,10 +38,10 @@
 
 </div>
 
-<form name="form1" method="post" action="[$cfg_websiteurl$]/asptophp/asptophp.asp?act=handlecontent" target="_blank">
+<form name="form1" method="post" action="http://sharembweb.com/AspToLanguage/asptophp.asp?act=handlecontent" target="_blank">
   <textarea name="content" id="content" class="inputstyle" style="width:99%;height:380px;">
 [&html转码&]<% 
-'作者：红尘云孙 QQ313801120  http://sharembweb.com/
+'作者：云孙World QQ313801120  http://sharembweb.com/
 '循环类
 Class whileclass
     Function myfun(nNumb)
@@ -229,12 +229,14 @@ End Sub
   </textarea>
 <div class="clear10"></div>
   <input type="submit" name="button" id="button" value="提交" class="mybtn">
+<!--#
   <select name="language" id="language" class="inputstyle">
   <option value="php" selected="selected">转PHP</option>
   <option value=".netc">转.net C#</option>
   <option value="js">转javascript</option>
   <option value="as">转Flash as</option>
 </select>
+#-->
   <label for="isOpenImportFunction"><input name="isOpenImportFunction" type="checkbox" id="isOpenImportFunction" value="1" checked>导入函数</label>
 </form>
 
@@ -331,7 +333,7 @@ function formFangZhanSubmit(This){
 【/bodycontent】
 -------------------------------
 【columnname】模板下载
-【columntype】新闻
+【columntype】产品
 【sortrank】30
 【filename】/mobandown/
 【flags】|top|
@@ -410,15 +412,15 @@ function formFangZhanSubmit(This){
 【labletitle】联系站长
 【target】
 【npagesize】20
-【webtitle】联系站长_红尘云孙(SXY)_sharembweb_313801120
-【webkeywords】联系站长_红尘云孙(SXY)_sharembweb_313801120
+【webtitle】联系站长_云孙World(SXY)_sharembweb_313801120
+【webkeywords】联系站长_云孙World(SXY)_sharembweb_313801120
 【webdescription】如果你想找到我，可加QQ313801120，可发邮箱313801120@qq.com
 
 
 【aboutcontent】
 
-作者：红尘云孙(SXY)<br> 
-QQ：<a href="tencent://message/?uin=313801120&Site=作者红尘云孙&Menu=yes" class="ablue" rel="nofollow" title="在线与313801120交流">313801120</a><br>
+作者：云孙World(SXY)<br> 
+QQ：<a href="tencent://message/?uin=313801120&Site=作者云孙World&Menu=yes" class="ablue" rel="nofollow" title="在线与313801120交流">313801120</a><br>
 邮箱：<a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=313801120@qq.com" class="ablue" rel="nofollow" title="在线与313801120交流" target="_blank">313801120@qq.com</a> <br>postmaster@aspphpcms.com
 <br>qq313801120@gmail.com<br>
 交流群：<a href="/url.asp?title=qq群35915100" class="ablue" target="_blank">35915100</a><br>
@@ -426,7 +428,7 @@ QQ：<a href="tencent://message/?uin=313801120&Site=作者红尘云孙&Menu=yes" class=
 【/aboutcontent】
 
 【bodycontent】 
-<div><img src="{$cfg_webimages$}/me.jpg" alt="作者红尘云孙/Cloud+"></div>
+<div><img src="{$cfg_webimages$}/me.jpg" alt="作者云孙World/Cloud+"></div>
 
 
 <br><strong>作者介绍</strong><br>
@@ -438,8 +440,8 @@ QQ：<a href="tencent://message/?uin=313801120&Site=作者红尘云孙&Menu=yes" class=
 6、上海，南京等大城市从事网站开发工作多年<br>
 
 <br><strong>联系方式</strong><br>
-作者：红尘云孙(SXY)<br> 
-QQ：<a href="tencent://message/?uin=313801120&Site=作者红尘云孙&Menu=yes" class="ablue" rel="nofollow" title="在线与313801120交流">313801120</a><br>
+作者：云孙World(SXY)<br> 
+QQ：<a href="tencent://message/?uin=313801120&Site=作者云孙World&Menu=yes" class="ablue" rel="nofollow" title="在线与313801120交流">313801120</a><br>
 微信：MQ313801120<br>
 邮箱：313801120@qq.com &nbsp; postmaster@aspphpcms.com &nbsp; qq313801120@gmail.com<br>
 交流群：<a href="http://shang.qq.com/wpa/qunwpa?idkey=253822bd485c454811141c731156d2ecd4dba04ecf647ce81dc97d16a563137b" class="ablue" rel="nofollow" target="_blank">35915100</a><br>
@@ -483,7 +485,7 @@ Digg主页：<a href="http://digg.com/u/sharembweb" target="_blank" class="ablue" r
 
 <form name="form1" method="post" action="http://sharembweb.com/Tools/FormattingTools/ClassAspCode.Asp?act={$escape content='处理编辑函数'$}" target="_blank">
   <textarea name="content" id="content" class="inputstyle" style="width:99%;height:300px;"><%
-'作者：红尘云孙 QQ313801120  http://sharembweb.com/
+'作者：云孙World QQ313801120  http://sharembweb.com/
 dim var1,var2,var3
 if 0=0 then
 if 1=1 then

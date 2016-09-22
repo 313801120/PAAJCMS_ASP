@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：红尘云孙(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流合作可联系本人)
+'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-08-05
+'创建：2016-09-22
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -444,18 +444,18 @@ function createDirFolder(byVal folderPath)
     'On Error Resume Next
     createDirFolder = "" 
     if checkFolder(folderPath) = true then exit function                            '文件夹存在，退出
-    dim splStr, i, s, newFolder 
-    newFolder = ""                                                                  'vb.net使用报错
+    dim splStr, i, s, sNewFolder 
+    sNewFolder = ""                                                                  'vb.net使用报错
     call handlePath(folderPath)                                                     '获得完整路径
     splStr = split(folderPath, "\") 
     for i = 0 to uBound(splStr)
         s = trim(splStr(i))                                                             '去除两边空格
         if s <> "" then
-            newFolder = newFolder & s & "\" 
+            sNewFolder = sNewFolder & s & "\" 
             if i = uBound(splStr) and inStr(s, ".") > 0 then exit for                       '创建到最后文件夹时，要是为文件则退出循环 20141215
             if inStr(s, ":") = false then
-                'Call Echo("NewFolder",NewFolder)
-                call createFolder(newFolder) 
+                'Call Echo("sNewFolder",sNewFolder)
+                call createFolder(sNewFolder) 
             end if 
         end if 
     next 
@@ -1140,6 +1140,7 @@ end function
 
 
 '========================================= 辅助区 =========================================
+
 '处理成完成路径 (2013,9,27
 function handlePath(fFPath)                                                     'Path前面不加ByVal 重定义，这样是为了让前面函数里可以使用这个路径完整调用
     fFPath = replace(fFPath, "/", "\") 
@@ -1312,11 +1313,12 @@ function printSpaceValue(byVal numb)
             n = left(n, inStr(n, ".") + 2) 
         end if 
         n = n & " MB" 
-    else
-        n = formatNumber(n / 1024, 2) & " KB"                                             '把Fix换成FormatNumber 是因为与php那边一致 20160526
+    elseif n>1024 then
+        n = formatNumber(n / 1024, 2) & " KB"
+	else
+		n=n & " bytes"                                             '把Fix换成FormatNumber 是因为与php那边一致 20160526
     end if 
-
-    if n = "0 KB" then n = "0" & formatNumber(numb / 1024, 2) & " KB"                   'n = Numb & "Bet"   '如果为0 K 就显示字的Bet数    改成与php版一样最小为K 如0.93K  20160525
+ 
     printSpaceValue = n 
 end function 
 'KB转M函数 (辅助)
@@ -1533,4 +1535,3 @@ function getParentPath(byVal dirPath)
     end if 
 end function 
 %>     
-

@@ -102,12 +102,12 @@ a.abgred:hover { background-color:#DF0000; }
   margin: 0 5px 0 0;
   padding: 2px 0 2px 5px;
   border: 1px solid #d0d0d0;
-  background: #FFF url(../images/input.png) repeat-x;
+  background: #FFF url(../Images/input.png) repeat-x;
   font-family: Verdana, Geneva, sans-serif,"宋体";
   font-size: 12px;
 }
 input.date, input.endDate {
-  background: #fff url(../images/input_date.png) no-repeat right 3px;
+  background: #fff url(../Images/input_date.png) no-repeat right 3px;
   padding-right: 18px;
   font-size: 12px;
 }
@@ -171,7 +171,7 @@ select {
 
 /*列表 暂时先用着*/ 
 .lbtop { 
-  background: url(../images/wel_2.gif) -10px -40px;
+  background: url(../Images/wel_2.gif) -10px -40px;
   background-repeat:repeat-x;
   height: 28px;
   border-right:1px solid #DEDEDE;
@@ -179,7 +179,7 @@ select {
 .lbsub {
   width: 118px;
   height: 28px;
-  background: url(../images/wel_2.gif) -10px -73px no-repeat;
+  background: url(../Images/wel_2.gif) -10px -73px no-repeat;
   font-weight: bold;
   line-height: 28px;
   float: left;
@@ -200,7 +200,7 @@ select {
 #positionwrap {
   width: 99.9%;
   height: 36px;
-  background: url(../images/mrtbg.jpg) repeat-x;
+  background: url(../Images/mrtbg.jpg) repeat-x;
   position: relative;
   overflow:hidden;
 }
@@ -229,7 +229,7 @@ select {
 	float: left;
 	height:28px;
 	line-height: 28px;
-	background-image: url(../Images/ATitleBg.jpg);
+	background-image: url(../Images/atitlebg.jpg);
 	padding: 0 10px;
 	position:relative;
 }
@@ -267,7 +267,7 @@ select {
 	border-bottom:1px solid #A4B2BD;
 }
 .drop_down_menu_box a:hover{
-	background-image: url(../Images/ATitleBg.jpg);
+	background-image: url(../Images/atitlebg.jpg);
 }
 .atitleright{
 	float:right;
@@ -280,7 +280,7 @@ select {
   float: left;
   line-height: 28px; 
   padding: 0 10px;
-  background-image: url(../Images/ATitleBg.jpg);
+  background-image: url(../Images/atitlebg.jpg);
 }
 .atitleleftclick:hover, .atitlefocus{ 
 	background-color:#DBE3F2;
@@ -295,7 +295,7 @@ select {
 }
 
 /*提示图标*/
-.onShow,.onFocus,.onError,.onCorrect,.onLoad,.onLamp,.onTime,.onHelp,.onHelp2{display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline; vertical-align:middle;background:url(../images/msg_bg.png) no-repeat;	color:#444;line-height:18px;padding:2px 10px 2px 23px; margin-left:10px;_margin-left:5px}
+.onShow,.onFocus,.onError,.onCorrect,.onLoad,.onLamp,.onTime,.onHelp,.onHelp2{display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline; vertical-align:middle;background:url(../Images/msg_bg.png) no-repeat;	color:#444;line-height:18px;padding:2px 10px 2px 23px; margin-left:10px;_margin-left:5px}
 .onShow{background-position:3px -147px;border-color:#40B3FF;color:#959595}
 .onFocus{background-position:3px -147px;border-color:#40B3FF;}
 .onError{background-position:3px -47px;border-color:#40B3FF; color:red}
@@ -305,12 +305,12 @@ select {
 .onHelp{background-position:3px -350px}
 .onHelp2{background-position:0px -350px;margin-left:0px;}
 /*关闭颜色选择器*/
-a.close-own{background: url(../images/cross.png) no-repeat left 3px; display:block; width:16px; height:16px;position: absolute;outline:none;right:7px; top:8px; text-indent:200px; overflow: hidden}
+a.close-own{background: url(../Images/cross.png) no-repeat left 3px; display:block; width:16px; height:16px;position: absolute;outline:none;right:7px; top:8px; text-indent:200px; overflow: hidden}
 a.close-own:hover{background-position: left -46px}
  
 /*标尺*/
 .measure-input {
-  background: url("../images/ruler.gif") repeat-x scroll 0 9px transparent;
+  background: url("../Images/ruler.gif") repeat-x scroll 0 9px transparent;
 }
 
 
@@ -323,7 +323,7 @@ a.close-own:hover{background-position: left -46px}
   border-top: 1px solid #f1f1f1;
   padding: 10px 0;
   width: 100%;
-  background: #fff url(../images/x_bg.png) repeat-x 0 -100px;
+  background: #fff url(../Images/x_bg.png) repeat-x 0 -100px;
 }
 .fixed-but .buttonwrap { 
 	margin: 0; 
@@ -338,7 +338,7 @@ a.close-own:hover{background-position: left -46px}
 }
  
 .fixed-but .buttonwrap .mybtn2 {
-	background-image:url(../images/buttonbg.jpg);
+	background-image:url(../Images/buttonbg.jpg);
 	color: #004092;
 	font-size: 14px;
 	padding:0 20px;
@@ -350,7 +350,7 @@ a.close-own:hover{background-position: left -46px}
 	font-weight:bold;
 }
 .fixed-but .buttonwrap .mybtn2:hover {
-	background-image:url(../images/buttonbg.jpg);
+	background-image:url(../Images/buttonbg.jpg);
 	background-color:#E7E9E8;
 	background-position: 0px -50px;	
 }
@@ -363,7 +363,7 @@ a.close-own:hover{background-position: left -46px}
 	padding: 2px;
 	padding-right: 5px;
 	padding-left: 5px;
-	background: #CCC url(../images/allbtbg2.gif);
+	background: #CCC url(../Images/allbtbg2.gif);
 	cursor: pointer;
 }
 
@@ -428,7 +428,7 @@ a.close-own:hover{background-position: left -46px}
 
 
 /*input输入框加背景*/
-.inputstyle { color:#666666; border:1px solid #DEDEDE; padding:6px; font-family:"微软雅黑", "黑体", "宋体"; font-size:14px; line-height:22px; background-image:url(../images/inputbg.gif); background-repeat:repeat-x; background-color:#FFFFFF; }
+.inputstyle { color:#666666; border:1px solid #DEDEDE; padding:6px; font-family:"微软雅黑", "黑体", "宋体"; font-size:14px; line-height:22px; background-image:url(../Images/inputbg.gif); background-repeat:repeat-x; background-color:#FFFFFF; }
 /*input输入框不加背景*/
 .inputstyle2 { padding:6px; border:1px solid #FFF; border-bottom:1px solid #B4B4B4; color:#666666; font-size:16px; line-height:32px; }
 
