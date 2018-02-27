@@ -13,11 +13,13 @@
 'dim t:set t=new class_vbTemplate 
 class class_vbTemplate 
 	dim DefaultTemplateFolder			'默认模板文件夹路径
+	dim DefaultTemplateRootHttpUrl		'主网址
 	dim DefaultTemplateHttpUrl
 	 '构造函数 初始化
     Sub Class_Initialize() 
 		DefaultTemplateFolder="\DataDir\VB模块\服务器\Template\"
-		DefaultTemplateHttpUrl="http://vb/DataDir/VB模块/服务器/Template/"
+		DefaultTemplateRootHttpUrl="http://sharembweb.com/img.asp?img="
+		DefaultTemplateHttpUrl=DefaultTemplateRootHttpUrl' & "/DataDir/VB模块/服务器/Template/"
 		MDBPath=DefaultTemplateFolder & "Database\WebStyle.mdb"
 		accessPass=""
 		call openconn()
@@ -897,7 +899,8 @@ class class_vbTemplate
 		'新版
 		content=readFile("DataDir\VB模块\服务器\Template\Foot\"&id&"\foot.html","")
 		cssStyle=getStrCut(content,"<style>","</style>",0)
-		cssStyle=replace(cssStyle,"http://127.0.0.1/","http://vb/")
+		'cssStyle=replace(cssStyle,"http://127.0.0.1/","http://http://sharembweb.com/img.asp?img=")
+		cssStyle=replace(cssStyle,"http://127.0.0.1/DataDir/VB模块/服务器/Template//",DefaultTemplateRootHttpUrl)
 	End Sub
 
 end class 
