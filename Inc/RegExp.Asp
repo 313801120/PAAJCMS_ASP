@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -38,6 +38,33 @@ end function
 function regExp_Instr(content, serchValue)
     regExp_Instr = checkStr(content, serchValue) 
 end function 
+
+
+'替换不区分大小写20171109   call rwend(replaceNoULCase("aa1b2b我的名字叫1B2B。" ,"1b2B","中国") )
+function replaceNoULCase(content,byval findStr,byval replaceStr)
+	dim contentLCase,i,s,nLen,sLeft,sRight
+	contentLCase=lcase(content)
+	findStr=lcase(findStr)
+	if findStr=replaceStr then
+		replaceNoULCase=content
+		exit function
+	end if
+	for i=1 to 399 
+		nLen=instr(contentLCase,findStr) 
+		if nLen>0 then
+			sLeft=mid(content,1,nLen-1)
+			sRight=mid(content,nLen+len(findStr))
+			content=sLeft & replaceStr & sRight
+			contentLCase=lcase(content) 
+			'call echo("content",content)
+		else
+			'call echo(nLen & "退出" & findStr ,contentLCase)
+			exit for
+		end if
+	next
+	replaceNoULCase=content
+end function
+ 
 
 '替换内容,不区分大小写
 function regExp_Replace(byVal content, byVal setPattern, byVal tStr)

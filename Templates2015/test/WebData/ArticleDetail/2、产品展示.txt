@@ -1,0 +1,167 @@
+【parentid】产品展示
+【title】企业案例网站1
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站1 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站2
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站2 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站3
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站3 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站4
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站4 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站5
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站5 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站6
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站6 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站7
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站7 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站7
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站8 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站8
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站9 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站9
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是企业案例网站10 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站10
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+这是企业案例网站11 测试内容
+【bodycontent】 
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【title】企业案例网站11
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+【/bodycontent】
+-------------------------------

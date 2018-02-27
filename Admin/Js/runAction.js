@@ -1161,31 +1161,67 @@ function sortArc(actionName,lableTitle,page){
 		//document.write(url)		
 		window.location.href=url 
 	}
+} 
+//批量修改价格 
+function batchEditPrice(actionName,lableTitle,page){
+	var value='',idList='' 
+	$("form[name='listform'] input[name='price']").each(function (index,obj) {
+		if(idList!=""){
+			value+=","
+			idList+=","
+		}
+		value+=$(this).val()
+		idList+=$("input[name='id']:eq("+index+")").val()
+	})
+  
+	if(value==""){
+		alert("没有记录，无需批量修改价格")
+	}else{ 
+		var url="?act=batchEditPrice&actionType="+actionName+"&lableTitle="+lableTitle+"&nPageSize="+getInputValue("nPageSizeSelect")+"&parentid="+getInputValue("parentid")			
+		url+="&searchfield="+getInputValue("searchfield")+"&keyword="+getInputValue("keyword")+"&page="+page+"&id="+idList+"&value="+value
+		//document.write(url)		
+		window.location.href=url 
+	}
 }
+//追加模板地址到网址中 20170702
+function addTemplateToUrl(){
+	var url,splxx 
+	url=window.location+"&"
+	if(url.indexOf("&template=")!=-1){
+		url=url.split("&template=")[1]
+		url=url.split("&")[0]
+		return "&template="+url
+	}
+	return "";
+}
+
 //更新当前页面 20160225
-function refreshPage(actionName,lableTitle,page,id){  
-	clickControl("?act=dispalyManageHandle",actionName,lableTitle,page,id)
+function refreshPage(actionName,lableTitle,page,id,idName){  
+	clickControl("?act=dispalyManageHandle"+addTemplateToUrl(),actionName,lableTitle,page,id,idName)
 }
 
 //添加修改前页面 20160225
-function addEditHandle(actionName,lableTitle,page,id){ 
-	clickControl("?act=addEditHandle",actionName,lableTitle,page,id)
+function addEditHandle(actionName,lableTitle,page,id,idName){ 
+	clickControl("?act=addEditHandle"+addTemplateToUrl(),actionName,lableTitle,page,id,idName)
 }
 //删除单个
-function delHandle(actionName,lableTitle,page,id){ 
-	clickControl("?act=delHandle",actionName,lableTitle,page,id)
+function delHandle(actionName,lableTitle,page,id,idName){ 
+	clickControl("?act=delHandle"+addTemplateToUrl(),actionName,lableTitle,page,id,idName)
 }
 //更新字段
-function updateFieldHandle(fieldName,fieldValue,actionName,lableTitle,page,id){ 
-	clickControl("?act=updateField&fieldname="+ fieldName +"&fieldvalue="+fieldValue,actionName,lableTitle,page,id)
+function updateFieldHandle(fieldName,fieldValue,actionName,lableTitle,page,id,idName){ 
+	clickControl("?act=updateField&fieldname="+ fieldName +"&fieldvalue="+fieldValue+addTemplateToUrl(),actionName,lableTitle,page,id,idName)
 }
 //获得网址
 //clickControl('?act=updateWebsiteStat','[$actionType$]','[$lableTitle$]','[$page$]','[$id$]')
 //点击控件
-function clickControl(url,actionName,lableTitle,page,id){
+function clickControl(url,actionName,lableTitle,page,id,idName){
 	url+="&actionType="+actionName+"&lableTitle="+lableTitle+"&nPageSize="+getInputValue("nPageSizeSelect")+"&parentid="+getInputValue("parentid")			
 	url+="&searchfield="+getInputValue("searchfield")+"&keyword="+getInputValue("keyword")+"&addsql="+getInputValue("addsql")+"&page="+page+"&id="+id+"&mdbpath=" +getInputValue("mdbpath")+"&focusid="+getInputValue("focusid")
-	//alert(url)
+	
+	if(idName!=undefined){
+		url+="&idname="+idName;
+	} 
 	window.location.href=url 
 }
 //搜索回车

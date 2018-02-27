@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -193,7 +193,7 @@ function readColumeSetTitle(action, styleID, columeTitle, columeContent)
     end if 
 
     dim content 
-    content = readColumn(styleID) 
+    content = readNavLeftFoot(styleID,"Left") 
     '标题宽
     if titleWidth <> "" then
         content = replace(content, "<div class=""tvalue"">", "<div class=""tvalue"" style='width:" & titleWidth & ";'>") 
@@ -207,21 +207,7 @@ function readColumeSetTitle(action, styleID, columeTitle, columeContent)
     content = replace(content, "栏目标题", columeTitle) 
     content = replace(content, "栏目内容", columeContent) 
     readColumeSetTitle = content 
-end function 
-
-'读栏目模块
-function readColumn(sID)
-    dim templateFilePath, startStr, endStr, s  
-    templateFilePath = cfg_webTemplate & "\Template_Left.html" 
-    startStr = "/*columnlist" & sID & "Start*/" 
-    endStr = "/*columnlist" & sID & "End*/" 
-    s = readTemplateFileModular(templateFilePath, startStr, endStr) 
-    if s = "[$NO$]" then
-        s = "Left样式ID[" & sID & "]不存在" 
-    end if 
-    readColumn = s 
-end function 
-
+end function  
 
 '读模板素材
 function readTemplateSource(sID)
@@ -295,8 +281,82 @@ function readArticleInfoStyleSource(sID)
         filePath = cfg_webTemplate & "\Resources\" & sID 
     end if 
     readArticleInfoStyleSource = readTemplateFileSource(filePath, sID) 
+end function  
+'读出Nav模板样式    
+function XY_ReadNav(action)
+    dim startStr, endStr, style, title, valueStr, moreClass, moreUrl, moreStr, aStr, c 
+    style = rParam(action, "style") 
+	c=readNavLeftFoot(style,"Nav")
+	c = Replace(c, "{$Nav$}", getNavTemplateSource)         '替换显示默认导航内容
+    XY_ReadNav = c
 end function 
 
+'读出Foot模板样式    
+function XY_ReadFoot(action)
+    dim startStr, endStr, style, title, valueStr, moreClass, moreUrl, moreStr, aStr, c 
+    style = rParam(action, "style") 
+	c=readNavLeftFoot(style,"Foot") 
+    XY_ReadFoot = c
+end function
+function readNavLeftFoot(sId,sType) 
+    dim templateFilePath, startStr, endStr, s,templateContent,content,cssFilePath,cssContent,splstr,c
+    templateFilePath = cfg_webTemplate & "\Template_"& sType &".html" 
+	'call echo("templateFilePath",templateFilePath)
+    startStr = "/*"& sType &"" & sID & "Start*/" 
+    endStr = "/*"& sType &"" & sID & "End*/" 
+    s = readTemplateFileModular(templateFilePath, startStr, endStr) 
+    if s = "[$NO$]" then
+		templateContent=readFile(templateFilePath,"gb2312")
+		content=getHttpUrl("http://aa/vbtemplate.asp?act=get"& sType &"Template&id="&sID,"")
+		if instr(content,"$Array$")>0 then
+			splstr=split(content,"$Array$")
+			c=startStr&vbcrlf&splstr(1)&endStr
+			call writeToFile(templateFilePath,phptrim(templateContent)&phptrim(c),"gb2312")
+		end if
+		cssFilePath=cfg_webCss&"\style.css"
+		cssContent=readFile(cssFilePath,"gb2312")
+		if instr(cssContent,startStr)=false then
+			c=startStr&vbcrlf&splstr(0)&endStr
+			cssContent=phptrim(cssContent)&phptrim(c)
+			call writeToFile(cssFilePath,cssContent,"gb2312")
+		end if
+		
+        s =  sType &"样式ID[" & sID & "]不存在" 
+    end if 
+    readNavLeftFoot= s 
+end function
 
+
+'获得导航模板资源 
+Function getNavTemplateSource()
+    Dim c
+    c = "<li class=left></li>{$ColumnMenu default='[_2018年02月22日 08时10分]' rootcolumnisfocus='true'$}</sPAn>" & vbCrlf
+    c = c & "<!--#[_2018年02月22日 08时10分]" & vbCrlf
+    c = c & "[list]<a href=""[$url$]"" title=""[$title$]"" [$atarget$]>[$title$]</a>[/list] " & vbCrlf
+    c = c & "[list-focus][$title$][/list-focus]" & vbCrlf
+    c = c & "" & vbCrlf
+    c = c & "[small-list]<li><a href=""[$url$]"" title=""[$title$]"">[$title$]</a></li>[/small-list] " & vbCrlf
+    c = c & "[small-list-focus]<li><a href=""[$url$]"" title=""[$title$]"">[$title$]</a></li>[/small-list-focus]" & vbCrlf
+    c = c & "" & vbCrlf
+    c = c & "[navheader]" & vbCrlf
+    c = c & "<li>" & vbCrlf
+    c = c & "[/navheader]" & vbCrlf
+    c = c & "[navheader-focus]" & vbCrlf
+    c = c & "<li class=focus>" & vbCrlf
+    c = c & "[/navheader-focus]" & vbCrlf
+    c = c & "[navfooter]" & vbCrlf
+    c = c & "</li>" & vbCrlf
+    c = c & "[/navfooter]" & vbCrlf
+    c = c & "" & vbCrlf
+    c = c & "" & vbCrlf
+    c = c & "[subheader]<ul>" & vbCrlf
+    c = c & "[/subheader]" & vbCrlf
+    c = c & "[subfooter]</ul><li class=line></li>" & vbCrlf
+    c = c & "[/subfooter] " & vbCrlf
+    c = c & "[sql]where flags like '%top%'[/sql]" & vbCrlf
+    c = c & "#-->" & vbCrlf
+    c = c & "<li class=right></li>" & vbCrlf 
+    getNavTemplateSource = c
+End Function
 %>     
 

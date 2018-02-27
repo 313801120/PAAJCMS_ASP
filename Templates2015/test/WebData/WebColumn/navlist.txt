@@ -1,0 +1,239 @@
+【columnname】网站首页
+【columntype】首页
+【sortrank】0
+【filename】/index.html
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+
+【/bodycontent】
+-------------------------------
+【columnname】公司简介
+【columntype】文本
+【sortrank】1
+【filename】/about/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】 
+
+【/bodycontent】
+-------------------------------
+【columnname】新闻中心
+【columntype】新闻
+【sortrank】2
+【filename】/news/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+【/bodycontent】
+-------------------------------
+【columnname】产品展示
+【columntype】产品
+【sortrank】3
+【filename】/products/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【npagesize】8
+【bodycontent】
+【/bodycontent】
+-------------------------------
+【columnname】下载中心
+【columntype】下载
+【sortrank】4
+【filename】/downloads/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+【/bodycontent】
+-------------------------------
+【columnname】在线招聘
+【columntype】招聘
+【sortrank】5
+【filename】/josb/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+招聘信息...
+【/bodycontent】
+-------------------------------
+【columnname】在线反馈
+【columntype】反馈
+【sortrank】6
+【filename】/feedback/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+<form class="comment" name="formmessage" method="post" action="[$WEB_VIEWURL$]?act=savedata&stype=feedback&columnid=[$glb_columnId$]" target="_blank" onSubmit="return formmessageSubmit()">
+    姓名：<br><input type="text" name="guestname" id="guestname" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    QQ：<br><input type="text" name="qq" id="qq" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    电话：<br><input type="text" name="tel" id="tel" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    地址：<br><input type="text" name="address" id="address" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    内容：<textarea name="bodycontent" placeholder="我也来说两句..." class="inputstyle"></textarea>
+验证码：<input type="text" name="yzm" id="yzm" style="width:100px;margin:6px 0;text-align:center;" class="inputstyle" /><img id="yzmimg" src="{$EDITORTYPE asp='/inc/yzm_7.[$EDITORTYPE$]' php='/inc_php/Include/YZM_7.[$EDITORTYPE$]' aspx='/inc_csharp/Include/YZM_7.aspx'$}" title="看不清楚，换一张" alt="看不清楚，换一张" style="cursor: pointer; vertical-align:middle;" onClick="this.src = '{$EDITORTYPE asp='/inc/yzm_7.[$EDITORTYPE$]' php='/inc_php/Include/YZM_7.[$EDITORTYPE$]' aspx='/inc_csharp/Include/YZM_7.aspx'$}?'+Math.random()*10000"/><br>         
+
+<input type="submit" class="mybtn" value="提交留言"></form>
+<script type="text/javascript">
+function formmessageSubmit(){
+    if(formmessage.guestname.value==''){
+        formmessage.guestname.focus();
+        alert('请输入姓名');
+        return false;
+    }
+    if(formmessage.qq.value==''){
+        formmessage.qq.focus();
+        alert('请输入QQ号');
+        return false;
+    }
+    if(formmessage.bodycontent.value==''){
+        formmessage.bodycontent.focus();
+        alert('请输入内容');
+        return false;
+    }
+    if(formmessage.yzm.value==''){
+        formmessage.yzm.focus();
+        alert('请输入验证码');
+        return false;
+    }
+}
+</script> 
+【/bodycontent】
+-------------------------------
+【columnname】在线留言
+【columntype】留言
+【sortrank】11
+【filename】/message/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+【/bodycontent】
+-------------------------------
+【columnname】联系我们
+【columntype】文本
+【sortrank】12
+【filename】/contactus/
+【flags】|top|
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+作者介绍<br>
+1、2006年进入互联网，专注网站开发10年<br>
+2、精通ASP/HTML5/CSS3/JS/Jquery/Canvas/Flash/PHP/VB/等<br>
+3、掌握DotNet/Android/JSP/nodeJS/python/BootStrop/PS/PR/FTP/linux等<br>
+4、擅长把复杂的事情简单化，独立开发一套PAAJCMS内容管理系统<br>
+5、发布【PAAJCMS】/【在线ASP转PHP】/【在线格式化ASP】【在线仿站】等开源项目<br>
+6、曾在上海、南京等城市从事网站开发工作多年<br><br>
+
+联系方式<br>
+作者：云祥孙<br>
+英文名：YXS<br>
+QQ：313801120<br>
+微信：MQ313801120<br>
+邮箱：313801120@qq.com   postmaster@aspphpcms.com   qq313801120@gmail.com<br>
+交流群：35915100<br>
+作者主页：http://sharembweb.com/<br>
+【/bodycontent】
+-------------------------------
+【columnname】banner
+【columntype】新闻
+【sortrank】13
+【filename】/banners/
+【flags】||
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【isonhtml】0
+【bodycontent】
+【/bodycontent】
+
+-------------------------------
+【parentid】产品展示
+【columnname】产品1
+【columntype】产品
+【sortrank】3
+【filename】/products/1/
+【flags】 
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【columnname】产品2
+【columntype】产品
+【sortrank】3
+【filename】/products/2/
+【flags】 
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+【/bodycontent】
+-------------------------------
+【parentid】产品展示
+【columnname】产品c
+【columntype】产品
+【sortrank】3
+【filename】/products/c/
+【flags】 
+【parentid】-1
+【labletitle】
+【target】
+【webtitle】
+【webkeywords】
+【webdescription】
+【bodycontent】
+【/bodycontent】

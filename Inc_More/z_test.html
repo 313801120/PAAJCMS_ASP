@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<script src='../Jquery/Jquery.Min.js' type='text/javascript'></script>
+</head>
+<body>
+<div>1</div>
+
+<div>2222
+
+<div>3333</div>
+
+<div>3.2,3.2
+	<div>3a3a3a3a3a</div>
+</div>
+<div>aaaaaa</div>
+
+</div>
+<div>4444</div>
+
+<script language="javascript">
+$(function(){
+	//$("div:eq(0)").html("中国人呀").append("在被选元素的结尾插入内容").prepend("在被选元素的开头插入内容").after("在被选元素之后插入内容").before("在被选元素之前插入内容")
+ 
+	$("div").each(function (index,obj) {		
+		alert( $(this).html() )
+	})	
+
+})
+
+/*
+
+before() - 在被选元素之前插入内容
+after() - 在被选元素之后插入内容
+
+prepend() - 在被选元素的开头插入内容
+append() - 在被选元素的结尾插入内容
+*/
+</script>
+</body>
+</html>

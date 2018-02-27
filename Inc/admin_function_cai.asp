@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -15,6 +15,8 @@ function callFunction_cai()
     sType = request("stype") 
     if sType = "cai" then
         call cai()                                                       '采集
+    elseif sType = "newcai" then
+        call newCai()                                                       '新版采集
     elseif sType = "clearAllData" then
         call cai_clearAllData()                                          '清除全部数据
     elseif sType = "importCaiData" then
@@ -25,6 +27,85 @@ function callFunction_cai()
         call eerr("callFunction_cai页里没有动作", request("stype")) 
     end if 
 end function 
+'新版采集
+function newCai()
+	dim id,sFileCharSet,httpurl,morepageurl,startPage,endPage,url,content,handleContent,dirPath,filePath,nState
+	dim i,nI,s,c,splstr,splxx,arrData(99,99,99)
+    dirPath = handlePath("../cache/cai") 
+    call createDirFolder(dirPath)  
+	id=request("id") 
+	rs.open "select * from " & db_PREFIX & "caiColumn where id="&id,conn,1,1
+	if not rs.eof then
+		sFileCharSet=rs("charset")			'文件编码
+		httpurl=rs("httpurl")				'首页网址
+		morepageurl=rs("morepageurl")		'更多页网址
+		startPage=rs("startPage")			'开始页数
+		endPage=rs("endPage")				'结束页数
+		if startPage<0 then startPage=0
+		call echo("开始/结束页",rs("startPage") & "/" & rs("endPage"))
+		if endPage>=startPage then
+			for i=startPage to endPage 
+				if i=startPage and httpurl<>"" then
+					url =httpurl
+				elseif morepageurl<>"" then
+					url=morepageurl
+				else
+					if httpurl<>"" then
+						url=httpurl
+					else
+						url=morepageurl
+					end if
+				end if
+				url=replace(url,"{*}",i)
+				filePath=dirPath & "/" & mymd5(url)
+				if checkFile(filePath)=false then
+					call echo("提示，正在下载文件",url)
+					nState=saveRemoteFile(url,filePath)
+					if nState<>200 then
+						call deleteFile(filePath)
+						call echo("提示，下载失败 状态码="& nState &"，删除文件",filePath)
+					end if
+				else
+					call echo("提示，网址有缓冲",url)
+				end if
+				'读内容 
+				if checkFile(filePath)=true then
+					content=readFile(filePath,sFileCharSet) 
+					call pubFormatObj.handleFormatting(content) 
+					call echo("提示，读文件内容",filePath)
+					rsx.open "select * from " & db_PREFIX & "caiColumn where parentId="&id & " order by sortRank",conn,1,1
+					while not rsx.eof
+						call echo("配置动作",rsx("sType") & " =>> " & rsx("labelNameList")&" =>> " & rsx("htmlValue")  )
+						if rsx("stype")<>"" then 
+							handleContent=pubFormatObj.handleLabelContent(rsx("labelNameList"),"*",rsx("htmlValue"),rsx("sType")) 
+							if rsx("sAction")="分割" then
+								splstr=split(handleContent,"$Array$  ")
+								nI=-1
+								for each s in splstr
+									if s<>"" then
+										nI=nI+1 
+										arrData(nI,0,0)=s
+									end if
+								next
+							end if
+						end if
+					rsx.movenext:wend:rsx.close
+				end if
+			'call rwend(handleContent)
+			next
+			if arrData(0,0,0)<>"" then
+				call rwend(arrData(0,0,0))
+			end if
+			
+					
+		end if
+		
+		
+		
+	end if:rs.close
+
+	call rw(getTimer())
+end function
 
 '导入采集数据
 function cai_importCaiData()

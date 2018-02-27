@@ -1,0 +1,143 @@
+ 
+<!--#top start#-->
+<style>
+.newproductwrap li{
+	width:169px;
+	height:232px;
+	border:1px solid #CCCCCC;
+	float:left;
+	margin:0 4px 4px 0;
+	padding:4px;
+}
+.newproductwrap li .title{
+	text-align:center;
+	font-size:14px;
+	color:#000000;
+}
+.newproductwrap li a{
+    height:0px;
+    line-height:18px;
+}
+</style>
+<style>
+.newswrap{
+}
+.newswrap li{ 
+	border-bottom:1px dotted #CCCCCC; 
+	margin:0 4px 4px 0;
+	padding:4px;
+	width:720px;
+	display:block;
+	position:relative;
+}
+.newswrap li .title{
+	text-align:center;
+	font-size:14px;
+	color:#000000;
+}
+.newswrap li .time{
+	position:absolute;
+	right:0px;
+	top:10px;
+	color:#999999;
+}
+.newswrap li a{
+    height:0px;
+    line-height:18px;
+}
+</style>
+<style>
+.guestbooklist{}
+.guestbooklist .gbitem{border:1px solid #B4B4B4;line-height:22px;font-size:14px;margin:0 0 10px 0}
+.guestbooklist .gbtitle{padding:0 0 0 10px;color:#000;line-height:30px;background-color:#EBEBEB}
+.guestbooklist .gbmessage{border-top:1px solid #B4B4B4;padding:10px}
+.guestbooklist .gbreply{border-top:1px solid #B4B4B4;padding:10px} 
+.comment{color:#979797;font-size:16px}
+.comment textarea{width:98%;height:80px;outline:0;font-size:16px;line-height:24px}
+.commentlist .usermsg{color:#888888;font-size:14px;line-height:24px;margin:0 0 10px 0}
+.commentlist .contentcontent{color:#333333;font-size:14px;line-height:22px}
+.commentlist .line{border-bottom:1px #CCCCCC solid;margin:6px 0 14px 0}
+.mybtn{margin-right:10px;padding:0 10px;height:30px;line-height:30px;font-weight:bold;color:#FFF;cursor:pointer;vertical-align:middle;border:0;background-color:#999999;font-size:14px}
+.mybtn:hover{margin-right:10px;padding:0 10px;height:30px;line-height:30px;font-weight:bold;color:#FFF;cursor:pointer;vertical-align:middle;border:0;background-color:#666666;font-size:14px}
+</style>
+
+
+<style>
+.bannerwrap{ margin:0 auto;
+	height:300px;
+	position:relative;
+}
+.bannerwrap .content{
+}
+.bannerwrap .content li{
+	position: absolute;  
+	background:#CCCCCC;
+}
+.bannerwrap .left, .bannerwrap .right{background:#000;font-family:"宋体";width:50px;height:50px;line-height:50px;text-align:center;font-size:40px;color:#fff;position:absolute;top:-100px;cursor:pointer;transition:all .2s ease;opacity:1;z-index:899999}
+.bannerwrap .left{left:0px;}
+.bannerwrap .right{right:0px;} 
+
+.Homedot{position:absolute;width:100%;text-align:center;z-index:999;bottom:30px;}
+.Homedot a{display:inline-block;margin:0px 5px;height:12px;width:12px;line-height:1000px;overflow:hidden;background:url([$WebImages$]/index_229.png) no-repeat;}
+.Homedot a.cur{background:url([$WebImages$]/index_228.png) no-repeat}
+</style>
+    <div class="headerwrap">{$ReadNav style='13' stylevalue='0'$}</div>
+    <div class="clear6"></div>
+    <div class="bannerwrap">
+    	<ul class="content">
+        
+        <!--#细节列表 ASPPHP通用#-->
+<sPAn class="testspan">{$ArticleList columnname='Banner' topnumb='6' default='[_Banner]'$}</sPAn>
+<!--#[_Banner]
+[list]<li style="background-image:url([$smallimage$])"></li>[/list]
+#--> 
+        </ul>
+    	<div class="left noselect" onClick="javascript:showUpBanner()"><</div> 
+        <div class="right noselect" onClick="javascript:showNextBanner()">></div> 
+        <div class="Homedot">
+        
+        <sPAn class="testspan">{$ArticleList columnname='Banner' topnumb='6' default='[_Banner_dot]'$}</sPAn>
+<!--#[_Banner_dot]
+[list]<a href="javascript:;">2</a>[/list]
+#--> 
+ </div>
+    </div>
+<script>
+var bannerIndex=0
+$(document).ready(function(){
+	$(".bannerwrap ul li").width($(".mainwrap").width()).height($(".bannerwrap").height());
+	var nH=($(".bannerwrap").height()-50)/2; 
+	$(".bannerwrap").hover(function(){  
+		$(".bannerwrap .left, .bannerwrap .right").stop(true).animate({top:nH},100);	 
+	},function(){
+		$(".bannerwrap .left, .bannerwrap .right").stop(true).animate({top:-100},100);
+	}); 
+	$(".Homedot a").click(function(){
+		showBannerIndex($(this).index());
+	})  
+	showBannerIndex(bannerIndex);
+});
+function showUpBanner(){
+	bannerIndex--;
+	if(bannerIndex<0){
+		bannerIndex=$(".bannerwrap ul li").length-1;
+	}
+	showBannerIndex(bannerIndex);
+}
+function showNextBanner(){
+	bannerIndex++;
+	if(bannerIndex>$(".bannerwrap ul li").length-1){
+		bannerIndex=0;
+	}
+	showBannerIndex(bannerIndex);
+}
+function showBannerIndex(i){
+	$(".Homedot a").attr("class","");
+	$(".Homedot a:eq("+i+")").attr("class","cur"); 
+	
+	$(".bannerwrap ul li").hide();
+	$(".bannerwrap ul li:eq("+i+")").show();
+}
+</script>
+    <div class="clear6"></div>
+<!--#top end#--> 

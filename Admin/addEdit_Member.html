@@ -17,6 +17,8 @@
 <div class="mg10">
 	<ul class="tabbut noselect">
         <li>基本设置</li>  
+        <li>其它设置</li>  
+        <li>详细信息</li>   
         <li>权限设置</li>   
     </ul>&nbsp;
     <div class="clear"></div>
@@ -34,6 +36,19 @@
                 </tbody>
                 <tbody class="tbodybox">
                     <tr align="center" height="25" bgcolor="#ffffff">
+                      <td>会员类型</td>
+                      <td align="left" style="padding:3px;"><select name="usertype" id="usertype">
+                        <option value="1">普通会员</option>
+                        <option value="2" [$usertype if='1' value='selected'$]>高级会员</option>
+                        <option value="3" [$usertype if='1' value='selected'$]>超级会员</option>
+                        <option value="4" [$usertype if='1' value='selected'$]>代理会员</option>
+                        <option value="8" [$usertype if='1' value='selected'$]>软件会员</option>
+                        <option value="9" [$usertype if='1' value='selected'$]>其它会员</option>
+                      </select>
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
                         <td>会员账号</td>
                         <td align="left" style="padding:3px;"><input name="username" type="text" id="username" value="[$username$]" style='width:97%;' class="input-text" alt="请输入账号" /></td>
                         <td>username</td>
@@ -48,31 +63,9 @@
                         <td align="left" style="padding:3px;"><input name="nickname" type="text" id="nickname" value="[$nickname$]" style='width:97%;' class="input-text" /></td>
                         <td>nickname</td>
                     </tr>
-                    <tr align="center" height="25" bgcolor="#F9FCEF">
-                        <td>openid</td>
-                        <td align="left" style="padding:3px;">[$input_openid$]</td>
-                        <td>openid</td>
-                    </tr>
-                    <tr align="center" height="25" bgcolor="#ffffff">
-                        <td>accesstoken</td>
-                        <td align="left" style="padding:3px;">[$input_accesstoken$]</td>
-                        <td>accesstoken</td>
-                    </tr>
-                    <tr align="center" height="25" bgcolor="#F9FCEF">
-                        <td>注册IP</td>
-                        <td align="left" style="padding:3px;">[$input_regip$]</td>
-                        <td>regip</td>
-                    </tr>
-                    <tr align="center" height="25" bgcolor="#ffffff">
-                        <td>登录IP</td>
-                        <td align="left" style="padding:3px;">[$input_loginip$]</td>
-                        <td>loginip</td>
-                    </tr>
-                    <tr align="center" height="25" bgcolor="#ffffff">
-                      <td>上一级会员id</td>
-                      <td align="left" style="padding:3px;"><input name="parentid" type="text" id="parentid" value="[$parentid$]" alt="上一级会员不是数值类型{Array}[数字]" style="width:20%;" class="input-text"></td>
-                      <td>parentid</td>
-                    </tr>
+
+
+
                     <tr align="center" height="25" bgcolor="#ffffff">
                       <td>到期时间</td>
                       <td align="left" style="padding:3px;">
@@ -97,16 +90,66 @@
         </script>         </td>
                       <td>expiredatetime</td>
                     </tr>
-                    <tr align="center" height="25" bgcolor="#ffffff">
-                      <td>关注列表</td>
-                      <td align="left" style="padding:3px;">[$input_followidlist$]</td>
-                      <td>followidlist</td>
-                    </tr>
+
                     <tr align="center" height="25" bgcolor="#ffffff">
                         <td>审核通过</td>
                         <td align="left" style="padding:3px;">
                         <label for='isthrough'><input type='checkbox' name='isthrough' id='isthrough' [$isthrough if='False' elseif='0' value='' elsevalue=' checked'$]  value='1'>通过</label>                        </td>
                         <td>isonhtml</td>
+                    </tr>
+                </tbody> 
+                <tbody class="tbodybox"> 
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>openid</td>
+                        <td align="left" style="padding:3px;">[$input_openid$]</td>
+                        <td>openid</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                        <td>accesstoken</td>
+                        <td align="left" style="padding:3px;">[$input_accesstoken$]</td>
+                        <td>accesstoken</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                      <td>上一级会员id</td>
+                      <td align="left" style="padding:3px;"><input name="parentid" type="text" id="parentid" value="[$parentid$]" alt="上一级会员不是数值类型{Array}[数字]" style="width:20%;" class="input-text"></td>
+                      <td>parentid</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                      <td>关注列表</td>
+                      <td align="left" style="padding:3px;">[$input_followidlist$]</td>
+                      <td>followidlist</td>
+                    </tr>
+                </tbody> 
+                <tbody class="tbodybox"> 
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>注册IP</td>
+                        <td align="left" style="padding:3px;">[$regip$]</td>
+                        <td>regip</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>机器名</td>
+                        <td align="left" style="padding:3px;">[$machinename$]</td>
+                        <td>machinename</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                        <td>操作系统</td>
+                        <td align="left" style="padding:3px;">[$osversion$]</td>
+                        <td>osversion</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                        <td>软件路径</td>
+                        <td align="left" style="padding:3px;">[$softpath$]</td>
+                        <td>softpath</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                        <td>屏幕宽</td>
+                        <td align="left" style="padding:3px;">[$srceenwidth$]</td>
+                        <td>srceenwidth</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
+                        <td>屏幕高</td>
+                        <td align="left" style="padding:3px;">[$srceenheight$]</td>
+                        <td>srceenheight</td>
                     </tr>
                 </tbody> 
                 <tbody class="tbodybox"> 

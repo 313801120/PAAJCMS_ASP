@@ -1,0 +1,24 @@
+【#jump#】true为true则为跳过当前
+【#top#】true为true则为停止全部
+-------------------------------
+【#sub#】
+admin5【|】 parentid='-1'sortrank='1'
+chinaz【|】 parentid='-1'sortrank='2' 
+	ASP【|】httpurl='http://down.chinaz.com/class/3_{*}.htm' charset='gb2312' startpage='1' endpage='1000'
+	PHP【|】httpurl='http://down.chinaz.com/class/5_{*}.htm' charset='gb2312' startpage='1' endpage='1000'
+	书籍教程【|】httpurl='http://down.chinaz.com/class/7_{*}.htm' charset='gb2312' startpage='1' endpage='1000'
+-------------------------------
+【#jump#】true
+【免责声明】
+【/免责声明】
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,47 @@
+ 
+<!--#left start#-->
+    <sPAn class="testspan">{$ReadColumeSetTitle title='网站公告' style='74' moreclass='morewrite mgr4' morestr='More' moreurl='{\$GetOnePageUrl title=\'网站公告\'$\}' stylevalue='0' value='[$读出内容 block=\'BlockName网站公告\' file=\'\'$]'$}</sPAn>
+    <div class="clear6"></div>
+    <sPAn class="testspan">{$ReadColumeSetTitle title='产品列表' style='74' moreclass='leftmore' morestr='More' moreurl=' ' stylevalue='0' value='[$读出内容 block=\'BlockName产品列表\' file=\'\'$]'$}</sPAn>
+    <div class="clear6"></div>
+    <sPAn class="testspan">{$ReadColumeSetTitle title='联系方式' style='74' moreclass='leftmore' morestr='More' moreurl=' ' stylevalue='0' value='[$读出内容 block=\'BlockName联系方式\' file=\'\'$]'$}</sPAn>
+    
+    
+    
+    
+        <!--#test start#-->
+    <R#读出内容BlockName网站公告 start#>
+    {$GetOnePageBody title='网站公告' fieldname='aboutcontent' default='PAAJCMS 是一款免费开源的，快速、简单、轻量级网站内容管理系统，有ASP和PHP和ASP.Net等多种版本，并且是相互通用的。只要你写一次，就可以同时在ASP平台和PHP平台和ASP.Net多种平台运行。 创立于2015年初，是为了敏捷WEB应用开发和简化企业应用开发而诞生的。PAAJCMS从诞生以来一直秉承简洁实用的设计原则，在保持出色的性能和至简的代码的同时，也注重易用性。 并且拥有众多的原创功能和特性，在易用性、扩展性和性能方面不断优化和改进，必将成为国内最领先和最具影响力的WEB应用开发框架，众多的典型案例确保可以稳定用于商业以及门户级的开发。 业以及门户级的开发。<br />PAAJCMS从诞生以来一直秉承大道至简的开发理念，无论从底层实现还是应用开发，我们都倡导用最少的代码完成相同的功能，正是由于对简单的执着和代码的修炼，让我们长期保持出色的性能和极速的开发体验。简单和快速开发是我们不变的宗旨。<br />框架在系统层面提供了众多的安全特性，确保你的网站和产品安全无忧。这些特性包括：
+XSS安全防护
+表单自动验证
+强制数据类型转换
+输入数据过滤
+表单令牌验证
+防SQL注入
+图像上传检测' autoadd='true' noisonhtml='true'$} 
+<R#读出内容BlockName网站公告 end#>
+
+    <R#读出内容BlockName产品列表 start#>
+ 		<ul>
+ 
+        <!--#自定义导航列表#-->
+<sPAn class="testspan">{$ColumnList columnname='产品展示' addsql=' order by sortrank' default='[_产品展示_list]'$}</sPAn>
+<!--#[_产品展示_list]
+[list]<li><a href="[$url$]"[$atarget$] >[$columnname$]</a></li>[/list]
+[list-focus]<li><a href="[$url$]" [$atarget$][$abcolor$]><font color="red">[$columnname$]</font></a></li>[/list-focus]
+#-->
+
+        
+        
+        </ul>
+<R#读出内容BlockName产品列表 end#>
+
+
+    <R#读出内容BlockName联系方式 start#>
+    {$GetOnePageBody title='联系方式' fieldname='aboutcontent' default='作者：云祥孙<br />邮箱：313801120@qq.com<br />QQ：<a href="tencent://message/?uin=313801120&Site=作者云祥孙&Menu=yes" target="_blank">313801120</a><br />交流群：<a href="http://sharembweb.com/url.asp?title=qq%C8%BA35915100" target="_blank">35915100</a><br />网址：<a href="http://sharembweb.com/" target="_blank">http://sharembweb.com/</a>' autoadd='true' noisonhtml='true'$} 
+<R#读出内容BlockName联系方式 end#>
+ <!--#test end#-->
+
+
+    
+<!--#left end#-->

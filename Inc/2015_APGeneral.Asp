@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -11,24 +11,54 @@
 <% 
 'ASP和PHP通用函数
 
+'获得导航id 根据大类与小类 20170404  call getWebColumnDidSid(did,sid,true)
+function getWebColumnDidSid(byval did,byval sid, byval isAdd)
+	dim i,parentid,id
+	rs1.open"select * from " & db_PREFIX & "WebColumn where parentid=-1 and columnName='"& did &"'",conn,1,1
+	if not rs1.eof then
+		id=rs1(0)
+		parentId=id
+	end if:rs1.close
+	if id="" then
+		exit function
+	end if 
+	rs1.open"select * from " & db_PREFIX & "WebColumn where parentid="& id &" and columnName='"& sid &"'",conn,1,3
+	if not rs1.eof then
+		id=rs1(0)
+	else
+		id=""
+	end if:rs1.close
+	'添加
+	if id="" and isAdd=true then	
+		rs1.open"select * from " & db_PREFIX & "WebColumn",conn,1,3
+		rs1.addnew
+		rs1("parentid")=parentId
+		rs1("columnName")=sid
+		rs1.update:rs1.close
+	end if
+	
+	getWebColumnDidSid=id
+end function
 '处理主栏目信息
 function handleColumnRoot(byval id)
-	dim i,parentid
+	dim i,parentid,rs1
+	Set rs1 = CreateObject("Adodb.RecordSet")
 	for i =1 to 9
-		rst.open"select * from " & db_PREFIX & "WebColumn where id="& id &"",conn,1,1
-		if not rst.eof then
-			parentid=cstr(rst("parentid"))
+		rs1.open"select * from " & db_PREFIX & "WebColumn where id="& id &"",conn,1,1
+		if not rs1.eof then
+			parentid=cstr(rs1("parentid"))
 			if parentid<>"-1" then
-				id=rst("parentid")
+				id=rs1("parentid")
 			else
-				glb_columnRootName=rst("columnname")
-				glb_columnRootEnName=rst("columnenname")
-				glb_columnRootId=rst("id")
+				glb_columnRootName=rs1("columnname")
+				glb_columnRootEnName=rs1("columnenname")
+				glb_columnRootId=rs1("id")
+				rs1.close
 				exit for		
 			end if
 		else
 			exit for
-		end if:rst.close
+		end if:rs1.close
 	next
 end function
 
@@ -36,39 +66,60 @@ end function
 function getColumnRootId(byval id)
 	dim parentid,i
 	for i =1 to 9
-		rst.open"select * from " & db_PREFIX & "WebColumn where id="& id &"",conn,1,1
-		if not rst.eof then
-			parentid=cstr(rst("parentid"))
+		rs2.open"select * from " & db_PREFIX & "WebColumn where id="& id &"",conn,1,1
+		if not rs2.eof then
+			parentid=cstr(rs2("parentid"))
 			if parentid<>"-1" then
-				id=rst("parentid")
+				id=rs2("parentid")
 			else
 				exit for		
 			end if
 		else
 			exit for
-		end if:rst.close
+		end if:rs2.close
 	next
 	getColumnRootId=id
 end function
-'获得子栏目id列表
+'获得栏目上一级id
+function getParentColumnId(parentID) 
+    getParentColumnId = "-1" 
+	'【@是jsp显示@】try{
+    rsx.open "Select * from " & db_PREFIX & "webcolumn where id=" & parentID & "", conn, 1, 1 
+    if not rsx.EOF then
+        getParentColumnId = rsx("parentID") 
+    end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
+end function
+'获得栏目上一级名称
+function getParentColumnName(parentID)  
+	'【@是jsp显示@】try{
+    rsx.open "Select * from " & db_PREFIX & "webcolumn where id=" & parentID & "", conn, 1, 1 
+    if not rsx.EOF then
+        getParentColumnName = rsx("columnName") 
+    end if : rsx.close 
+	'【@是jsp显示@】}catch(Exception e){}
+end function 
+'获得子栏目id列表 
 function getColumnIdList(byval id, sType)
 	dim parentid,c,splstr,s
 	if sType="addthis" then
 		c=id
 	end if
-	rsTemp.open"select * from " & db_PREFIX & "WebColumn where parentid="& id &"",conn,1,1
-	while not rsTemp.eof 
-		if c<>"" then
-			c=c & ","
+	rs3.open"select * from " & db_PREFIX & "WebColumn where parentid="& id &"",conn,1,1
+	while not rs3.eof
+		id=rs3("id")
+		if instr("," & c & ",", ","& id &",")=false then
+			if c<>"" then
+				c=c & ","
+			end if
+			c=c & id
 		end if
-		id=rsTemp("id")
-		c=c & rsTemp("id")
-	rsTemp.movenext:wend:rsTemp.close
+	rs3.movenext:wend:rs3.close
 	splstr=split(c,",")
 	for each id in splstr
 		if id<>"" then
 			s=getColumnIdList(id,"")
-			if s<>"" then
+			if s<>"" and instr(","& c &",", ","& s &",")=false then
 				c=c & "," & s
 			end if
 		end if
@@ -128,16 +179,16 @@ function getWebColumnSortSql(id)
 end function 
 
 '上一篇文章 这里面的sortrank(排序)也可以改为id,在引用的时候就要用id
-function upArticle(parentid, lableName, lableValue, ascOrDesc)
-    upArticle = handleUpDownArticle("上一篇：", "uppage", parentid, lableName, lableValue, ascOrDesc) 
+function upArticle(parentid, lableName, lableValue, ascOrDesc,url)
+    upArticle = handleUpDownArticle("上一篇：", "uppage", parentid, lableName, lableValue, ascOrDesc,url) 
 end function 
 '下一篇文章
-function downArticle(parentid, lableName, lableValue, ascOrDesc)
-    downArticle = handleUpDownArticle("下一篇：", "downpage", parentid, lableName, lableValue, ascOrDesc) 
+function downArticle(parentid, lableName, lableValue, ascOrDesc,url)
+    downArticle = handleUpDownArticle("下一篇：", "downpage", parentid, lableName, lableValue, ascOrDesc,url) 
 end function 
-'处理上下页
-function handleUpDownArticle(lableTitle, sType, parentid, lableName, lableValue, ascOrDesc)
-    dim c, url, target, targetStr 
+'处理上下页  url就给上页值用的
+function handleUpDownArticle(lableTitle, sType, parentid, lableName, lableValue, ascOrDesc,url)
+    dim c, target, targetStr 
 
     dim sql 
     if lableName = "adddatetime" then
@@ -258,7 +309,7 @@ function getArticleUrl(title)
 
     getArticleUrl = url 
 end function 
-'获得栏目URL 20160114 getColumnUrl("首页","type")
+'获得栏目URL 20160114 getColumnUrl("首页","type")   
 function getColumnUrl(columnNameOrId, sType)
     dim url, addSql 
 
@@ -313,12 +364,30 @@ function getColumnId(columnName)
     end if : rsx.close 
 	'【@是jsp显示@】}catch(Exception e){}
 end function
+'获得栏目父窗口id
+function getWebColumnParentId(s,sType)
+	dim sql,addsql,rsx
+	Set rsx = CreateObject("Adodb.RecordSet")
+	if sType="id" then
+		addsql=" where id=" & s & ""
+		getWebColumnParentId="-1"
+	else
+		addsql=" where columnName='" & s & "'"
+	end if
+	sql="Select * from " & db_PREFIX & "webcolumn"&addsql
+	'call eerr("sql",sql)
+    rsx.open sql, conn, 1, 1 
+    if not rsx.EOF then
+        getWebColumnParentId = rsx("parentId") 
+    end if : rsx.close  
+end function
+
 
 '获得栏目名称
 function getColumnName(sID)
 	getColumnName=""
     if sID <> "" then
-	'【@是jsp显示@】try{
+	'【@是jsp显示@】try{ 
         rsx.open "Select * from " & db_PREFIX & "webcolumn where id=" & sID, conn, 1, 1 
         if not rsx.EOF then
             getColumnName = rsx("columnName") 

@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -17,7 +17,7 @@
 function cssCompression(content, level)
     level = cStr(level)                                                             '转成字符好判断
     'Css高级压缩
-    if level = "1" then
+    if level = 1 then
         content = regExp_Replace(content, "\/\*(.|" & vbCrLf & ")*?\*\/", "") 
         content = regExp_Replace(content, "\s*([\{\}\:\;\,])\s*", "$1") 
         content = regExp_Replace(content, "\,[\s\.\#\d]*\{", "{") 
@@ -49,9 +49,9 @@ function unCssCompression(content)
     content = regExp_Replace(content, "\s*([\{\}\:\;\,])\s*", "$1") 
     content = regExp_Replace(content, ";\s*;", ";")                                 '//清除连续分号
     content = regExp_Replace(content, "\,[\s\.\#\d]*{", "{") 
-    content = regExp_Replace(content, "([^\s])\{([^\s])", "$1 {" & vbCrLf & "" & vbTab & "$2") 
+    content = regExp_Replace(content, "([^\s])\{([^\s])", "$1 {" & vbCrLf & "" & "    " & "$2")	'vbTab 替换成4个空格 
     content = regExp_Replace(content, "([^\s])\}([^" & vbCrLf & "]*)", "$1" & vbCrLf & "}" & vbCrLf & "$2") 
-    content = regExp_Replace(content, "([^\s]);([^\s\}])", "$1;" & vbCrLf & "" & vbTab & "$2") 
+    content = regExp_Replace(content, "([^\s]);([^\s\}])", "$1;" & vbCrLf & "" & "    " & "$2") 	'vbTab 替换成4个空格 
     unCssCompression = content 
 end function 
 
@@ -67,38 +67,40 @@ function phpTrim(str)
     phpTrim = trimVbCrlf(str) 
 end function 
 
-'去掉字符串开头的连续的回车和空格
-function phpLTrim(str)
-    dim nPos, isBlankChar 
-    nPos = 1 
-    isBlankChar = true 
-    while isBlankChar
-        if mid(str, nPos, 1) = " " or mid(str, nPos, 1) = vbTab then                      '把vbTab也去掉
-            nPos = nPos + 1 
-        elseIf mid(str, nPos, 2) = vbCrLf then
-            nPos = nPos + 2 
-        else
-            isBlankChar = false 
-        end if 
-    wend 
-    phpLTrim = right(str, len(str) - nPos + 1) 
+'去掉字符串开头的连续的回车和空格 改进于20171207
+function phpLTrim(byval str)
+	dim nLen,n,i,s
+	nLen = len(str)
+	n=0
+	for i=1 to nLen
+		s=left(str,1)
+		if s=" " or s=vbTab or s=chr(10) or s=chr(13) then
+			str=mid(str,2)
+		elseif s=vbcrlf then
+			str=mid(str,3)
+		else
+			exit for
+		end if
+	next  
+	phpLTrim=str
 end function 
 
-'去掉字符串末尾的连续的回车和空格
-function phpRTrim(str)
-    dim nPos, isBlankChar 
-    nPos = len(str) 
-    isBlankChar = true 
-    while isBlankChar and nPos >= 2
-        if mid(str, nPos, 1) = " " or mid(str, nPos, 1) = vbTab then                      '把vbTab也去掉
-            nPos = nPos - 1 
-        elseIf mid(str, nPos - 1, 2) = vbCrLf then
-            nPos = nPos - 2 
-        else
-            isBlankChar = false 
-        end if 
-    wend 
-    phpRTrim = rTrim(left(str, nPos)) 
+'去掉字符串末尾的连续的回车和空格 改进于20171207
+function phpRTrim(byval str)
+	dim nLen,n,i,s
+	nLen = len(str)
+	n=0
+	for i=1 to nLen
+		s=right(str,1)
+		if s=" " or s=vbTab or s=chr(10) or s=chr(13) then
+			str=mid(str,1,len(str)-1)
+		elseif s=vbcrlf then
+			str=mid(str,1,len(str)-2)
+		else
+			exit for
+		end if
+	next  
+	phpRTrim=str
 end function 
 
 
@@ -148,6 +150,10 @@ end function
 function getHtmlCssStyle(byVal content)
     getHtmlCssStyle = handleHtmlStyleCss(content, "", "") 
 end function 
+'获得Html里style内容
+function getHtmlStyleContent(content)
+	getHtmlStyleContent=handleHtmlStyleCss(content, "","")
+end function
 '处理html里的css 替换路径
 function handleHtmlStyleCss(content, sType, imgPath)
     dim splStr, s, isStyle, styleStartStr, styleEndStr, styleStr, cssStr, sNewCssStr 

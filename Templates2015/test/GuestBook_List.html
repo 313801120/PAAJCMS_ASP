@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>{$Web_Title$}</title>
+<meta name="keywords" content="{$Web_KeyWords$}" />
+<meta name="description" content="{$Web_Description$}" /> 
+<script src="Jquery/jquery.min.js" type="text/javascript"></script><!--#JS#-->
+<link href="[$WebCss$]/style.css" rel="stylesheet" type="text/css" /><!--#Css#-->
+</head>
+<body>
+<div class="mainwrap"> 
+
+{$Include file='head.html' block='top'$} 
+
+    
+	<div class="sidebarleft"> 
+ {$Include file='left.html' block='left'$} 
+    
+    </div>
+	<div class="sidebarright">
+    
+    <sPAn class="testspan">{$ReadColumeSetTitle title='[\$detailTitle\$]' style='21' moreclass='morewrite' morestr='More' moreurl=' ' stylevalue='0' value='[$读出内容 block=\'BlockNameMain\' file=\'\'$]'$}</sPAn>
+    </div>
+    <div class="clear6"></div> 
+    
+     {$ReadFoot style='10' stylevalue='0'$} 
+    
+</div>
+
+    <!--#test start#-->
+<R#读出内容BlockNameMain start#> 
+<ul class="guestbooklist">[$detailContent$]</ul>
+
+
+
+<div class="clear20"></div>
+    <form class="comment" name="formmessage" method="post" action="[$WEB_VIEWURL$]?act=savedata&stype=guestbook&columnid=[$glb_columnId$]" target="_blank" onSubmit="return formmessageSubmit()">
+    姓名：<br><input type="text" name="guestname" id="guestname" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    QQ：<br><input type="text" name="qq" id="qq" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    电话：<br><input type="text" name="tel" id="tel" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    地址：<br><input type="text" name="address" id="address" style="width:98%;margin:6px 0" class="inputstyle" /><br>
+    内容：<textarea name="bodycontent" placeholder="我也来说两句..." class="inputstyle"></textarea>
+验证码：<input type="text" name="yzm" id="yzm" style="width:100px;margin:6px 0;text-align:center;" class="inputstyle" /><img id="yzmimg" src="{$EDITORTYPE asp='/inc/yzm_7.[$EDITORTYPE$]' php='/inc_php/Include/YZM_7.[$EDITORTYPE$]' aspx='/inc_csharp/Include/YZM_7.aspx'$}" title="看不清楚，换一张" alt="看不清楚，换一张" style="cursor: pointer; vertical-align:middle;" onClick="this.src = '{$EDITORTYPE asp='/inc/yzm_7.[$EDITORTYPE$]' php='/inc_php/Include/YZM_7.[$EDITORTYPE$]' aspx='/inc_csharp/Include/YZM_7.aspx'$}?'+Math.random()*10000"/><br>         
+
+<input type="submit" class="mybtn" value="提交留言"></form>
+<script type="text/javascript">
+function formmessageSubmit(){
+    if(formmessage.guestname.value==''){
+        formmessage.guestname.focus();
+        alert('请输入姓名');
+        return false;
+    }
+    if(formmessage.qq.value==''){
+        formmessage.qq.focus();
+        alert('请输入QQ号');
+        return false;
+    }
+    if(formmessage.bodycontent.value==''){
+        formmessage.bodycontent.focus();
+        alert('请输入内容');
+        return false;
+    }
+    if(formmessage.yzm.value==''){
+        formmessage.yzm.focus();
+        alert('请输入验证码');
+        return false;
+    }
+}
+</script> 
+<div class="clear6"></div>[$pageInfo$]<div class="clear6"></div>
+<R#读出内容BlockNameMain end#>
+    <!--#test end#-->
+
+
+<!--#list start#-->
+        <!--#body start#-->
+            [list] 
+                <li class="gbitem">
+                    <div class="gbtitle">姓名：[$guestname$] 于 [$adddatetime time format_time='1'$] 发表</div>
+                    <div class="gbmessage">[$bodycontent$]</div>
+                    <div class="gbreply"><font color="#339900">回复：</font>[$reply$]</div>
+                </li> 
+            [/list]
+
+  
+
+ 
+        <!--#body end#--> 
+ <!--#list end#-->
+</body>
+</html>
+
+

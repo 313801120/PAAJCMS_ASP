@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -134,16 +134,16 @@ Function str2bin(varstr)
 End Function
  
 '二进制到字符串
-Function bytes2BSTR(vIn)
+Function bytes2BSTR(splstr)
     Dim Strreturn 
     Dim I, ThisCharCode, NextCharCode 
     Strreturn = "" 
-    For I = 1 To LenB(vIn)
-        ThisCharCode = AscB(MidB(vIn, I, 1)) 
+    For I = 1 To ubound(splstr)
+        ThisCharCode = midBin(splstr, I, 1)
         If ThisCharCode < &H80 Then
             Strreturn = Strreturn & Chr(ThisCharCode) 
         Else
-            NextCharCode = AscB(MidB(vIn, I + 1, 1)) 
+            NextCharCode = midBin(splstr, I + 1, 1) 
             Strreturn = Strreturn & Chr(CLng(ThisCharCode) * &H100 + CInt(NextCharCode)) 
             I = I + 1 
         End If 

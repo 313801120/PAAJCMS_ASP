@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -73,6 +73,13 @@ sub rwEnd(str)
     response.write(str) 
     response.end() 
 end sub 
+'以pre方式显示  20160928
+sub rwPre(content)
+	response.Write("<pre>"& replace(content,"<","&lt;") &"</pre>")
+end sub
+function pre(content)
+	pre = "<pre>"& replace(content,"<","&lt;") &"</pre>"
+end function
 'HTML结束
 sub htmEnd(str)
     call rwEnd(str) 
@@ -89,9 +96,25 @@ end sub
 sub trace(str)
     call debug(str) 
 end sub 
+
+
+
+
+'回显内容
+sub echoPrompt(word, str)
+    response.write("<font color=Green>" & word & "</font>：" & str & "<br>") 
+end sub 
+'回显内容
+sub echoStr(word, str)
+    call echoPrompt(word, str) 
+end sub 
 '测试显示信息
 sub echo(word, str)
     call echoPrompt(word, str) 
+end sub 
+'测试显示信息+粗
+sub echoB(word, str)
+    response.write("<b><font color=Green>" & word & "</font>：" & str & "</b><br>") 
 end sub 
 '测试显示信息+红色
 sub echoRed(word, str)
@@ -109,14 +132,25 @@ end sub
 sub echoYellowB(word, str)
     response.write("<b><font color=#B38704>" & word & "</font>：" & str & "</b><br>") 
 end sub 
-'回显内容
-sub echoPrompt(word, str)
-    response.write("<font color=Green>" & word & "</font>：" & str & "<br>") 
+'测试显示信息+蓝色
+sub echoBlue(word, str)
+    response.write("<font color=blue>" & word & "</font>：" & str & "<br>") 
 end sub 
-'回显内容
-sub echoStr(word, str)
-    call echoPrompt(word, str) 
+'测试显示信息+蓝色+粗
+sub echoBlueB(word, str)
+    response.write("<b><font color=blue>" & word & "</font>：" & str & "</b><br>") 
 end sub 
+'测试显示信息+灰色
+sub echoGay(word, str)
+    response.write("<font color=#ccc>" & word & "</font>：" & str & "<br>") 
+end sub 
+'测试显示信息+灰色+粗
+sub echoGayB(word, str)
+    response.write("<b><font color=#ccc>" & word & "</font>：" & str & "</b><br>") 
+end sub 
+
+
+
 '打印数组 打印PHP里用到  打印 [0] => aa [1] => bb [2] => cc
 sub print_R(arrArray)
     dim i, c  
@@ -182,7 +216,7 @@ end sub
 '输出字符串并终止程序运行
 sub printEnd(byVal s)
     response.write(s) : response.end() 
-end sub 
+end sub
  
 
 
@@ -196,7 +230,7 @@ function setIsSelected(byVal str, byVal str2)
 	setIsSelected=IIF(str = str2,"selected='selected'","") 
 end function  
 
-'处理错误信息 If Err Then doError Err.Description, "Msg"
+'处理错误信息 If Err Then call doError(Err.Description, "Msg")
 sub doError(s, msg)
     'On Error Resume Next
     dim nRnd, c 

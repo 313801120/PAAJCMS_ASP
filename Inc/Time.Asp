@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -11,10 +11,34 @@
 <% 
 'Time 时间操作类 (2013,9,27)
 
+'获得格式化时间
+function getFormatYMD(timeStr, sType)
+	'q 季   m 月   y 一年的日数   d 日   w 一周的日数   ww 周   h 时   n 分钟   s 秒 
+    getFormatYMD = dateDiff(sType, timeStr, now())   
+end function
+'获得时间处理后多久前，天，时  20171010
+function getHandleHowLongAgoTime(timeStr)
+	dim nDay,nHour,nMinute,s
+	nDay=dateDiff("d", timeStr, now())  
+	nHour=dateDiff("h", timeStr, now())  
+	nMinute=dateDiff("n", timeStr, now())
+	if nDay>0 then
+		s=nDay & "天前"
+	elseif nHour>0 then
+		s=nHour & "小时前"
+	else
+		s=nMinute & "分钟前"
+	end if
+	getHandleHowLongAgoTime=s
+end function
+
 '时间处理    
 function format_Time(timeStr, nType)
     dim y, m, d, h, mi, s ,c,nWeek
     if isDate(timeStr) = false then exit function 
+	
+	
+	timeStr = CDate(timeStr)		'转时间类型
     y = CStr(year(timeStr)) 
     m = CStr(month(timeStr))  
     if len(m) = 1 then m = "0" & m 
@@ -78,9 +102,57 @@ function format_Time(timeStr, nType)
         case 15:
             'yyyy年mm月 第1周
             c = y & "年" & m & "月 第" & nWeek & "周" 
+        case 16:
+            'yyyy年mm月dd日
+            c =  m & "月" & d & "日" 
+        case 17:
+            'hh:mm
+            c = h & ":" & mi
+        case 18:				'07-19 09:50
+			 c = m & "-" & d & " " & " " & h & ":" & mi 
+        case 19:				'07-19 09:50
+			 c =h & "时" & mi & "分" & s & "秒" 
+        case 20:
+            'yyyy/mm/dd hh:mm:ss
+            c = y & "/" & m & "/" & d & " " & h & ":" & mi & ":" & s 
+		case 88: 
+            c = d
+        case 89: 
+            c = m  
+			
+		 
+		
+		
+		
+		
+		case 120:
+			select case m
+				case "01":c="Janurary"
+				case "02":c="February"
+				case "03":c="March"
+				case "04":c="April"
+				case "05":c="May"
+				case "06":c="June"
+				case "07":c="July"
+				case "08":c="August"
+				case "09":c="September"
+				case "10":c="October"
+				case "11":c="November"
+				case "12":c="December"
+			end select  
     end select
 	format_Time=c
-end function 
+end function
+'获得星期几 
+function getWeekDay(timeStr, sType)
+	dim xqj
+	sType=cstr(sType)
+	xqj=weekday(timeStr)-1
+	if sType="1" then
+		xqj="星期" & replace(replace(replace(replace(replace(replace(replace(xqj,"1","一"),"2","二"),"3","三"),"4","四"),"5","五"),"6","六"),"0","天")
+	end if
+	getWeekDay=xqj
+end function
 '获得当前时期还可以计算  默认为加天数
 function getHandleDate(numb)
     'if numb = "" then
@@ -113,8 +185,7 @@ function getDayStatus(h, nType)
     getDayStatus = c 
 end function 
 '时间计算
-function printTimeValue(byval nV)
-    on error resume next 
+function printTimeValue(byval nV) 
     dim nVTemp, c, n 
 	nVTemp=nV
     if nV >= 86400 then
@@ -138,8 +209,11 @@ function printTimeValue(byval nV)
     end if 
     if nV > 0 then
         c = c & nV & "秒" 
-    end if 
-    if err then call doError(err.description, "printTimeValue 时间计算，nV=" & nVTemp) 
+    end if
+	if c="" then
+		c="0秒"
+	end if
+	
     printTimeValue = c 
 end function 
 '计算整时  (问答以小时或分钟显示)
@@ -191,7 +265,7 @@ function vbEchoTimer()
 end function 
 '获得时间第四种
 function vbRunTimer(startTime)
-    VBRunTimer = "运行时间：" & calculationTimer(pubTimer,now()) & " 秒"
+    VBRunTimer = "运行时间：" & calculationTimer(startTime, now()) & " 秒"
 end function
 
 

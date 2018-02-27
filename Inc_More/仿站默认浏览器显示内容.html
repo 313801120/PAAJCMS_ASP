@@ -1,0 +1,46 @@
+<style>
+body{
+line-height:24px;
+font-size:14px;
+}
+#msg{
+margin:20px 0 0 0;
+}
+</style>
+软件名称：云祥孙仿站助手<br>
+<div style="color:#999999">(提供升级，永久免费)</div>
+当前版本：v1.0<br>
+更新时间：2016.1.1<br>
+开发作者：云祥孙<br>
+官网：<a href="http://sharembweb.com" target="_blank">www.sharembweb.com</a><br>
+交流群：<a href="http://shang.qq.com/wpa/qunwpa?idkey=253822bd485c454811141c731156d2ecd4dba04ecf647ce81dc97d16a563137b" target="_blank">35915100</a><br>
+联系QQ：<a href="tencent://message/?uin=313801120&amp;Site=作者云祥孙&amp;Menu=yes">313801120</a><br>
+
+<div>
+<div id="msg">有问题，来给我们留言</div>
+  <form id="form1" name="form1" method="post" action="[url]?a=ask" onsubmit="return onSubmit()">
+    <textarea name="content" id="content" style="width:95%;height:60px;"></textarea>
+    <input name="user" type="hidden" id="user" value="[user]" />
+    <div style="margin:12px 0 0 0;">
+    <input type="submit" name="button" id="btnSubmit" value="提交" />
+    </div>
+  </form>
+<script language="javascript">
+function onSubmit(){ 
+	var c= trim(document.all.content.value);
+	if(c==""){
+		document.all.msg.innerHTML="别着急，先留个言，再提交也不迟嘛";
+		return false;
+	}else if(c.length<3){
+		document.all.msg.innerHTML="你的留言是不是有点少，不要太草率呀";
+		return false;
+	} 
+	document.all.btnSubmit.value="正在提交中...";
+	document.all.btnSubmit.disabled = true;
+	return true;
+}
+function trim(str){
+	return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+</script>
+</div>

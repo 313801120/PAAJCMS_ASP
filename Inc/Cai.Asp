@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -11,73 +11,8 @@
 <% 
 'Cai采集内容(2014)
  
-'获得采集内容 
-function getHttpPage(byVal httpurl, byVal sCharSet)
-    getHttpPage = handleGetHttpPage(httpurl, sCharSet)(0)   
-end function 
-'处理获得采集内容 
-function handleGetHttpPage(byVal httpurl, byVal sCharSet)
-    on error resume next 
-    dim startTime, nStatus, nTime, content, sSplType, webFileSize 
-    startTime = now() 
-    sSplType = "|-*ypia=|" 
-    sCharSet = handleStrCharSet(sCharSet) 
-    if isNull(httpurl) = true or len(httpurl) < 7 or httpurl = "$False$" then
-        handleGetHttpPage = split("" & sSplType & - 1 & sSplType & nTime & sSplType & webFileSize, sSplType) 
-        exit function 
-    end if 
- 
-    dim http 
-    set http = createObject("MSXML2.XMLHTTP")
-        call http.open("GET", httpurl, false) 
-        http.send 
-        if http.readyState <> 4 then
-            set http = nothing 
-            handleGetHttpPage = split("" & sSplType & http.readyState & sSplType & nTime & sSplType & webFileSize, sSplType) 
-            exit function 
-        end if 
 
-        content = bytesToBstr(http.responseBody, sCharSet) 
-        nStatus = http.status 
-        nTime = dateDiff("s", startTime, now()) 
-        webFileSize = strLength(content) 
 
-        handleGetHttpPage = split(content & sSplType & nStatus & sSplType & nTime & sSplType & webFileSize, sSplType) 
-
-    set http = nothing 
-end function 
-'获得请求url状态
-function getHttpUrlState(httpurl)
-    getHttpUrlState = handleGetHttpPage(httpurl, "")(1) 
-end function 
-'获得请求url的服务器名称
-function getHttpUrlServerName(httpurl)
-    getHttpUrlServerName = ""                                                       '配置php里用的
-end function 
-
-'获得采集内容 (辅助)
-function getURLContent(httpurl, sCharSet)
-    getURLContent = getHttpPage(httpurl, sCharSet) 
-end function 
-'获得采集内容 (辅助)
-function getHttpUrl(httpurl, sCharSet)
-    getHttpUrl = getHttpPage(httpurl, sCharSet) 
-end function 
-function bytesToBstr(body, cset)
-    dim objStream 
-    if isNul(body) then exit function                                               '为空则退出
-    set objStream = createObject("ADODB.Stream")
-        objStream.type = 1 
-        objStream.mode = 3 
-        objStream.open 
-        call objStream.write(body) 
-        objStream.position = 0 
-        objStream.type = 2 
-        objStream.charset = cset 
-        bytesToBstr = objStream.readText 
-        objStream.close 
-    set objStream = nothing 
-end function 
 '截取字符串 更新20160114
 'c=[A]abbccdd[/A]
 '0=abbccdd
@@ -144,7 +79,7 @@ Function cutStr(ByVal content, ByVal nCutValue, ByVal MoreStr)
         If n >= nCutValue Then cutStr = Left(content, i) & MoreStr : Exit Function 
     Next 
 End Function 
-'截取内容，不区分大小写 20150327  C=CutStrNOLU(c,"<heAd",">")
+'截取内容，不区分大小写 20150327  C=cutStrNOLU(c,"<heAd",">")
 function cutStrNOLU(content, startStr, endStr)
     dim s, LCaseContent, nStartLen, nEndLen, sNewStrStart 
     startStr = LCase(startStr) 
@@ -234,7 +169,7 @@ function getArrayList(byVal content, byVal startStr, byVal endStr, byVal isStart
             c = rep.replace(c, "") 
         end if 
     set rep = nothing 
-    if sType = "1" or sType = "去掉字符" or sType = true then
+    if sType = "1" or sType = "去掉字符" then		'or sType = true   这个不能用，因为在vb.net里会出错，晕
         c = replace(c, """", "") 
         c = replace(c, "'", "") 
         c = replace(c, " ", "") 
@@ -243,8 +178,7 @@ function getArrayList(byVal content, byVal startStr, byVal endStr, byVal isStart
     end if 
     getArrayList = c 
 end function 
-
-
+ 
 
 '创建于20160801
 function getArrayNew( byval content, startStr, endStr, isStart, isEnd) 

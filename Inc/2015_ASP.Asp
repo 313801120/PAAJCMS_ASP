@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -578,19 +578,19 @@ end function
 function getBeforeNStr(content, sType, nNumb)
     dim splStr, sx, s, c, i, sYHCount, s1, s2, tempZc, nI 
     dim wc                                                                          '输入文本存储内容
-    dim arrayWC(999)                                                                '输入文本数组内容
+    dim arrayWC(9999)                                                                '输入文本数组内容
     dim arrayWCCount                                                                '输入文本数组内容总数
     dim zc                                                                          '单词存储内容
-    dim arrayZC(999)                                                                '单词存储内容 数组
+    dim arrayZC(9999)                                                                '单词存储内容 数组
     dim arrayZCCount                                                                '单词存储内容 数组总数
     dim nc                                                                          '为数字累加
-    dim arrayNC(999)                                                                '为数字累加 数组
+    dim arrayNC(9999)                                                                '为数字累加 数组
     dim arrayNCCount                                                                '为数字累加 数组总数
     dim fc                                                                          '符号
-    dim arrayFC(999)                                                                '符号 数组
+    dim arrayFC(9999)                                                                '符号 数组
     dim arrayFCCount                                                                '符号 数组总数
 
-    dim arrayCountStr(999)                                                          '数组总内容
+    dim arrayCountStr(9999)                                                          '数组总内容
     dim nArrayCount                                                                 '数组总数
 
 

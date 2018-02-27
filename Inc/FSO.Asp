@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -133,7 +133,7 @@ function saveByteFile(byVal filePath, content)
         with ads
             .type = 1 
             .open 
-            .write content 
+            .write(content)
             'Response.Write("<br><b>["&LocalFileName&"]</b><br>")
             .saveToFile filePath, 2 
             .cancel 
@@ -175,8 +175,8 @@ function copyFile(byVal path, byVal toPath)
             call fso.copyFile(path, toPath) 
             copyFile = true 
         end if 
+    if err then call doError(err.description, "CopyFile 拷贝文件 函数出错，Path=" & path & "("& fso.fileExists(path) &")，ToPath=" & toPath & "("& fso.fileExists(toPath) &")") 
     set fso = nothing 
-    if err then call doError(err.description, "CopyFile 拷贝文件 函数出错，Path=" & path & "，ToPath=" & toPath) 
 end function 
 '删除文件，只读文件也可删除，谨慎使用
 function deleteFile(byVal filePath)
@@ -679,7 +679,7 @@ function getFileFolderList(byVal folderPath, fileYes, fileTypeList, fileNameOrTy
                         if inStr("|名称|取名称|", "|" & fileNameOrType & "|") > 0 then
                             c = c & myFile.name & vbCrLf 
                         else
-                            c = c & myFile & vbCrLf 
+                            c = c & myFile.path & vbCrLf 			'加上.path  写全，在vb.net里非常重要
                         end if 
                     end if 
                     doEvents 
@@ -1296,8 +1296,8 @@ function showAttributeTip(n)
     end if 
     if c <> "" then c = left(c, len(c) - 1) 
     showAttributeTip = c 
-end function 
-'KB转M函数，不够1M,自动显示K 最大为G   (追求好看与可读，舒服)
+end function  
+'KB转M函数，不够1M,自动显示K 最大为G   (追求好看与可读，舒服)   把最小" bytes" 移除掉
 function printSpaceValue(byVal numb)
     dim n 
     n = numb 
@@ -1313,10 +1313,12 @@ function printSpaceValue(byVal numb)
             n = left(n, inStr(n, ".") + 2) 
         end if 
         n = n & " MB" 
-    elseif n>1024 then
+    else
         n = formatNumber(n / 1024, 2) & " KB"
-	else
-		n=n & " bytes"                                             '把Fix换成FormatNumber 是因为与php那边一致 20160526
+		if numb<1024 then
+			n="0" & n
+		end if
+	 
     end if 
  
     printSpaceValue = n 
@@ -1465,9 +1467,10 @@ end function
 
 '0：E:\E盘\WEB网站\至前网站\filename.asp
 '1：E:\E盘\WEB网站\至前网站\      可以这么调用 HandleFilePathArray(FilePath)(1)
-'2：filename.asp
+'2：filename.asp?v1
 '3：filename
 '4：asp
+'name：filename.asp    去掉?后面值
 
 '文件处理成数组20150124  数组  0原文件路径 1为文件路径   2为文件名称  3为去除文件类型文件名称   4为文件类型后缀名
 function handleFilePathArray(byVal filePath)
@@ -1481,8 +1484,11 @@ function handleFilePathArray(byVal filePath)
     else
         fileNoTypeName = "" 
     end if 
-    fileType = mid(fileName, inStrRev(fileName, ".") + 1) 
-
+	if inStrRev(fileName, ".")=false then
+		fileType = ""
+	else
+    	fileType = mid(fileName, inStrRev(fileName, ".") + 1) 
+	end if
     'Call Echo("FilePath",FilePath)
     'Call Echo("FileDir",FileDir)
     'Call Echo("FileName",FileName)
@@ -1494,13 +1500,20 @@ function handleFilePathArray(byVal filePath)
 end function 
 '获得文件属性
 function getFileAttr(byVal filePath, sType)
+	dim nLen
     sType = cstr(sType) 
     if sType = "0" then
         getFileAttr = handleFilePathArray(filePath)(0) 
     elseIf sType = "1" then
         getFileAttr = handleFilePathArray(filePath)(1) 
-    elseIf sType = "name" or sType = "2" then
+    elseIf  sType = "2" then
         getFileAttr = handleFilePathArray(filePath)(2) 
+    elseIf sType = "name" then
+        getFileAttr = handleFilePathArray(filePath)(2) 
+		nLen=instr(getFileAttr,"?")
+		if nLen>0 then
+			getFileAttr=mid(getFileAttr,1,nLen-1)
+		end if
     elseIf sType = "3" then
         getFileAttr = handleFilePathArray(filePath)(3) 
     elseIf sType = "4" then

@@ -1,0 +1,168 @@
+【parentid】新闻中心
+【title】新闻中心1
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心1 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心2
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心2 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心3
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心3 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心4
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心4 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心5
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心5 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心6
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心6 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心7
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心7 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心7
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心8 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心8
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心8 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心9
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心9 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心10
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心10 测试内容
+【/bodycontent】
+-------------------------------
+【parentid】新闻中心
+【title】新闻中心11
+【sortrank】0
+【author】test
+【adddatetime】2015-01-28 15:09:05
+【target】
+【customaurl】 
+【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【aboutcontent】 
+【/aboutcontent】
+【bodycontent】 
+这是新闻中心11 测试内容
+【/bodycontent】
+-------------------------------

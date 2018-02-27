@@ -15,7 +15,7 @@
 		当前位置：[$position$]
 	</div>
 </div>
- 
+ <!--[$print_sql$]-->
 <div class="mg10">
 	<div class="atitleleft">[$lableTitle$]信息</div>
 	<a href="javascript:addEditHandle('[$actionType$]','[$lableTitle$]','[$page$]','');" class="atitleright">添加[$lableTitle$]</a>&nbsp;
@@ -46,7 +46,7 @@
 		<table width="100%" border="0" cellpadding="2" cellspacing="1" bgcolor="#CFCFCF" align="center" style="margin-top:8px">
 		<tbody>
 		<tr bgcolor="#E7E7E7">
-			<td height="28" colspan="10" background="Images/tbg.gif" style="padding-left:10px;">
+			<td height="28" colspan="11" background="Images/tbg.gif" style="padding-left:10px;">
              <!--           ◆ 所有栏目>文档列表  (使用鼠标右键弹出菜单)-->			</td>
 		</tr>
 		<tr align="center" bgcolor="#FBFCE2" height="25">
@@ -59,6 +59,7 @@
 		  <td>点击</td>
 		  <td>HTML</td>
 		  <td>发布人</td>
+		  <td>价格</td>
 		  <td>操作</td>
 		  </tr> 
         [list]
@@ -75,21 +76,22 @@
 		  <td>[$views$]</td>
 		  <td>[$ishtml if='False' elseif='0' value='未生成' elsevalue='已生成'$] </td>
 		  <td>[$author$]</td> 
+			<td><input name="price" type="text" id="price" style="text-align:center;width:50px; height:22px;line-height:22px; font-size:16px" class="nap" value="[$price$]">&nbsp;</td>
 			<td>
 				<a href="javascript:addEditHandle('[$actionType$]','[$lableTitle$]','[$page$]','[$id$]');"><img src="Images/icon/gtk-edit.png" title="编辑" alt="编辑" border="0" width="16" height="16"></a>
 				<a href="[$viewWeb$]" target="_blank"><img src="Images/icon/part-list.gif" title="预览" alt="预览" style="cursor:pointer" border="0" width="16" height="16"></a>
                 <a href="javascript:delHandle('[$actionType$]','[$lableTitle$]','[$page$]','[$id$]');" title="删除" onClick="return new xyClass().myConfirm('你确定要删除吗？\n删除后将不可恢复')"><img src="Images/icon/gtk-del.png" title="删除" /></a>            
-             <a href="[$viewWeb$]&isMakeHtml=1&isSave=1" target="_blank" title="生成HTML">[$isonhtml if='False' elseif='0' value='' elsevalue='生成'$]</a>
-             </td>
+             <a href="[$viewWeb$]&isMakeHtml=1&isSave=1" target="_blank" title="生成HTML">[$isonhtml if='False' elseif='0' value='' elsevalue='生成'$]</a>             </td>
 		  </tr>
         [/list] 
 		<tr bgcolor="#ffffff">
-			<td height="36" colspan="10">
+			<td height="36" colspan="11">
 				<a href="javascript:checkmm('全选')" class="coolbg">全选</a>
 				<a href="javascript:checkmm('反选')" class="coolbg">反选</a>
 				<a href="javascript:checkmm('取消')" class="coolbg">取消</a>
 				<a href="javascript:delArc('[$actionType$]','[$lableTitle$]','[$page$]')" class="coolbg">删除</a>
 				<a href="javascript:sortArc('[$actionType$]','[$lableTitle$]','[$page$]')" class="coolbg">排序</a>
+				<a href="javascript:batchEditPrice('[$actionType$]','[$lableTitle$]','[$page$]')" class="coolbg">价格</a>
             <!--  
 				<a href="javascript:checkArc(0)" class="coolbg"> 审核 </a>
 				<a href="javascript:adArc(0)" class="coolbg"> 推荐 </a>
@@ -104,19 +106,17 @@
               <option value="40"[$nPageSize if='40' value=' selected'$]>每页显示40条</option>
               <option value="50"[$nPageSize if='50' value=' selected'$]>每页显示50条</option>
               <option value="100"[$nPageSize if='100' value=' selected'$]>每页显示100条</option>
-            </select>
-            </td>
+            </select>            </td>
 		</tr> 
 		<tr align="right" bgcolor="#F9FCEF">
-			<td height="36" colspan="10" align="center">
+			<td height="36" colspan="11" align="center">
 				[$pageInfo$]			
                 <input name="nPageSize" type="hidden" id="nPageSize" value="[$nPageSize$]"> 
-                <input name="focusid" type="hidden" id="focusid" value="[$focusid$]">   
-                </td>
+                <input name="focusid" type="hidden" id="focusid" value="[$focusid$]">                </td>
 		</tr>
 		</table> 
  
-        </form>
+      </form>
 	</div>
 </div> 
 </body>

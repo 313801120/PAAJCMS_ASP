@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -285,10 +285,21 @@ dim selectDatabase, dbhost, dbuser, dbpwd, dbname, accessDir, accessPath, config
 dim tempContent, msgStr, isYes, connStr 
 dim showLayout				'显示布局
 
+dim configTableList,tableListC
+ 
+	configTableList="|webcolumn|articledetail|onepage|tablecomment|website|admin|searchstat|friendlink|job|guestbook|feedback|listmenu|lineqq|linevote|member|memberlog|payment|previeworder|productcomment|websitestat|systemlog|weblayout|webmodule|caiweb|caiconfig|caidata|bidding|weburlscan|webdomain|CaiColumn|CaiDetail|"
+  
+  configTableList=lcase(configTableList)
+  
+  
+                  dim webdataDir
+				  webdataDir=request("webdataDir")
+				  if request("webdataDir")="" then
+                  	webdataDir="/Data/WebData"
+				  end if
+
 call loadRun()		'【@是.netc屏蔽@】'【@是jsp屏蔽@】
 sub loadRun()
-
-
 	if EDITORTYPE="asp" then
     	configFilePath = "/inc/Config.Asp" 
 	elseif EDITORTYPE="aspx" then
@@ -305,8 +316,28 @@ sub loadRun()
 	else
 		call displayDefault()
 	end if
+	'call echo("tableListC",tableListC)
 end sub
 
+
+'判断创建表是否可以生成
+function checkCreateTable(byval tableName)
+	dim sTableName
+	sTableName=lcase(tableName)
+	if db_PREFIX<>"" then
+		sTableName=mid(sTableName, len(db_PREFIX)+1 )
+	end if
+	'call echo("db_PREFIX",db_PREFIX)
+	'call echo("sTableName",sTableName)
+	'call eerr("tableName",tableName)
+	tableListC = tableListC & sTableName & "|"
+ 	'call echo(configTableList,sTableName)
+	if instr("|"& configTableList &"|","|"& sTableName &"|")=false and instr("|"& configTableList &"|","|*|")=false then
+		checkCreateTable=true
+	else
+		checkCreateTable=checkTable_show(tableName)
+	end if
+end function
 
 
 '注意，创建数据时 Default """"  默认值用这个   不要用这种Default ''    20150506
@@ -315,9 +346,99 @@ sub webData(db_PREFIX, loginname, loginpwd)
     dim tableName, sql, isAddData, splStr, splxx, i, s, splTrue, bigClassName 
     dim splUrl, splNavName, sNavClassName, splImg, templateIndex, templateHome, templateMain 
     'call echo("db_PREFIX",db_PREFIX)
+
+    '采集栏目表-------------------------------
+    tableName = db_PREFIX & "CaiColumn"  
+    if checkCreateTable(tableName) = false then
+        sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
+
+        sql = sql & "columnName VarChar Default """","                                  '导航名称 
+        sql = sql & "columnType VarChar Default """","                                  '导航类型
+        sql = sql & "parentId Int Default -1,"                                          '父栏目ID
+        sql = sql & "httpurl VarChar Default """","                                     '网址
+        sql = sql & "morePageUrl VarChar Default """","                                 '更多页配置  {*}        为i页
+        sql = sql & "charset VarChar Default """","                                     '字符编码
+        sql = sql & "startPage Int Default 0,"                                           '当前页数
+        sql = sql & "endPage Int Default 0,"                                          '总页数 
+		
+        sql = sql & "sType VarChar Default """","                                       '类型 
+        sql = sql & "sAction VarChar Default """","                                     '动作 
+        sql = sql & "labelNameList VarChar Default """","                               '标签名称列表 
+        sql = sql & "htmlValue VarChar Default """","                                   'html内容值 
+		
+        sql = sql & "fieldName VarChar Default """","                                   '字段名称
+        sql = sql & "fieldCheck Int Default 0,"                                         '字段检测
+		
+        sql = sql & "isCaiPage YesNo Default No,"                                       '是否为采集页 
+
+        sql = sql & "isThrough YesNo Default Yes,"                                       '通过审核 
+        sql = sql & "smallImage VarChar Default """","                                  '小图片地址
+        sql = sql & "bigImage VarChar Default """","                                    '大图片地址
+        sql = sql & "bannerImage VarChar Default """","                                 '当前Banner图片 
+        sql = sql & "customAUrl VarChar Default """","                                  '自定义链接网址
+        sql = sql & "fontColor VarChar Default """","                                   '字颜色
+        sql = sql & "fontB YesNo Default No,"                                           '字粗
+        sql = sql & "sortRank Int Default 0,"                                           '排序编号 
+        sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间 
+        sql = sql & "bodycontent Text Default """")"                                    '备注
+        if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
+        conn.execute(sql) 
+    end if 
+
+    '采集信息表-------------------------------
+    tableName = db_PREFIX & "CaiDetail" 
+    if checkCreateTable(tableName) = false then
+        sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
+        sql = sql & "parentId Int Default -1,"                                          '父栏目ID
+        sql = sql & "sortRank Int Default 0,"                                           '排序编号 
+
+        sql = sql & "value1 Text Default """","                                         '内容1
+        sql = sql & "value2 Text Default """","                                         '内容2
+        sql = sql & "value3 Text Default """","                                         '内容3
+        sql = sql & "value4 Text Default """","                                         '内容4
+        sql = sql & "value5 Text Default """","                                         '内容5
+        sql = sql & "value6 Text Default """","                                         '内容6
+        sql = sql & "value7 Text Default """","                                         '内容7
+        sql = sql & "value8 Text Default """","                                         '内容8
+        sql = sql & "value9 Text Default """","                                         '内容9
+
+        sql = sql & "fieldName1 VarChar Default """","                                  '字段名称1
+        sql = sql & "fieldName2 VarChar Default """","                                  '字段名称2
+        sql = sql & "fieldName3 VarChar Default """","                                  '字段名称3
+        sql = sql & "fieldName4 VarChar Default """","                                  '字段名称4
+        sql = sql & "fieldName5 VarChar Default """","                                  '字段名称5
+        sql = sql & "fieldName6 VarChar Default """","                                  '字段名称6
+        sql = sql & "fieldName7 VarChar Default """","                                  '字段名称7
+        sql = sql & "fieldName8 VarChar Default """","                                  '字段名称8
+        sql = sql & "fieldName9 VarChar Default """","                                  '字段名称9
+
+        sql = sql & "fieldCheck1 VarChar Default """","                                 '字段检测1
+        sql = sql & "fieldCheck2 VarChar Default """","                                 '字段检测2
+        sql = sql & "fieldCheck3 VarChar Default """","                                 '字段检测3
+        sql = sql & "fieldCheck4 VarChar Default """","                                 '字段检测4
+        sql = sql & "fieldCheck5 VarChar Default """","                                 '字段检测5
+        sql = sql & "fieldCheck6 VarChar Default """","                                 '字段检测6
+        sql = sql & "fieldCheck7 VarChar Default """","                                 '字段检测7
+        sql = sql & "fieldCheck8 VarChar Default """","                                 '字段检测8
+        sql = sql & "fieldCheck9 VarChar Default """","                                 '字段检测9
+
+        sql = sql & "title VarChar Default """","                                       '标题 
+        sql = sql & "isThrough YesNo Default No,"                                       '通过审核 
+        sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间 
+        sql = sql & "flags VarChar Default """","                                       '旗 
+        sql = sql & "noteBody Text Default """","                                       '笔记信息
+        sql = sql & "aboutcontent Text Default """","                                   '简单介绍 
+        sql = sql & "bodycontent Text Default """")"                                    '备注
+        if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
+        conn.execute(sql) 
+    end if 
+	
+		
     '网站栏目表-------------------------------
-    tableName = db_PREFIX & "WebColumn" 
-    if checkTable_show(tableName) = false then
+    tableName = db_PREFIX & "WebColumn"  
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
 
         sql = sql & "columnName VarChar Default """","                                  '导航名称
@@ -360,7 +481,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "isOnHtml YesNo Default Yes,"                                       '是否开启生成Html
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
 
         sql = sql & "noteBody Text Default """","                                       '笔记信息
@@ -368,6 +489,9 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
         sql = sql & "tempTXT1 Text Default """","                                       '暂存文本1
         sql = sql & "tempTXT2 Text Default """","                                       '暂存文件2
+		
+		
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
@@ -375,7 +499,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
     '文章信息表-------------------------------
     tableName = db_PREFIX & "ArticleDetail" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "parentId Int Default -1,"                                          '父栏目ID
         sql = sql & "sortRank Int Default 0,"                                           '排序编号
@@ -389,6 +513,10 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "smallimageAlt VarChar Default """","                               '小图alt
         sql = sql & "bigimageAlt VarChar Default """","                                 '大图alt
         sql = sql & "bannerimageAlt VarChar Default """","                              'Banneralt
+		
+		
+        sql = sql & "image960px VarChar Default """","                                  '960像素图片
+        sql = sql & "image1280px VarChar Default """","                                  '1280像素图片
 
 
         sql = sql & "title VarChar Default """","                                       '标题
@@ -399,7 +527,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "isThrough YesNo Default No,"                                       '通过审核
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
         sql = sql & "occasions VarChar Default """","                                   '场合
         sql = sql & "hotline VarChar Default """","                                     '热线
@@ -456,6 +584,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "tempTXT1 Text Default """","                                       '暂存文本1
         sql = sql & "tempTXT2 Text Default """","                                       '暂存文件2
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
@@ -463,8 +592,9 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
     '单页表-------------------------------
     tableName = db_PREFIX & "OnePage" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
+        sql = sql & "BigClassName VarChar Default """","                                '大类名称
         sql = sql & "title VarChar Default """","                                       '标题
         sql = sql & "displayTitle VarChar Default """","                                '显示标题
         sql = sql & "adminId Int Default 0,"                                            '管理员id
@@ -485,15 +615,26 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "isRecommend YesNo Default Yes,"                                    '推荐
         sql = sql & "lableTitle VarChar Default """","                                  '标签描述
         sql = sql & "banner VarChar Default """","                                      '当前Banner图片
+		
+		
+
+        sql = sql & "smallImage VarChar Default """","                                  '小图片地址
+        sql = sql & "bigImage VarChar Default """","                                    '大图片地址
+        sql = sql & "bannerImage VarChar Default """","                                 '当前Banner图片
+        sql = sql & "downloadFile VarChar Default """","                                '下载文件
+        sql = sql & "smallimageAlt VarChar Default """","                               '小图alt
+        sql = sql & "bigimageAlt VarChar Default """","                                 '大图alt
+        sql = sql & "bannerimageAlt VarChar Default """","                              'Banneralt
 
         sql = sql & "isHtml YesNo Default No,"                                          '是否为html
         sql = sql & "isOnHtml YesNo Default Yes,"                                       '开启生成Html
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
         sql = sql & "noteBody Text Default """","                                       '笔记信息
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
@@ -501,7 +642,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
     '文章评论表 20160129-------------------------------
     tableName = db_PREFIX & "TableComment" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "UserID Int Default 0,"                                             '用户ID
         sql = sql & "itemID Int Default 0,"                                             '项目ID 产品ID
@@ -513,12 +654,13 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "ip VarChar Default """","                                          '评论者IP
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
         sql = sql & "reply Text Default """","                                          '回复内容
         sql = sql & "noteBody Text Default """","                                       '笔记信息
 
         sql = sql & "isThrough Int Default 0,"                                          '是否通过
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
@@ -526,7 +668,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
     '网站信息表-------------------------------
     tableName = db_PREFIX & "WebSite" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "WebSiteUrl VarChar Default """","                                  '网站地址
         sql = sql & "webSiteBottom Text Default """","                                  '底部信息 WebSiteBottom
@@ -540,11 +682,11 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "TZ51La VarChar Default """","                                      '统计网站
         sql = sql & "UserEmail VarChar Default """","                                   '用户Email
         sql = sql & "ProductDid VarChar Default """","                                  '产品大类
-        sql = sql & "TemplateIndex Text Default ""首页"","                                '模板首页
-        sql = sql & "TemplateHome Text Default ""内页"","                                 '模板内页
-        sql = sql & "TemplateMain Text Default ""详细页"","                               '模板详细页
-        sql = sql & "TemplateMain2 Text Default ""详细页"","                              '模板详细页2
-        sql = sql & "TemplateMain3 Text Default ""详细页"","                              '模板详细页3
+        sql = sql & "TemplateIndex Text Default """","                                '模板首页
+        sql = sql & "TemplateHome Text Default """","                                 '模板内页
+        sql = sql & "TemplateMain Text Default """","                               '模板详细页
+        sql = sql & "TemplateMain2 Text Default """","                              '模板详细页2
+        sql = sql & "TemplateMain3 Text Default """","                              '模板详细页3
         sql = sql & "UseNumb Text Default """","                                        '网站使用次数
         '20111118追加
         sql = sql & "WebRecord VarChar Default """","                                   '网站记录
@@ -558,15 +700,15 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "webKeywords VarChar Default """","                                 '网站关键词
         sql = sql & "webDescription Text Default """","                                 '网站描述
 
-        sql = sql & "WebTemplate VarChar Default ""\Templates"","                         '网站模板路径
-        sql = sql & "WebSkins VarChar Default ""\Skins\Default\"","                       '网站样式路径'暂时不要用
+        sql = sql & "WebTemplate VarChar Default """","                         '网站模板路径
+        sql = sql & "WebSkins VarChar Default """","                       '网站样式路径'暂时不要用
 
-        sql = sql & "WebFolderName VarChar Default ""test3"","                            '网站文件夹名称 new20150721
+        sql = sql & "WebFolderName VarChar Default """","                            '网站文件夹名称 new20150721
 
 
-        sql = sql & "WebImages VarChar Default ""\Skins\Default\Images\"","               '网站Images路径
-        sql = sql & "WebCss VarChar Default ""\Skins\Default\Css\"","                     '网站Css路径
-        sql = sql & "WebJs VarChar Default ""\Skins\Default\Js\"","                       '网站Js路径
+        sql = sql & "WebImages VarChar Default """","               '网站Images路径
+        sql = sql & "WebCss VarChar Default """","                     '网站Css路径
+        sql = sql & "WebJs VarChar Default """","                       '网站Js路径
 
         sql = sql & "AddWebSite YesNo Default No,"                                      'URL前添加域名
         sql = sql & "UpdateHtml YesNo Default No,"                                      '修改后更新HTML
@@ -585,7 +727,12 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "WebCodeReplaceTpl VarChar Default """","                           '替换网页指定内容，批量
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
+		
+        sql = sql & "templateSetCode VarChar Default """","                             '读取模板时默认编码
+		
+        sql = sql & "isMemberVerification VarChar Default 0,"                           '开启会员验证
+
 
         '最后垫底
         sql = sql & "WebHtml VarChar Default 0)"                                        '网站运行状态，如ASP，HTML
@@ -596,7 +743,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
     '管理员表-------------------------------
     tableName = db_PREFIX & "Admin" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "userName VarChar Default """","                                    '账号
         sql = sql & "pwd VarChar Default """","                                         '密码
@@ -604,7 +751,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
         sql = sql & "regIP VarChar Default """","                                       '注册IP
         sql = sql & "upIP VarChar Default """","                                        '修改IP
@@ -624,8 +771,10 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '搜索统计表-------------------------------
     tableName = db_PREFIX & "SearchStat" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
+        sql = sql & "userid Int Default -1,"                                          	'会员id		
+        sql = sql & "BigClassName VarChar Default """","                                '大类名称
         sql = sql & "title VarChar Default """","                                       '搜索关键词
         sql = sql & "isThrough YesNo Default No,"                                       '通过
         sql = sql & "webTitle VarChar Default """","                                    '网站自定标题
@@ -647,15 +796,16 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "flags VarChar Default """","                                       '旗
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '友情链接表-------------------------------
     tableName = db_PREFIX & "FriendLink" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
 
         sql = sql & "adminId Int Default 0,"                                            '管理员id
@@ -672,7 +822,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "isThrough YesNo Default No,"                                       '通过审核
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
 
         sql = sql & "webTitle VarChar Default """","                                    '网站自定标题
@@ -694,13 +844,14 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "noteBody Text Default """","                                       '笔记信息
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '招聘表-------------------------------
     tableName = db_PREFIX & "Job" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "title VarChar Default """","                                       '职位名称
         sql = sql & "sex VarChar Default """","                                         '性别
@@ -731,16 +882,17 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "isOnHtml YesNo Default Yes,"                                       '开启生成Html
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "noteBody Text Default """","                                       '笔记信息
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '留言表-------------------------------
     tableName = db_PREFIX & "GuestBook" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "columnid VarChar Default """","                                    '栏目ID
         sql = sql & "parentId Int Default -1,"                                          '父栏目ID
@@ -767,7 +919,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "fontColor VarChar Default """","                                   '字颜色
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "isThrough Int Default 0,"                                          '是否通过
 
 
@@ -777,13 +929,14 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "noteBody Text Default """","                                       '笔记信息
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '反馈表-------------------------------
     tableName = db_PREFIX & "Feedback" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "columnid VarChar Default """","                                    '栏目ID
         sql = sql & "title VarChar Default """","                                       '标题
@@ -810,7 +963,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "fontColor VarChar Default """","                                   '字颜色
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "isThrough Int Default 0,"                                          '是否通过
 
 
@@ -820,13 +973,14 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "noteBody Text Default """","                                       '笔记信息
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '后台菜单表-------------------------------
     tableName = db_PREFIX & "ListMenu" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "title VarChar Default """","                                       '标题
         sql = sql & "parentId Int Default -1,"                                          '父栏目ID
@@ -835,7 +989,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "customAUrl VarChar Default """","                                  '自定义链接网址
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "isDisplay YesNo Default No,"                                                  '显示与隐藏
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
@@ -843,7 +997,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '在线QQ表------------------------------
     tableName = db_PREFIX & "LineQQ" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "BigClassName VarChar Default """","                                '大类名称
         sql = sql & "title VarChar Default """","                                       '标题
@@ -852,14 +1006,14 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "IsAddFriend YesNo Default Yes,"                                    '是否为加为好友
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "bodycontent Text)"                                                 '更多详细内容
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '投票表-------------------------------
     tableName = db_PREFIX & "LineVote" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "title VarChar Default """","                                       '投票标题
         sql = sql & "Option1 VarChar Default """","                                     '投票选项一
@@ -888,21 +1042,23 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "OnHtml YesNo Default Yes,"                                         '开启生成Html
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "VoteType YesNo Default Yes)"                                       '投票类型
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '会员表-------------------------------
     tableName = db_PREFIX & "Member" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
+        sql = sql & "userid Int Default -1,"                                          	'会员id	
         sql = sql & "parentId Int Default -1,"                                          '父栏目ID
         sql = sql & "userType VarChar Default """","                                    '会员类型
         sql = sql & "userName VarChar Default """","                                    '会员账号
         sql = sql & "pwd VarChar Default """","                                         '会员密码
         sql = sql & "yunPwd VarChar Default """","                                      '原密码
-        sql = sql & "sex VarChar Default ""男"","                                         '性别
+        sql = sql & "sex VarChar Default """","                                         '性别  男
         sql = sql & "age Int Default 18,"                                               '年龄
         sql = sql & "tel VarChar Default """","                                         '电话
         sql = sql & "phone VarChar Default """","                                       '手机
@@ -913,12 +1069,17 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "company VarChar Default """","                                     '公司
 
         sql = sql & "regIP VarChar Default """","                                       '注册IP
-        sql = sql & "loginIp VarChar Default """","                                     'IP
-
+        sql = sql & "regTime VarChar Default """","                                     '注册时间
+		
+        sql = sql & "lastLoginIP VarChar Default """","                            	'上次登录IP
+        sql = sql & "lastLoginTime DateTime Default Now(),"                            '上次登录时间
+        sql = sql & "loginIp VarChar Default """","                                     '登录IP
+        sql = sql & "loginTime DateTime Default Now(),"                                '登录时间
         sql = sql & "loginCount Int Default 0,"                                         '登录次数
-        sql = sql & "loginTime DateTime Default Date(),"                                '登录时间
-        sql = sql & "lastLoginTime DateTime Default Date(),"                            '上次登录时间
 
+
+        sql = sql & "actionList Text Default """","                                      '动作列表
+        sql = sql & "actionTime DateTime Default Now(),"                            '动作执行时间
 
 
         'QQ信息
@@ -935,8 +1096,15 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
 
 
+		'特殊
+        sql = sql & "machineName VarChar Default """","                                       '机器名
+        sql = sql & "OSVersion VarChar Default """","                                       '操作系统
+        sql = sql & "softPath VarChar Default """","                                       '软件路径
+        sql = sql & "srceenWidth VarChar Default """","                                       '屏幕宽
+        sql = sql & "srceenHeight VarChar Default """","                                       '屏幕高
+
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 		
         sql = sql & "expireDateTime DateTime Default Date(),"                               '到期时间
         sql = sql & "followIdList VarChar Default """","                                        '关注文章ID列表
@@ -948,14 +1116,24 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '会员日志表-------------------------------
     tableName = db_PREFIX & "MemberLog" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "userid Int Default -1,"                                            '会员id
         sql = sql & "title VarChar Default """","                                       '标题
+		'特殊
+        sql = sql & "machineName VarChar Default """","                                       '机器名
+        sql = sql & "OSVersion VarChar Default """","                                       '操作系统
+        sql = sql & "softPath VarChar Default """","                                       '软件路径
+        sql = sql & "srceenWidth VarChar Default """","                                       '屏幕宽
+        sql = sql & "srceenHeight VarChar Default """","                                       '屏幕高
+		
+		
+        sql = sql & "txt1 Text Default """","                                      '存储内容一
+        sql = sql & "txt2 Text Default """","                                      '存储内容二
 
         sql = sql & "ip VarChar Default """","                                          'IP
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "isThrough Int Default 0,"                                          '是否通过
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
@@ -963,11 +1141,11 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '付款信息表-------------------------------
     tableName = db_PREFIX & "Payment" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "UserName VarChar Default """","                                    '会员账号
         sql = sql & "MemberId VarChar Default """","                                    '会员ID编号
-        sql = sql & "Sex VarChar Default ""男"","                                         '性别
+        sql = sql & "Sex VarChar Default """","                                         '性别男
         sql = sql & "Age Int Default 18,"                                               '年龄
 
         sql = sql & "Tel VarChar Default """","                                         '电话
@@ -981,32 +1159,34 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "Ip VarChar Default """","                                          'IP
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "isThrough Int Default 0)"                                          '是否通过
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '购物信息表-------------------------------
     tableName = db_PREFIX & "Previeworder" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "MemberId VarChar Default """","                                    '会员编号账号
         sql = sql & "OrderId VarChar Default """","                                     '订单ID编号
         sql = sql & "ProductId VarChar Default """","                                   '产品ID编号
-        sql = sql & "title VarChar Default ""男"","                                       '产品名称
+        sql = sql & "title VarChar Default """","                                       '产品名称
         sql = sql & "Total VarChar Default """","                                       '些产品总数
         sql = sql & "Price Int Default 18,"                                             '此产品单价
         sql = sql & "ProductSum VarChar Default """","                                  '此产品总
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "isThrough YesNo Default No)"                                       '是否发货
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '产品评论表-------------------------------
     tableName = db_PREFIX & "ProductComment" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "UserName VarChar Default """","                                    '评论者
         sql = sql & "title VarChar Default """","                                       '评论标题
@@ -1017,14 +1197,15 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "Ip VarChar Default """","                                          '评论者IP
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "isThrough YesNo Default No)"                                       '是否显示评论
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '网站统计表 20160203-------------------------------
     tableName = db_PREFIX & "WebSiteStat" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "visiturl Text Default """","                                       '来访网址
         sql = sql & "viewurl Text Default """","                                        '浏览网址
@@ -1038,19 +1219,20 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "dateClass VarChar Default """","                                   '日期分类
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
 
 
         sql = sql & "isThrough Int Default 0,"                                          '是否通过
         sql = sql & "noteInfo Text Default """","                                       '笔记信息
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '系统日志表-------------------------------
     tableName = db_PREFIX & "SystemLog" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "msgStr Text Default """","                                         '信息内容
         sql = sql & "tableName VarChar Default """","                                   '表名 也可以说module模块
@@ -1061,6 +1243,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
@@ -1069,7 +1252,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
     '布局表 20151228-------------------------------
     tableName = db_PREFIX & "webLayout" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "layoutName VarChar Default """","                                  '布局名称
         sql = sql & "layoutList VarChar Default """","                                  '布局列表
@@ -1087,16 +1270,17 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '模块表 20151228-------------------------------
     tableName = db_PREFIX & "webModule" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "moduleType VarChar Default """","                                  '模块类型
         sql = sql & "moduleName VarChar Default """","                                  '模块名称
@@ -1109,16 +1293,17 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
         sql = sql & "aboutcontent Text Default """","                                   '简单介绍
+        sql = sql & "memberUserCheck Int Default 0,"                                    '会员检测 1为需要登录，2不需要登录也显示
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
     end if 
     '采集网站表-------------------------------
     tableName = db_PREFIX & "CaiWeb" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "BigClassName VarChar Default """","                                '大类名称
         sql = sql & "columnname VarChar Default """","                                  '栏目名称
@@ -1131,7 +1316,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "sortRank Int Default 0,"                                           '排序编号
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "IP VarChar Default """","                                          'IP地址
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
@@ -1139,7 +1324,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '采集配置表-------------------------------
     tableName = db_PREFIX & "CaiConfig" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "BigClassName VarChar Default """","                                '大类名称
         sql = sql & "sType VarChar Default """","                                       '类型
@@ -1153,7 +1338,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "sortRank Int Default 0,"                                           '排序编号
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "IP VarChar Default """","                                          'IP地址
 
         sql = sql & "isThrough YesNo Default No,"                                       '通过审核
@@ -1163,7 +1348,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '采集数据表-------------------------------
     tableName = db_PREFIX & "CaiData" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "BigClassName VarChar Default """","                                '大类名称
         sql = sql & "columnname VarChar Default """","                                  '栏目名称
@@ -1193,7 +1378,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "sortRank Int Default 0,"                                           '排序编号
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "IP VarChar Default """","                                          'IP地址
         sql = sql & "isThrough YesNo Default No,"                                       '通过审核
 
@@ -1203,7 +1388,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '竞价表(百度竞价) 20151228-------------------------------
     tableName = db_PREFIX & "Bidding" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "searchWords VarChar Default """","                                 '搜索词
         sql = sql & "webKeywords VarChar Default """","                                 '网站关键词
@@ -1217,7 +1402,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "sortRank Int Default 0,"                                           '顺序
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
 
 
         sql = sql & "bodycontent Text Default """")"                                    '备注
@@ -1226,7 +1411,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
     end if 
     '网站URL扫描表 20160428-------------------------------
     tableName = db_PREFIX & "WebUrlScan" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "bigClassName VarChar Default """","                                '大类名称
         sql = sql & "linkType VarChar Default """","                                    '链接类型
@@ -1244,14 +1429,15 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "webSize Int Default 0,"                                            '网页大小
         sql = sql & "sortRank Int Default 0,"                                           '顺序
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
         sql = sql & "isThrough YesNo Default No)"                                       '通过审核
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
-    end if 
+    end if
+	
     '网站域名表 20160511-------------------------------
     tableName = db_PREFIX & "WebDomain" 
-    if checkTable_show(tableName) = false then
+    if checkCreateTable(tableName) = false then
         sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
         sql = sql & "bigClassName VarChar Default """","                                '大类名称
         sql = sql & "website VarChar Default """","                                     '域名
@@ -1274,15 +1460,17 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "isHtml YesNo Default No,"                                          '可运行Html程序
         sql = sql & "nlinks Int Default 0,"                                             '外链数
         sql = sql & "links Text Default """","                                          '外链列表
-
-
-        sql = sql & "homepagelist VarChar Default """","                                '旗
+		
+        sql = sql & "nmails Int Default 0,"                                             '邮箱数
+        sql = sql & "mails Text Default """","                               			'邮箱列表
+ 
+        sql = sql & "homepagelist VarChar Default """","                                '首页列表
 
         sql = sql & "flags VarChar Default """","                                       '旗
         sql = sql & "webSize Int Default 0,"                                            '网页大小
         sql = sql & "sortRank Int Default 0,"                                           '顺序
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
-        sql = sql & "upDateTime DateTime Default Date(),"                               '修改时间
+        sql = sql & "upDateTime DateTime Default Now(),"                                '修改时间
 
         sql = sql & "isDomain YesNo Default No,"                                        '是否为域名
         sql = sql & "isThrough YesNo Default No)"                                       '通过审核
@@ -1297,11 +1485,8 @@ sub webData(db_PREFIX, loginname, loginpwd)
         conn.execute("insert into " & db_PREFIX & "admin (username,pwd,flags) values('" & loginname & "','" & myMD5(loginpwd) & "','|*|')") 
 
         'Add memeber
-        conn.execute("insert into " & db_PREFIX & "member (username,pwd) values('1','" & myMD5("1") & "' )") 
-        conn.execute("insert into " & db_PREFIX & "member (username,pwd) values('test','" & myMD5("test") & "' )") 
-
-			
-
+        'conn.execute("insert into " & db_PREFIX & "member (username,pwd) values('1','" & myMD5("1") & "' )") 
+        'conn.execute("insert into " & db_PREFIX & "member (username,pwd) values('test','" & myMD5("test") & "' )")  
         'Add WebSite
         dim fieldNameList, fieldValueList 
         fieldNameList = "webTitle,webKeywords,webDescription,WebSiteUrl,WebSiteBottom" 
@@ -1313,7 +1498,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         'add menu
         dim parentid, title, lableName, content, tempS, url, sIsdisplay, nCount 
-        content = getftext(adminDir & "/后台菜单配置.ini") 
+        content = getftext(adminDir & "/admin_menu_config.ini") 
         content =  replace(content, vbTab, "    ") 
 		if instr(content,vbcrlf)=0 then
 			content = replace(content,chr(10), vbCrLf) 		'从github上下载不处理会出有问题
@@ -1330,7 +1515,7 @@ sub webData(db_PREFIX, loginname, loginpwd)
                     parentid = "-1" 
                 end if 
 
-                if LCase(tempS) = "end" then
+                if phptrim(LCase(tempS)) = "end" then
                     exit for 
                 elseIf s <> "" then
                     title = mid(s & " ", 1, inStr(s & " ", " ") - 1) 
@@ -1385,7 +1570,7 @@ sub displayDefault()
     selectDatabase = "access" 
     dbhost = "localhost" 
     dbuser = "sa" 
-    dbpwd = "" 
+    dbpwd = "sa" 
     dbname = "webdata" 
     accessDir = "/data/" 
     msgStr = "创建数据库" 
@@ -1419,8 +1604,10 @@ sub displayDefault()
 			if EDITORTYPE="aspx" then
 				connStr = "server='"& dbhost &",1433';database='"& dbname &"';uid='"& dbuser &"';pwd='"& dbpwd &"';" 
 			else
-            	connStr = " Password = " & dbpwd & "; user id =" & dbuser & "; Initial Catalog =" & dbname & "; data source =" & dbhost & ";Provider = sqloledb;" 
+            	connStr = " Password = " & dbpwd & "; user id =" & dbuser & "; Initial Catalog =" & dbname & "; data source =" & dbhost & ",1433;Provider = sqloledb;" 
 			end if
+			 
+	
             if checkSqlServer(connStr) = false then
                 call echo("connStr", connStr) 
                 msgStr = "链接SqlServer数据库失败，检测账号密码" 
@@ -1449,6 +1636,7 @@ sub displayDefault()
 					accessPath=replace(accessPath,"\","\\")
 				else
 					accessPath=replace(accessPath,"\\","\")
+					accessPath=replace(accessPath,handlePath("/"),"/")	'20170517
 				end if 
                 replaceStr = startStr & accessPath & endStr 
                 content = replace(content, findStr, replaceStr) 
@@ -1536,11 +1724,12 @@ end sub
 sub displayImportData()
     call setsession("adminusername", "PAAJCMS") 
     call setsession("adminflags", "|*|")
+    call setsession("adminId", 0) 	'20170517  默认ID为0
 	showLayout="step4"
 end sub 
 %>
 <%if showLayout="step1" then%>
-<form id="form1" name="form1" method="post" action="?act=displayDefault"> 
+<form id="form1" name="form1" method="post" action="?act=displayDefault&webdataDir=<%=webdataDir%>"> 
 <div class="pright"> 
     <div class="pr-title"><h3>第一步 选择数据库</h3></div> 
     <label for="radio"><input name="selectDatabase" type="radio" id="radio" value="access" <%=IIF(selectDatabase = "access","checked","")%> onClick="selectInsrtDatabase(this.value);" /> 
@@ -1563,13 +1752,23 @@ end sub
                   </div> 
                     <div style="float:left" id="havedbsta"><font color="red"></font></div>                </td> 
             </tr> 
+            <tr> 
+                <td class="onetd"><strong>所需数组：</strong></td> 
+                <td> 
+               	<%
+				call echo("数据库创建组件" , checkObject("ADOX.Catalog"))
+				call echo("数据库连接组件" , checkObject("Adodb.connection"))
+				%> 
+                 
+                 </td> 
+            </tr> 
         </tbody> 
          
         <tbody id="sqlserver_layout" <%=IIF(selectDatabase = "access","style='display:none'","")%> > 
             <tr> 
                 <td class="onetd"><strong>数据库主机：</strong></td> 
                 <td><input name="dbhost" id="dbhost" type="text" value="<%=dbhost%>" class="input-txt"> 
-                    <small>一般为localhost / .\SQLEXPRESS</small>                </td> 
+                    <small>一般为localhost 或 .\SQLEXPRESS</small>                </td> 
             </tr> 
             <tr> 
                 <td class="onetd"><strong>数据库用户：</strong></td> 
@@ -1585,7 +1784,8 @@ end sub
             <tr> 
                 <td class="onetd"><strong>数据库名称：</strong></td> 
                 <td> 
-                  <div style="float:left;margin-right:3px;"><input name="dbname" id="dbname" type="text" value="<% =dbname%>" class="input-txt" onChange="HaveDB()"> 
+                  <div style="float:left;margin-right:3px;"><input name="dbname" id="dbname" type="text" value="<% =dbname%>" class="input-txt" onChange="HaveDB()">
+                  请确定数据库名称存在
                     </div> 
                     <div style="float:left" id="havedbsta"><font color="red"></font></div>                </td> 
             </tr> 
@@ -1593,7 +1793,7 @@ end sub
          
     </table>   
 <div class="btn-box">  
-        <input name="提交" type="submit" class="btnclick1" onClick="window.location.href='index.php?step=3';" value="继续"> 
+        <input name="提交" type="submit" class="btnclick1" onClick="window.location.href='index.php?step=3&accessDir=<%=request("accessDir")%>';" value="继续"> 
     </div> 
 </div> 
 <script language="javascript"> 
@@ -1610,7 +1810,7 @@ function selectInsrtDatabase(sValue){
 </script> 
 </form> 
 <%elseif showLayout="step2" then%> 
-<form id="form1" name="form1" method="post" action="?act=displayImportTableLayout"> 
+<form id="form1" name="form1" method="post" action="?act=displayImportTableLayout&webdataDir=<%=webdataDir%>"> 
 <div class="pright"> 
     <div class="pr-title"><h3>第二步 设置登录密码</h3></div> 
     <table width="726" border="0" align="center" cellpadding="0" cellspacing="0" class="twbox"> 
@@ -1648,7 +1848,7 @@ function selectInsrtDatabase(sValue){
 </div> 
 </form> 
 <%elseif showLayout="step3" then%> 
-<form id="form1" name="form1" method="post" action="?act=displayImportData"> 
+<form id="form1" name="form1" method="post" action="?act=displayImportData&webdataDir=<%=webdataDir%>"> 
 <div class="pright"> 
   <div class="pr-title"><h3>第三步 导入数据</h3></div>     
 <table width="726" border="0" align="center" cellpadding="0" cellspacing="0" class="twbox"> 
@@ -1680,7 +1880,7 @@ function selectInsrtDatabase(sValue){
                 </tr> 
                 <tr> 
                   <td colspan="2"> 
-                  <iframe src="<% =WEB_ADMINURL%>?act=setAccess&webdataDir=/Templates2015/sharembweb/WebData&login=out&n=<%=getRnd(9)%>" width="100%" height="350"></iframe> 
+                  <iframe src="<% =WEB_ADMINURL%>?act=setAccess&webdataDir=<%=webdataDir%>&login=out&n=<%=getRnd(9)%>" width="100%" height="350"></iframe> 
                   </td> 
                 </tr>  
           </tbody> 
@@ -1689,4 +1889,5 @@ function selectInsrtDatabase(sValue){
 <%end if%>
 </body> 
 </html> 
+
 

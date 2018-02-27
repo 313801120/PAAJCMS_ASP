@@ -25,6 +25,8 @@
         <div class="explain-col">
             <select name="searchfield" id="searchfield">
             <option value="bodycontent" selected>搜索字段</option>
+            <option value="id"[$searchfield if='id' value=' selected'$]>会员ID</option> 
+            <option value="username"[$searchfield if='username' value=' selected'$]>会员账号</option> 
             <option value="bodycontent"[$searchfield if='bodycontent' value=' selected'$]>内容</option> 
             </select>					 关键字：				 
             <input type="text" name="keyword" value="[$keyword$]" style="width:200px">		 
@@ -40,10 +42,10 @@
 		<tr align="center" bgcolor="#FBFCE2" height="25">
 		  <td>ID</td>
 		  <td>选择</td>
-		  <td>会员名称</td>
-		  <td>openId</td>
+		  <td>会员账号</td>
 		  <td>登录时间</td> 
-		  <td>登录次数;</td>
+		  <td>登录IP</td>
+		  <td>登录次数</td>
 		  <td>操作</td>
 		  </tr> 
         [list]
@@ -52,9 +54,9 @@
 		  <td align="left">
 				<input name="idcheck" type="checkbox" class="np" value="[$id$]">
                 <input type="hidden" name="id" id="id" value="[$id$]" />    </td>
-		  <td align="left">[$nickname$]</td>
-		  <td align="left">[$openid len='30'$]</td>
-		  <td>[$adddatetime$]</td>
+		  <td align="left"><a href="?act=dispalyManageHandle&actionType=MemberLog&lableTitle=会员日志&nPageSize=10&parentid=&searchfield=userid&keyword=%3D%3D[$id$]&addsql=&page=&id=&mdbpath=&focusid=" title="查看会员日志">[$username$]</a></td>
+		  <td>[$logintime$]</td>
+		  <td>[$loginip$]</td>
 		  <td>[$logincount$]</td>
 		  <td>
 			 <a href="javascript:addEditHandle('[$actionType$]','[$lableTitle$]','[$page$]','[$id$]');"><img src="Images/icon/gtk-edit.png" title="编辑" alt="编辑" border="0" width="16" height="16"></a>
@@ -81,6 +83,8 @@
               <option value="30"[$nPageSize if='30' value=' selected'$]>每页显示30条</option>
               <option value="40"[$nPageSize if='40' value=' selected'$]>每页显示40条</option>
               <option value="50"[$nPageSize if='50' value=' selected'$]>每页显示50条</option>
+              <option value="100"[$nPageSize if='100' value=' selected'$]>每页显示100条</option>
+              <option value="300"[$nPageSize if='300' value=' selected'$]>每页显示300条</option>
             </select>            </td>
 		</tr> 
 		<tr align="right" bgcolor="#F9FCEF">

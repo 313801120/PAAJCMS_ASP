@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -14,6 +14,38 @@
 '######################################################################
 'Dim obj : Set obj = New Cls_AB_JSON
 'call rw(obj.toJSON)
+
+'call rw(getPostToJson())
+
+'处理字符串到json 20170827  handleStrToJson("aa=11,bb=22,c=33") {"aa":"11","bb":"22","c":"33"}
+function handleStrToJson(byval content)
+	dim c,splstr,splxx,aspD,s,name,value
+	set aspD = createObject("Scripting.Dictionary")
+	c=replace(content,"\""","[|-双引号-|]")
+	c=replace(content,"\=","[|-等号-|]")
+	c=replace(content,"\,","[|-逗号-|]")
+	splstr=split(c,",")
+	for each s in splstr
+		if instr(s,"=")>0 then
+			splxx=split(s,"=")
+			name=replace(splxx(0),"[|-双引号-|]","""")
+			name=replace(name,"[|-等号-|]","=")
+			name=replace(name,"[|-逗号-|]",",")
+			value=replace(splxx(1),"[|-双引号-|]","""")
+			value=replace(value,"[|-等号-|]","=")
+			value=replace(value,"[|-逗号-|]",",")
+			aspD.add name, value
+		end if
+	next
+	
+	handleStrToJson=json_encode(aspD)
+end function
+
+'转json
+function  json_encode(o)
+	Dim obj : Set obj = New Cls_AB_JSON
+	 json_encode=obj.toJSON(o)
+end function
 Class Cls_AB_JSON
 	Public Collection, Count, QuotedVars, Kind, StrEncode
 	Private s_charset
@@ -355,7 +387,7 @@ Class Cls_AB_JSON
 								toJSON = toJSON & "{"
 								For Each i In o
 									If bFI Then bFI = False Else toJSON = toJSON & ","
-									toJSON = toJSON & IIF(QuotedVars, """" & IIF(StrEncode,JSEncode(i),JSEncode__(i)) & """", IIF(StrEncode,JSEncode(i),JSEncode__(i))) & ":" & toJSON(o(i))
+									toJSON = toJSON & """" & IIF(QuotedVars, """" & IIF(StrEncode,JSEncode(i),JSEncode__(i)) & """", IIF(StrEncode,JSEncode(i),JSEncode__(i))) & """:" & toJSON(o(i))
 								Next
 								toJSON = toJSON & "}"
 							End If

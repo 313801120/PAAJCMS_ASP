@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -68,7 +68,11 @@ function webPageControl(nRecrodCount, nPageSize, sPage, configPageUrl, action)
     dim nPreviousPage, nNextPage                                                      '定义上一页，下一页
     dim isDisplayTip                                                                '是否显示提示翻页信息
     isDisplayTip = true 
-
+	if sPage="0" then
+		sPage=1
+	end if
+	'call echo(typename(sPage),sPage)
+	
     dim sPageStart, sPageEnd, sHomePage, sHomePageFocus, sUpPage, sUpPageFocus, sNextPage, sNextPageFocus, sForPage, sForPageFocus, sTailPage, sTailPageFocus 
     if action <> "" then
         sPageStart = getStrCut(action, "[sPageStart]", "[/sPageStart]", 2)    '页头部分

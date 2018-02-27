@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -10,6 +10,85 @@
 %>
 <% 
 '与php通用   我的后台
+
+'获得传过来的参数值 20170610
+function XY_Request(action)  
+	dim requestName
+	requestName = trim(RParam(action, "name")) 
+	XY_Request=request(requestName)
+end function
+'20180116
+function XY_AP_getWebColumnParentId(action)
+	action=replaceGlobleVariable(action)	'处理下
+	dim id,parentId
+	id= trim(RParam(action, "id")) 
+	parentId=getWebColumnParentId(id,"id")
+	'call echo("parentId",parentId)
+	XY_AP_getWebColumnParentId=parentId
+end function
+
+'获得子类字段值
+function XY_AP_SubGetFieldValue(action)
+	dim tableName2,sFieldName2,nFieldName2,fieldName2,sql,viewfieldname2,splxx,s,fieldValue
+	tableName2 = trim(RParam(action, "tablename2")) 
+	sFieldName2 = trim(RParam(action, "sfieldname2")) 
+	nFieldName2 = trim(RParam(action, "nfieldname2")) 
+	fieldName2 = trim(RParam(action, "fieldname2"))
+	viewfieldname2 = trim(RParam(action, "viewfieldname2"))		'显示字段名称
+	
+	sFieldName2=replaceGlobleVariable(sFieldName2)
+	nFieldName2=replaceGlobleVariable(nFieldName2)
+	fieldName2=replaceGlobleVariable(fieldName2) 
+	
+	fieldValue=XY_AP_NewGetFieldValue(action) 
+	if fieldName2<>"" then
+		sFieldName2=fieldName2
+	end if
+	
+	if nFieldName2<>"" then
+		sql=" where " & nFieldName2 & "=" & fieldValue
+	else
+		splxx=split(sFieldName2,"=")
+		sql=" where " & splxx(0) & "='" &  fieldValue &"'"		
+	end if	
+	sql="Select * from " & db_PREFIX & tableName2 & sql 
+	rs.open sql, conn, 1,1 
+	if not rs.eof then
+		s=rs(viewfieldname2)
+	end if:rs.close
+	XY_AP_SubGetFieldValue=s
+end function
+'新版获得字段值 201705
+function XY_AP_NewGetFieldValue(action)
+	dim tableName,sFieldName,nFieldName,fieldName,sql,viewfieldname,splxx,s
+	tableName = trim(RParam(action, "tablename")) 
+	sFieldName = trim(RParam(action, "sfieldname")) 
+	nFieldName = trim(RParam(action, "nfieldname")) 
+	fieldName = trim(RParam(action, "fieldname"))
+	viewfieldname = trim(RParam(action, "viewfieldname"))		'显示字段名称
+	
+	sFieldName=replaceGlobleVariable(sFieldName)
+	nFieldName=replaceGlobleVariable(nFieldName)
+	fieldName=replaceGlobleVariable(fieldName) 
+	
+	if fieldName<>"" then
+		sFieldName=fieldName
+	end if
+	  
+	if nFieldName<>"" then
+		sql=" where " & nFieldName
+	else
+		splxx=split(sFieldName,"=")
+		sql=" where " & splxx(0) & "='" &  splxx(1) &"'"		
+	end if
+	
+	sql="Select * from " & db_PREFIX & tableName & sql 
+	rs.open sql, conn, 1,1 
+	if not rs.eof then
+		s=rs(viewfieldname)
+	end if:rs.close
+	XY_AP_NewGetFieldValue=s
+end function
 
 '获得网站底部内容aa 
 Function XY_AP_WebSiteBottom(action)
@@ -79,9 +158,24 @@ End Function
 
 '栏目菜单
 Function XY_AP_ColumnMenu(action)
-    Dim defaultStr, thisId, parentid,c,s
+    Dim defaultStr, thisId, parentid,thisparentid,c,s,rootcolumnisfocus,columnName
     parentid = Trim(RParam(action, "parentid"))
-	parentid=getColumnId(parentid)
+    columnName = Trim(RParam(action, "columnName"))
+    thisparentid = Trim(RParam(action, "thisparentid"))
+    rootcolumnisfocus = lcase(Trim(RParam(action, "rootcolumnisfocus")))
+	
+	
+	if columnName<>"" then
+	parentid=getColumnId(columnName)
+	end if
+	
+	if thisparentid<>"" then
+		thisparentid=replaceGlobleVariable(thisparentid)		'应不应该处理下，待后面测试
+		parentid=thisparentid
+	end if
+	
+	
+	'call echo("parentid",parentid)
 	
     If parentid = "" Then parentid = "-1" 
 
@@ -89,8 +183,21 @@ Function XY_AP_ColumnMenu(action)
     If thisId = "" Then thisId = "-1" 
     defaultStr = getDefaultValue(action)                                            '获得默认内容
 	
-	defaultStr=defaultStr & "[topnav]"& parentid &"[/topnav]"
-    XY_AP_ColumnMenu = showColumnList( parentid, "webcolumn", "columnname",thisId , 0, defaultStr)
+	'20170519
+	defaultStr=replaceGlobleVariable(defaultStr)		'应不应该处理下，待后面测试
+	
+    'defaultStr = handleRGV(defaultStr, "{$glb_columnRootId$}", glb_columnRootId)                  '栏目主Id
+	 
+	 'call eerr("",defaultstr)
+	
+	defaultStr=defaultStr & "[topnav]"& parentid &"[/topnav]" 
+	
+	if rootcolumnisfocus="1" or rootcolumnisfocus="true" or rootcolumnisfocus="ok" then
+		defaultStr=defaultStr & "[rootcolumeid]"& glb_columnRootId &"[/rootcolumeid]"  
+	end if
+     
+	
+	XY_AP_ColumnMenu = showColumnList( parentid, "webcolumn", "columnname",thisId , 0, defaultStr)
  
 End Function 
 
@@ -118,7 +225,7 @@ Function XY_AP_ColumnList(action)
 
 End Function 
 
-'显示文章列表
+'显示文章列表 did大类不存在则使用默认-1
 Function XY_AP_ArticleList(action)
     Dim sql, addSql, columnName, columnId, nTopNumb, idRand, splStr, s, columnIdList 
     action = replaceGlobleVariable(action)                                          '处理下替换标签
@@ -142,6 +249,7 @@ Function XY_AP_ArticleList(action)
         splStr = Split(s, "[Array]") 
         For Each columnName In splStr
             columnId = getColumnId(columnName) 
+			'call echoRedB(columnName,columnId)
             If columnId <> "" Then
                 If columnIdList <> "" Then
                     columnIdList = columnIdList & "," 
@@ -193,14 +301,61 @@ Function XY_AP_Links(action)
     addSql = RParam(action, "addSql") 
     XY_AP_Links = XY_AP_GeneralList(action, "FriendLink", addSql) 
 End Function 
- 
+'显示单页列表 20170518
+Function XY_AP_GetOnePageList(action)
+    Dim addSql 
+    addSql = RParam(action, "addSql") 
+    XY_AP_GetOnePageList = XY_AP_GeneralList(action, "OnePage", addSql) 
+End Function 
+'显示会员列表 20170524
+Function XY_AP_GetMemberList(action)
+    Dim addSql 
+    addSql = RParam(action, "addSql") 
+    XY_AP_GetMemberList = XY_AP_GeneralList(action, "Member", addSql) 
+End Function 
+'显示会员列表 20170524
+Function XY_AP_CustomTableList(action)
+    Dim addSql,tableName
+    addSql = RParam(action, "addSql") 
+    tableName = RParam(action, "tablename") 
+    XY_AP_CustomTableList = XY_AP_GeneralList(action, tableName, addSql) 
+End Function 
+
+
+'获得分割列表 20170518
+function XY_AP_GetSplitList(action)
+	dim defaultStr
+	dim splvalue,spltype,splxx,listS,s,i,c,title
+    defaultStr = getDefaultValue(action)                                            '获得默认内容
+	splvalue=RParam(action, "splvalue")
+	spltype=RParam(action, "spltype")
+	if splvalue="文章标签" or splvalue="tag" then
+		splvalue=glb_relatedTags
+	end if
+	
+	listS = strCut(defaultStr, "[list]","[/list]", 2) 
+	splxx=split(splvalue,spltype)
+	i=0
+	for each title in splxx
+		i=i+1
+		s=ListS
+		s = replaceValueParam(s, "i", i)                                                '循环编号
+		s = replaceValueParam(s, "编号", i)                                             '循环编号
+		s = replaceValueParam(s, "title", title)                                        '标题 
+		c=c & s 
+	next
+	XY_AP_GetSplitList=c
+end function
+
+
+'获得栏目ID，根据动作
 function XY_GetColumnId(action)
 	dim columnName
 	columnName=RParam(action, "columnName")
 	XY_GetColumnId=getColumnId(columnName)
 end function
 '通用信息列表
-Function XY_AP_GeneralList(action, byval tableName, addSql)
+Function XY_AP_GeneralList(action, byval tableName, addSql) 
     Dim title, topNumb, nTop, isB, sql ,tempS
     Dim columnName, columnEnName, aboutcontent, bodyContent, showTitle 
     Dim bannerImage, smallImage, bigImage, id 
@@ -251,13 +406,13 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
      
     '检测SQL
     If checksql(sql) = False Then
-        Call errorLog("出错提示：<br>action=" & action & "<hr>sql=" & sql & "<br>") 
+        Call errorLog("出错提示3：<br>action=" & action & "<hr>sql=" & sql & "<br>") 
         Exit Function 
     End If 
 	'【@是jsp显示@】try{
     rs.Open sql, conn, 1, 1 
 	'【PHP】删除rs
-	nRecordCount=rs.recordCount
+	nRecordCount=rs.recordCount 
 	'【@是jsp显示@】rs = Conn.executeQuery(handleSqlTop(sql));
     For i = 1 To nRecordCount
 		startStr = "" : endStr = ""
@@ -298,6 +453,17 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
                     url = rs("customAUrl") 
                 End If 
             End If 
+        '单页
+        ElseIf tableName = "onepage" Then 
+            if isMakeHtml = true then
+                url = getHandleRsUrl(rs("fileName"), rs("customAUrl"), "/page/page" & rs("id")) 
+            else
+                url = handleWebUrl("?act=detail&id=" & rs("id")) 
+				If rs("customAUrl") <> "" Then
+                    url = rs("customAUrl") 
+                End If 
+            end if  
+			
         '评论
         ElseIf tableName = "tablecomment" Then
 
@@ -448,6 +614,14 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
 			elseif tableName="tablecomment" then		
 				idPage=getThisIdPage(db_PREFIX & tableName ,rs("id"),10) 
 				url = WEB_ADMINURL & "?act=addEditHandle&actionType=TableComment&lableTitle=评论&nPageSize=10&parentid=&searchfield=bodycontent&keyword=&addsql=&page="& idPage &"&id=" & rs("id") & "&n=" & getRnd(11)
+				
+			'【单页】
+			elseif tableName="onepage" then		
+				idPage=getThisIdPage(db_PREFIX & tableName ,rs("id"),10) 
+				url = WEB_ADMINURL & "?act=addEditHandle&actionType=OnePage&lableTitle=单页&nPageSize=10&switchId=2&page="& idPage &"&id=" & rs("id") & "&n=" & getRnd(11)
+				
+				
+				
 			
 			'【文章】
             ElseIf tableName = "articledetail" Then 
@@ -458,7 +632,7 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
                 s = replaceValueParam(s, "columnurl", getColumnUrl(rs("parentid"), ""))         '文章对应栏目URL 20160304
                 s = replaceValueParam(s, "columnname", getColumnName(rs("parentid")))           '文章对应栏目名称 20160304 
             End If  
-            s = handleDisplayOnlineEditDialog(url, s, "", "div|li|span")                    '处理是否添加在线修改管理器
+            s = handleDisplayOnlineEditDialog(url, s, "", "div|li|span|td|img|a")'20170518 在线编辑                    '处理是否添加在线修改管理器
 			end if
             c = c & s 
         End If 
@@ -476,21 +650,57 @@ Function XY_AP_GeneralList(action, byval tableName, addSql)
         c = c & strCut(defaultStr, startStr, endStr, 2) 
     End If 
     XY_AP_GeneralList = c 
-End Function 
+End Function
+
+'替换替换表字段列表 20170603
+function handleReplaceTableFieldList(content,tableName,sql,leftLabel,rightLabel)
+	dim fieldNameList,splFieldName,i,fieldName,replaceStr
+	tableName=lcase(tableName)		'转小写
+    fieldNameList = getHandleFieldList(db_PREFIX & tableName, "字段列表") 
+    splFieldName = Split(fieldNameList, ",")
+	'call eerr("fieldNameList",fieldNameList)
+    rs.Open sql, conn, 1, 1
+	if not rs.eof then
+	For i = 0 To UBound(splFieldName)
+		If splFieldName(i) <> "" Then
+			fieldName = splFieldName(i) 
+			replaceStr = rs(fieldName) & "" 
+			content= replaceValueParam(content,leftLabel & fieldName & rightLabel, replaceStr)
+		End If 
+	Next
+			content= replaceValueParam(content,leftLabel & "id" & rightLabel, rs(0))
+	end if:rs.close
+	handleReplaceTableFieldList=content
+end function
 
 
 '处理获得表内容
 Function XY_handleGetTableBody(action, tableName, fieldParamName, defaultFileName, adminUrl)
-    Dim url, content, id, sql, addSql, fieldName, fieldParamValue, fieldNameList, sLen, delHtmlYes, trimYes,defaultStr
+    Dim url, content, id, sql, addSql, fieldName, fieldParamValue, fieldNameList, sLen, delHtmlYes, trimYes,defaultStr,onlineedit
 	dim snoisonhtml,intoFieldStr,valuesStr
-    fieldName = RParam(action, "fieldname")                                         '字段名称	
+	fieldName = RParam(action, "fieldname")                                         '字段名称	
     snoisonhtml = RParam(action, "noisonhtml") 					'不生成html
 	'dim nonull nonull=RParam(action, "noisonhtml")							'内容不能为空20160716 home
-	 
+    onlineedit = trim(lcase(RParam(action, "onlineedit"))) 					'在线编辑
+	dim ishide:ishide = trim(lcase(RParam(action, "ishide"))) 					'是否隐藏内容
+
+	
 	if snoisonhtml="true" then
 		intoFieldStr=",isonhtml"
 		valuesStr=",0"
 	end if
+	
+		 
+	'追加字段处理 20170517
+	dim addFileName,addFileValue
+    addFileName = RParam(action, "addfilename") 
+    addFileValue = RParam(action, "addfilevalue") 
+	if addFileName<>"" then
+		'call eerr(addFileName,addFileValue)
+		intoFieldStr=intoFieldStr & "," & addFileName
+		valuesStr=valuesStr & "," & addFileValue
+	end if
+	
 
     fieldNameList = getHandleFieldList(db_PREFIX & tableName, "字段列表") 
     '字段名称不为空，并且要在表字段里
@@ -543,13 +753,13 @@ Function XY_handleGetTableBody(action, tableName, fieldParamName, defaultFileNam
         id = XY_AP_GetFieldValue("", sql, "id") 
     End If 
     url = adminUrl & "&id=" & id & "&n=" & getRnd(11) 
-    If Request("gl") = "edit" Then
+    If Request("gl") = "edit" and onlineedit<>"no" and onlineedit<>"0" and onlineedit<>"false" Then
         content = "<span>" & content & "</span>" 
     End If 
-
-    'call echo(sql,url)
-    content = handleDisplayOnlineEditDialog(url, content, "", "span") 
-    XY_handleGetTableBody = content 
+	if ishide<>"no" and ishide<>"0" and ishide<>"false" then
+		content = handleDisplayOnlineEditDialog(url, content, "", "span") 
+		XY_handleGetTableBody = content 
+	end if
 
 End Function 
 
@@ -577,10 +787,16 @@ End Function
 
 '获得栏目URL
 Function XY_GetColumnUrl(action)
-    Dim columnName, url 
+    Dim columnName, url,id
     columnName = RParam(action, "columnName") 
-    url = getColumnUrl(columnName, "name") 
-    'handleWebUrl  有对gl处理
+	if columnName<>"" then
+		id = RParam(action, "id") 
+		url = getColumnUrl(columnName, "name") 
+	else
+		id = RParam(action, "id")  
+		url = getColumnUrl(id, "id") 
+    end if
+	'handleWebUrl  有对gl处理
 	
     'If Request("gl") <> "" Then
     '    url = url & "&gl=" & Request("gl") 
@@ -793,9 +1009,10 @@ Function XY_TitleInSearchEngineList(action)
     c = c & "<li><a href=""https://search.yahoo.com/search;_ylt=A86.JmbkJatWH5YARmebvZx4?toggle=1&cop=mss&ei=gb2312&fr=yfp-t-901&fp=1&p=" & title & """ rel=""nofollow"" target=""_blank"">【yahoo搜索】在雅虎里搜索(" & title & ")</a></li>" & vbCrLf 
 
     c = c & "<li><a href=""https://www.sogou.com/sogou?ie=utf8&query=" & toUTFChar(title) & """ rel=""nofollow"" target=""_blank"">【sogou搜索】在搜狗里搜索(" & title & ")</a></li>" & vbCrLf 
-    c = c & "<li><a href=""http://www.youdao.com/search?ue=utf8&q=" & toUTFChar(title) & """ rel=""nofollow"" target=""_blank"">【youdao搜索】在有道里搜索(" & title & ")</a></li>" & vbCrLf 
+    'c = c & "<li><a href=""http://www.youdao.com/search?ue=utf8&q=" & toUTFChar(title) & """ rel=""nofollow"" target=""_blank"">【youdao搜索】在有道里搜索(" & title & ")</a></li>" & vbCrLf
+	'c = c & "<li><a href=""https://www.so.com/s?ie=utf-8&q=" & toUTFChar(title) & """ rel=""nofollow"" target=""_blank"">【360搜索】在360里搜索(" & title & ")</a></li>" & vbCrLf 
     c = c & "<li><a href=""http://search.yam.com/Search/Web/DefaultKSA.aspx?SearchType=web&l=0&p=0&k=" & toUTFChar(title) & """ rel=""nofollow"" target=""_blank"">【yam搜索(google提供技术)】在蕃薯藤里搜索(" & title & ")</a></li>" & vbCrLf 
-	
+ 
 	
     c = c & "<li><a href=""http://cn.bing.com/search?q=" & toUTFChar(title) & """ rel=""nofollow"" target=""_blank"">【bing搜索】在必应里搜索(" & title & ")</a></li>" & vbCrLf 
     c = c & "</ul>" & vbCrLf 
@@ -854,7 +1071,7 @@ end function
 
 '文章位置显示信息{}为有动作的
 function XY_detailPosition(action)
-    Dim c,stype,splitS,id,i,parentid,cList
+    Dim c,stype,splitS,id,i,parentid,cList,url,columnname,thisColumnUrl
 	stype = rParam(action, "stype") 
 	stype="|"& stype &"|"
 	splitS=rParam(action, "splitS")
@@ -873,7 +1090,12 @@ function XY_detailPosition(action)
 			if not rsTemp.eof then
 				id=rsTemp("parentid")
 				parentid=cstr(rsTemp("parentid"))
-				cList = splitS & "<a href=""" & getColumnUrl(rsTemp("columnname"), "name") & """>" & rsTemp("columnname") & "</a>" & cList
+				url=getColumnUrl(rsTemp("columnname"), "name")
+				columnname=rsTemp("columnname")
+				if i=1 then
+					thisColumnUrl=url
+				end if
+				cList = splitS & "<a href=""" & url & """>" & columnname & "</a>" & cList
 			end if:rsTemp.close
 			if parentid="-1" then
 				exit for
@@ -892,7 +1114,14 @@ function XY_detailPosition(action)
     End If
     '尾部追加内容
 	
-	XY_detailPosition=c
+	if instr(stype,"|endnavurl|")>0 then
+		XY_detailPosition=thisColumnUrl
+	elseif instr(stype,"|endnavname|")>0 then
+		XY_detailPosition=glb_columnName
+	else
+		XY_detailPosition=c
+	end if
+	
 end function
 
 %>           

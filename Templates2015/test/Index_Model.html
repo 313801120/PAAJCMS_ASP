@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>{$Web_Title$}</title>
+<meta name="keywords" content="{$Web_KeyWords$}" />
+<meta name="description" content="{$Web_Description$}" /> 
+<script src="Jquery/jquery.min.js" type="text/javascript"></script><!--#JS#-->
+<link href="[$WebCss$]/style.css" rel="stylesheet" type="text/css" /><!--#Css#-->
+</head>
+<body>
+<div class="mainwrap"> 
+
+{$Include file='head.html' block='top'$} 
+
+    
+	<div class="sidebarleft"> 
+ {$Include file='left.html' block='left'$} 
+    
+    </div>
+	<div class="sidebarright">
+    
+    <sPAn class="testspan">{$ReadColumeSetTitle title='公司简介' style='21' moreclass='morewrite' morestr='More' moreurl='{\$GetColumnUrl columnname=\'公司简介\'$\}' stylevalue='0' value='[$读出内容 block=\'BlockName公司简介\' file=\'\'$]'$}</sPAn>
+    <div class="clear6"></div>
+    <sPAn class="testspan">{$ReadColumeSetTitle title='最新产品' style='21' moreclass='morewrite' morestr='More' moreurl='{\$GetColumnUrl columnname=\'产品展示\'$\}' stylevalue='0' value='[$读出内容 block=\'BlockName最新产品\' file=\'\'$]'$}</sPAn>
+    <div class="clear6"></div>
+    <sPAn class="testspan">{$ReadColumeSetTitle title='新闻中心' style='21' moreclass='morewrite' morestr='More' moreurl='{\$GetColumnUrl columnname=\'新闻中心\'$\}' stylevalue='0' value='[$读出内容 block=\'BlockName新闻中心\' file=\'\'$]'$}</sPAn>
+    <div class="clear6"></div>
+    
+    </div>
+    <div class="clear6"></div>
+    
+     {$ReadFoot style='10' stylevalue='0'$} 
+    
+</div>
+
+    <!--#test start#-->
+<R#读出内容BlockName公司简介 start#>
+<!--#获得单面内容#-->
+<sPAn class="testspan">{$GetOnePageBody title='公司简介' fieldname='aboutcontent' default='[_公司简介2018年02月26日 13时53分]' autoadd='true' noisonhtml='true'$}</sPAn> 
+<!--#[_公司简介2018年02月26日 13时53分]作者介绍<br>
+1、2006年进入互联网，专注网站开发10年<br>
+2、精通ASP/HTML5/CSS3/JS/Jquery/Canvas/Flash/PHP/VB/等<br>
+3、掌握DotNet/Android/JSP/nodeJS/python/BootStrop/PS/PR/FTP/linux等<br>
+4、擅长把复杂的事情简单化，独立开发一套PAAJCMS内容管理系统<br>
+5、发布【PAAJCMS】/【在线ASP转PHP】/【在线格式化ASP】【在线仿站】等开源项目<br>
+6、曾在上海、南京等城市从事网站开发工作多年
+#-->  
+<R#读出内容BlockName公司简介 end#>
+
+<R#读出内容BlockName最新产品 start#>
+
+<ul class="newproductwrap">
+
+<!--#细节列表 ASPPHP通用#-->
+<sPAn class="testspan">{$ArticleList columnname='产品展示' topnumb='4' default='[_产品展示_最新]'$}</sPAn>
+ 
+<!--#[_产品展示_最新]
+[list]<li class="left"><a href="[$url$]" title="[$title$]" [$atarget$]><img src="[$smallimage$]" width="169" height="200"><div class="title">[$title$]</div></a></li>[/list]  
+#--> 
+</ul>
+<R#读出内容BlockName最新产品 end#>
+
+<R#读出内容BlockName新闻中心 start#>
+<ul class="newswrap">
+ 
+<sPAn class="testspan">{$ArticleList columnname='新闻中心' topnumb='6' default='[_新闻中心_最新]'$}</sPAn>
+ 
+<!--#[_新闻中心_最新]
+[list]<li class="left"><a href="[$url$]" title="[$title$]" [$atarget$]>[$title$]<div class='time'>[$adddatetime format_time='2'$]</div></a></li>[/list]  
+#--> 
+</ul>
+<R#读出内容BlockName新闻中心 end#>
+
+    <!--#test end#-->
+
+</body>
+</html>
+
+

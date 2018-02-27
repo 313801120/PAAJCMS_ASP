@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -113,7 +113,7 @@ function getTemplateContent(templateFileName)
             templateFile = ROOT_PATH & templateFileName 
         end if 
     end if 
-    c = getFText(templateFile) 
+    c = readFile(templateFile,"") 
     c = replaceLableContent(c) 
     getTemplateContent = c 
 end function 
@@ -201,23 +201,27 @@ end function
 '栏目类别循环配置        showColumnList(parentid, "webcolumn", ,"",0, defaultStr,3,"")   nCount为深度值   thisPId为交点的id
 function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal thisPId, nCount, byVal action)
     dim i, s, c, selectcolumnname, selStr, url, isFocus, sql, addSql, listLableStr, topnav,nRecordCount
-    dim thisColumnName, sNavheaderStr, sNavfooterStr 
+    dim thisColumnName, sNavheaderStr, sNavfooterStr ,focusRootColumeId
 	dim titleFieldName			'标题字段名称
 	titleFieldName="title"
-	if lcase(tableName)="webcolumn" then
+	if instr("|webcolumn|bbscolumn|caicolumn|", "|" & lcase(tableName) & "|")>0 then
 		titleFieldName="columnname"
-	end if 
+	end if
 	
     parentid = trim(parentid) 
     listLableStr = "list" 
 
     topnav = getStrCut(action, "[topnav]", "[/topnav]", 2) 
+    focusRootColumeId = getStrCut(action, "[rootcolumeid]", "[/rootcolumeid]", 2) 
     thisColumnName = getColumnName(parentid) 
     'call echo(parentid,topnav)
 
     if parentid <> topnav then
-        if instr(action, "[small-list") > 0 then
-            listLableStr = "small-list" 
+		'深度20180116
+		if instr(action, "[small"& nCount &"-list") > 0 then
+            listLableStr = "small"& nCount & "-list"   
+        elseif instr(action, "[small-list") > 0 then
+            listLableStr = "small-list"
         end if 
     end if 
     'call echo("listLableStr",listLableStr)
@@ -253,7 +257,8 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
                 startStr = "" : endStr = "" 
                 selStr = "" 
                 isFocus = false 
-                if CStr(rs("id")) = CStr(thisPId) then
+				'改进
+                if CStr(rs("id")) = CStr(thisPId) or (focusRootColumeId<>"" and CStr(rs("id"))=cstr(focusRootColumeId)) then
                     selStr = " selected " 
                     isFocus = true 
                 end if 
@@ -342,7 +347,14 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
                     if rs("parentid") = "-1" and instr(action, "[navheader]") > 0 then
                         sNavheaderStr = getStrCut(action, "[navheader]", "[/navheader]", 2) 
                         sNavfooterStr = getStrCut(action, "[navfooter]", "[/navfooter]", 2) 
-                    'call die(sNavfooterStr)
+						if isFocus = true then
+							if instr(action,"[navheader-focus]")>0 then
+                        		sNavheaderStr = getStrCut(action, "[navheader-focus]", "[/navheader-focus]", 2) 
+							end if
+							if instr(action,"[navfooter-focus]")>0 then
+                        		sNavfooterStr = getStrCut(action, "[navfooter-focus]", "[/navfooter-focus]", 2) 
+							end if
+						end if
                     end if
 					
 					if EDITORTYPE<>"jsp" then 
@@ -435,6 +447,13 @@ function dispalyManage(actionName, lableTitle, byVal nPageSize, addSql)
 
     dim replaceStr                                                                  '替换字符
     tableName = LCase(actionName)                                                   '表名称
+	
+	dim columnTalbeName:columnTalbeName="webColumn"								    '类表名称 
+	if instr(lcase("|bbsdetail|"), lcase(tableName))>0 then
+		columnTalbeName="bbsColumn"												    '类表名称 
+	elseif instr(lcase("|caidetail|"), lcase(tableName))>0 then
+		columnTalbeName="caiColumn"
+	end if
 
     searchfield = request("searchfield")                                            '获得搜索字段值
     keyWord = request("keyword")                                                    '获得搜索关键词值
@@ -454,29 +473,49 @@ function dispalyManage(actionName, lableTitle, byVal nPageSize, addSql)
     fieldNameList = specialStrReplace(fieldNameList)                                '特殊字符处理
     splFieldName = split(fieldNameList, ",")                                        '字段分割成数组
 
+	'追加于20170702
+	dim customTemplatePath,templatePath
+	templatePath="manage_" & tableName & ".html"
+	if request("template")<>"" then
+		customTemplatePath="manage_" & request("template") & ".html"
+		if checkFile(customTemplatePath)=true then
+			templatePath=customTemplatePath
+		end if
+	end if
     '读模板
-    content = getTemplateContent("manage_" & tableName & ".html") 
+    content = getTemplateContent(templatePath) 
 
     action = getStrCut(content, "[list]", "[/list]", 2) 
     '网站栏目单独处理      栏目不一样20160301
-    if actionName = "WebColumn" then
+    if actionName = "WebColumn" or actionName = "BBSColumn" or actionName = "CaiColumn" then
         action = getStrCut(content, "[action]", "[/action]", 1) 
-        content = replace(content, action, showColumnList( "-1", "WebColumn", "columnname", "", 0, action)) 
+        content = replace(content, action, showColumnList( "-1", actionName, "columnname", "", 0, action))
+		
+		
     elseIf actionName = "ListMenu" then
         action = getStrCut(content, "[action]", "[/action]", 1) 
         content = replace(content, action, showColumnList( "-1", "listmenu", "title", "", 0, action)) 
     else
         if keyWord <> "" and searchfield <> "" then
-            addSql = getWhereAnd(" where " & searchfield & " like '%" & keyWord & "%' ", addSql) 
+			if left(keyWord,2)="==" then
+				keyWord=mid(keyWord,3)
+				if searchfield<>"id" and instr(getHandleFieldList(db_PREFIX & tableName, "字段配置列表"), ","& searchfield &"|numb|")=false then
+					keyWord="'"& keyWord &"'" 
+				end if  
+				
+            	addSql = getWhereAnd(" where " & searchfield & " = " & keyWord & " ", addSql) 
+			else
+            	addSql = getWhereAnd(" where " & searchfield & " like '%" & keyWord & "%' ", addSql) 
+			end if
         end if 
         if parentid <> "" then
             addSql = getWhereAnd(" where parentid=" & parentid & " ", addSql) 
         end if 
         'call echo(tableName,addsql)
-        sql = "select * from " & db_PREFIX & tableName & " " & addSql 
+        sql = getWhereAnd("select * from " & db_PREFIX & tableName , addSql) 	'改进于20180128
         '检测SQL
         if checksql(sql) = false then
-            call errorLog("出错提示：<br>action=" & action & "<hr>sql=" & sql & "<br>") 
+            call errorLog("出错提示5：<br>action=" & action & "<hr>sql=" & sql & "<br>") 
             exit function 
         end if 
 		'【@是jsp显示@】try{	
@@ -541,7 +580,10 @@ function dispalyManage(actionName, lableTitle, byVal nPageSize, addSql)
             rs.open sql, conn, 1, 1 '【@是.netc屏蔽@】'【@是jsp屏蔽@】
             '【PHP】删除rs
             nX = rs.recordCount '【@是.netc屏蔽@】'【@是jsp屏蔽@】
-        end if 
+        end if
+		'待屏蔽
+    	content = replaceValueParam(content, "print_sql", sql)     '打印出SQL
+		
         for i = 1 to nX
             '【PHP】$rs=mysql_fetch_array($rsObj);                                            //给PHP用，因为在 asptophp转换不完善  特殊
             '【@是.netc显示@】rs.Read();
@@ -600,9 +642,9 @@ function dispalyManage(actionName, lableTitle, byVal nPageSize, addSql)
 
     end if 
 
-    if inStr(content, "[$input_parentid$]") > 0 then
+    if inStr(content, "[$input_parentid$]") > 0 then  
         action = "[list]<option value=""[$id$]""[$selected$]>[$selectcolumnname$]</option>[/list]" 
-        c = "<select name=""parentid"" id=""parentid""><option value="""">≡ 选择栏目 ≡</option>" & showColumnList( "-1", "webcolumn", "columnname", parentid, 0, action) & vbCrLf & "</select>" 
+        c = "<select name=""parentid"" id=""parentid""><option value="""">≡ 选择栏目 ≡</option>" & showColumnList( "-1", columnTalbeName, "columnname", parentid, 0, action) & vbCrLf & "</select>" 
         content = replace(content, "[$input_parentid$]", c)                        '上级栏目
     end if 
 
@@ -652,6 +694,11 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
     dim splStr, fieldConfig, defaultFieldValue, postUrl 
     dim subTableName, subFileName                                                   '子列表的表名称，子列表字段名称
     dim templateListStr, listStr, listS, listC 
+	
+	dim idname:idname=request("idname")
+	if idname="" then
+		idname="id"
+	end if
 
     dim id 
     id = rq("id") 
@@ -674,9 +721,18 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
     systemFieldList = getHandleFieldList(db_PREFIX & tableName, "字段配置列表") 
     splStr = split(systemFieldList, ",") 
 
-
+ 
+	'追加于20170702
+	dim customTemplatePath,templatePath
+	templatePath="addEdit_" & tableName & ".html"
+	if request("template")<>"" then
+		customTemplatePath="addEdit_" & request("template") & ".html"
+		if checkFile(customTemplatePath)=true then
+			templatePath=customTemplatePath
+		end if
+	end if
     '读模板
-    content = getTemplateContent("addEdit_" & tableName & ".html") 
+    content = getTemplateContent(templatePath) 
 
 
     '关闭编辑器
@@ -691,8 +747,8 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
     if id = "*" then
         sql = "select * from " & db_PREFIX & "" & tableName 
     else
-        sql = "select * from " & db_PREFIX & "" & tableName & " where id=" & id 
-    end if
+        sql = "select * from " & db_PREFIX & "" & tableName & " where "& idname &"=" & id 
+    end if 
 	
 	
     if inStr(",Admin,", "," & actionName & ",") > 0 then
@@ -722,27 +778,26 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
             content = replace(content, "<!--template_list-->" & templateListStr & "<!--/template_list-->", listC) 
         end if 
 
-
-        if flags = "|*|" or(getsession("adminId") = id and getsession("adminflags") = "|*|" and id <> "") then
+		 
+		
+		'超级管理员
+		if cstr(getsession("adminId")) = cstr(id) and getsession("adminflags") = "|*|" and id <> "" then
             s = getStrCut(content, "<!--普通管理员-->", "<!--普通管理员end-->", 1) 
-            content = replace(content, s, "") 
+            content = replace(content, s, "<input name='flags' type='hidden' value='*' />") 
+			
+			
             s = getStrCut(content, "<!--用户权限-->", "<!--用户权限end-->", 1) 
             content = replace(content, s, "") 
 
-            'call echo("","1")
+            s = getStrCut(content, "<!--超级管理员-->", "<!--超级管理员end-->", 1) 
+            content = replace(content, s, "")   
+			
             '普通管理员权限选择列表
         elseIf(id <> "" or addOrEdit = "添加") and getsession("adminflags") = "|*|" then
             s = getStrCut(content, "<!--超级管理员-->", "<!--超级管理员end-->", 1) 
             content = replace(content, s, "") 
             s = getStrCut(content, "<!--用户权限-->", "<!--用户权限end-->", 1) 
-            content = replace(content, s, "") 
-        'call echo("","2")
-        else
-            s = getStrCut(content, "<!--超级管理员-->", "<!--超级管理员end-->", 1) 
-            content = replace(content, s, "") 
-            s = getStrCut(content, "<!--普通管理员-->", "<!--普通管理员end-->", 1) 
-            content = replace(content, s, "") 
-        'call echo("","3")
+            content = replace(content, s, "")
         end if 
     end if
 	
@@ -752,7 +807,7 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
     if id <> "" then
         rs.open sql, conn, 1, 1 
         if not rs.EOF then
-            id = rs("id") 
+            id = rs(idname)			'id 
         end if 
         '标题颜色
         if inStr(systemFieldList, ",titlecolor|") > 0 then
@@ -812,12 +867,19 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
             if fieldValue <> "" then
                 fieldValue = replace(replace(fieldValue, """", "&quot;"), "<", "&lt;") '在input里如果直接显示"的话就会出错了
             end if 
-            if inStr(",ArticleDetail,WebColumn,ListMenu,", "," & actionName & ",") > 0 and fieldName = "parentid" then
+            if inStr(lcase(",ArticleDetail,WebColumn,ListMenu,BBSColumn,BBSDetail,CaiColumn,CaiDetail,"), "," & lcase(actionName) & ",") > 0 and fieldName = "parentid" then
                 defaultList = "[list]<option value=""[$id$]""[$selected$]>[$selectcolumnname$]</option>[/list]" 
                 if addOrEdit = "添加" then
                     fieldValue = request("parentid") 
-                end if 
-                subTableName = "webcolumn" 
+                end if  
+                subTableName = "webcolumn"
+				if instr(lcase("|BBSColumn|BBSDetail|"), "|"& lcase(actionName) &"|")>0 then
+                	subTableName = "bbscolumn"
+				elseif instr(lcase("|CaiColumn|CaiDetail|"), "|"& lcase(actionName) &"|")>0 then
+                	subTableName = "caicolumn"
+				end if
+				
+				
                 subFileName = "columnname" 
                 if actionName = "ListMenu" then
                     subTableName = "listmenu" 
@@ -918,6 +980,7 @@ function addEditDisplay(actionName, lableTitle, byVal fieldNameList)
     content = replace(content, "{$WEB_VIEWURL$}", WEB_VIEWURL)                      '前端浏览网址
     content = replace(content, "{$Web_Title$}", cfg_webTitle)  
     content = replaceValueParam(content, "EDITORTYPE", EDITORTYPE)                        'ASP与PHP
+    content = replaceValueParam(content, "idname", idname)                        '主键
 
 
 
@@ -999,6 +1062,10 @@ function del(actionName, lableTitle)
     dim tableName, url 
     tableName = LCase(actionName)                                                   '表名称
     dim id 
+	dim idname:idname=request("idname")
+	if idname="" then
+		idname="id"
+	end if
 
     call handlePower("删除" & lableTitle)                                           '管理权限处理
 
@@ -1012,7 +1079,7 @@ function del(actionName, lableTitle)
         '管理员
         if actionName = "Admin" then
 			'【@是jsp显示@】try{	
-            rs.open "select * from " & db_PREFIX & "" & tableName & " where id in(" & id & ") and flags='|*|'", conn, 1, 1 
+            rs.open "select * from " & db_PREFIX & "" & tableName & " where "& idname &" in(" & id & ") and flags='|*|'", conn, 1, 1 
             if not rs.EOF then
                 call rwend(getMsg1("删除失败，系统管理员不可以删除，正在进入" & lableTitle & "列表...", url)) 
             end if : rs.close 
@@ -1030,6 +1097,11 @@ end function
 '排序处理
 function sortHandle(actionType)
     dim splId, splValue, i, id, nSortRank, tableName, url ,s
+	dim idname:idname=request("idname")
+	if idname="" then
+		idname="id"
+	end if
+	
     tableName = LCase(actionType)                                                   '表名称
     splId = split(request("id"), ",") 
     splValue = split(request("value"), ",") 
@@ -1040,15 +1112,43 @@ function sortHandle(actionType)
         if s = "" then
             nSortRank = 0 
 		else
-			nSortRank=cint(nSortRank)
+			nSortRank=cint(s)
         end if 
-        conn.execute("update " & db_PREFIX & tableName & " set sortrank=" & nSortRank & " where id=" & id) 
+        conn.execute("update " & db_PREFIX & tableName & " set sortrank=" & nSortRank & " where "& idname &"=" & id) 
     next 
     url = getUrlAddToParam(getThisUrl(), "?act=dispalyManageHandle", "replace") 
     call rw(getMsg1("更新排序完成，正在返回列表...", url)) 
 
     call writeSystemLog(tableName, "排序" & request("lableTitle"))                  '系统日志
 end function 
+'批量修改价格
+function batchEditPrice(actionType)
+    dim splId, splValue, i, id, nPrice, tableName, url ,s
+	dim idname:idname=request("idname")
+	if idname="" then
+		idname="id"
+	end if
+	
+    tableName = LCase(actionType)                                                   '表名称
+    splId = split(request("id"), ",") 
+    splValue = split(request("value"), ",") 
+    for i = 0 to uBound(splId)
+        id = splId(i) 
+        s = splValue(i)  
+
+        if s = "" then
+            nPrice = 0 
+		else
+			nPrice=cint(s)
+        end if 
+        conn.execute("update " & db_PREFIX & tableName & " set Price=" & nPrice & " where "& idname &"=" & id) 
+    next 
+    url = getUrlAddToParam(getThisUrl(), "?act=dispalyManageHandle", "replace") 
+    call rw(getMsg1("更新价格完成，正在返回列表...", url)) 
+
+    call writeSystemLog(tableName, "价格" & request("lableTitle"))                  '系统日志
+end function 
+
 
 '更新字段
 function updateField()
@@ -1062,7 +1162,7 @@ function updateField()
     'call echo(fieldname,fieldvalue)
     'call echo("fieldNameList",fieldNameList)
     if inStr(fieldNameList, "," & fieldName & ",") = 0 then
-        call eerr("出错提示", "表(" & tableName & ")不存在字段(" & fieldName & ")") 
+        call eerr("出错提示2", "表(" & tableName & ")不存在字段(" & fieldName & ")") 
     else
         conn.execute("update " & db_PREFIX & tableName & " set " & fieldName & "=" & fieldvalue & " where id=" & id) 
     end if 
@@ -1385,7 +1485,7 @@ function getAdminOneMenuList()
     sql = "select * from " & db_PREFIX & "listmenu where parentid=-1 " & addSql & " and isdisplay<>0 order by sortrank" 
     '检测SQL
     if checksql(sql) = false then
-        call errorLog("出错提示：<br>function=getAdminOneMenuList<hr>sql=" & sql & "<br>") 
+        call errorLog("出错提示6：<br>function=getAdminOneMenuList<hr>sql=" & sql & "<br>") 
         exit function 
     end if 
 	'【@是jsp显示@】try{	
@@ -1410,7 +1510,7 @@ function getAdminMenuList()
     sql = "select * from " & db_PREFIX & "listmenu where parentid=-1 " & addSql & " and isdisplay<>0 order by sortrank" 
     '检测SQL
     if checksql(sql) = false then
-        call errorLog("出错提示：<br>function=getAdminMenuList<hr>sql=" & sql & "<br>") 
+        call errorLog("出错提示7：<br>function=getAdminMenuList<hr>sql=" & sql & "<br>") 
         exit function 
     end if 
 	'【@是jsp显示@】try{	
@@ -1536,7 +1636,7 @@ function executeSQL()
         call openconn() 
         '检测SQL
         if checksql(sqlvalue) = false then
-            call errorLog("出错提示：<br>sql=" & sqlvalue & "<br>") 
+            call errorLog("出错提示8：<br>sql=" & sqlvalue & "<br>") 
             exit function 
         end if 
         call echo("执行SQL语句成功", sqlvalue) 

@@ -77,6 +77,34 @@ KindEditor.ready(function(K) {
 			});
 		});
 	}); 
+	K('#btnimage960px').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#image960px').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#image960px').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	}); 
+	K('#btnimage1280px').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#image1280px').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#image1280px').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	}); 
+	
+	
+	
+	
 }); 
 </script> 
  
@@ -252,10 +280,37 @@ KindEditor.ready(function(K) {
                         <td align="left" style="padding:3px;">[$textarea1_temptxt2$]</td>
                         <td>temptxt2</td>
                     </tr>
+                    
+                    
+  <tr align="center" height="25" bgcolor="#ffffff">
+                        <td>960像素图片</td>
+                        <td align="left" style="padding:3px;">[$input_image960px$]<input type="button" class="btnclick1" id="btnimage960px" value="选择图片" />（本地上传）</td>
+                        <td>image960px</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>1280像素图片</td>
+                        <td align="left" style="padding:3px;">[$input_image1280px$]<input type="button" class="btnclick1" id="btnimage1280px" value="选择图片" />（本地上传）</td>
+                        <td>image1280px</td>
+                    </tr>  
+                    
+                    
                    <tr align="center" height="25" bgcolor="#ffffff">
                         <td>点击数</td>
                         <td align="left" style="padding:3px;">[$input_hits$]</td>
                         <td>hits</td>
+                    </tr>
+                    
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>生成静态文件</td>
+                        <td align="left" style="padding:3px;">
+                    <select name="memberusercheck" id="memberusercheck">
+<option value=''>会员登录检测</option>
+<option selected value='0'>默认</option>
+<option value="1"[$memberusercheck if='1' value=' selected'$]>登录检测</option>
+<option value="2"[$memberusercheck if='2' value=' selected'$]>登录不检测</option>
+</select>  </td>
+                        <td>memberusercheck</td>
                     </tr>
                 </tbody> 
         </table>

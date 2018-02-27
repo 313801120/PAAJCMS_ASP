@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -312,6 +312,33 @@ function getParamValue(content, paramName)
             end if 
         end if 
     next 
+end function 
+ 
+
+
+
+
+'检测Html内容是否设置了编码(当前页没有调用过20150119)  暂时留着
+function checkContentCharset(byVal content, byVal char_Set)
+    content = LCase(content) 
+    char_Set = LCase(char_Set) 
+    checkContentCharset = true 
+    if inStr(content, "<meta ") > 0 then
+        dim i, s, tempS, lalType, lalStr 
+        for i = 1 to len(content)
+            s = mid(content, i, 1) 
+            if s = "<" then
+                tempS = LCase(mid(content, i)) 
+                lalType = LCase(mid(tempS, 1, inStr(tempS, " "))) 
+                if lalType = "<meta " then
+                    lalStr = mid(tempS, 1, inStr(tempS, ">")) 
+                    if inStr(lalStr, "charset") > 0 then
+                        if inStr(lalStr, char_Set) = 0 then checkContentCharset = false 
+                    end if 
+                end if 
+            end if 
+        next 
+    end if 
 end function 
 
 %>     

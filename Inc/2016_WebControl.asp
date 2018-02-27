@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -229,10 +229,16 @@ function replaceValueParam(content, paramName, replaceStr)
     dim elseIfValue, elseValue                                                      '第二判断值
     dim instrStr, instr2Str                                                         '查找字符
     dim tempReplaceStr                                                              '暂存
+	dim stype																		'类型
+	dim nLeft,nRight
+	dim isIf,isElseIf:isIf=false:isElseIf=false										'为if判断
+	dim isDefault:isDefault=true													'是否为默认值 
+	dim tableName																	'操作表名称
     'ReplaceStr = ReplaceStr & "这里面放上内容在这时碳呀。"
     'ReplaceStr = CStr(ReplaceStr)            '转成字符类型
     if isNul(replaceStr) = true then replaceStr = "" 
     tempReplaceStr = replaceStr 
+	dim ssubnav												'调用子导航动作
 
     '最多处理99个  20160225
     for i = 1 to 999
@@ -254,6 +260,16 @@ function replaceValueParam(content, paramName, replaceStr)
             '删除Html
             delHtmlYes = rParam(labelStr, "delHtml")                                        '是否删除Html
             if delHtmlYes = "true" then replaceStr = replace(delHtml(replaceStr), "<", "&lt;") 'HTML处理
+			
+			'删除url后台为index.html 20180106
+			dim delIndexHtml			        
+			delIndexHtml = rParam(labelStr, "delIndexHtml")            
+			if delIndexHtml=true or delIndexHtml="1" then 
+				if lcase(right(replaceStr,10))="index.html" then
+					replaceStr=left(replaceStr,len(replaceStr)-10)
+				end if
+			end if
+			
             '删除两边空格
             trimYes = rParam(labelStr, "trim")                                              '是否删除两边空格
             if trimYes = "true" then replaceStr = trimVbCrlf(replaceStr) 
@@ -262,16 +278,26 @@ function replaceValueParam(content, paramName, replaceStr)
             sLen = rParam(labelStr, "len")                                                  '字符长度值
             sLen = handleNumber(sLen) 
             'If sLen<>"" Then ReplaceStr = CutStr(ReplaceStr,sLen,"null")' Left(ReplaceStr,sLen)
-            if sLen <> "" then 
-			
+            if sLen <> "" then  
 				replaceStr = cutStr(replaceStr, cint(sLen), "...")           'Left(ReplaceStr,nLen)
-			
 			end if
+			'调用 子导航20180116
+			ssubnav=rParam(labelStr, "subnav")     
+			if ssubnav<>"" then
+				replaceStr=subnav(replaceStr,ssubnav)
+			end if 
+			
+			
             '时间处理
             sNTimeFormat = rParam(labelStr, "format_time")                                   '时间处理值
+			tableName = rParam(labelStr, "tablename")										'表名称 
             if sNTimeFormat <> "" then
-                replaceStr = format_Time(replaceStr, cint(sNTimeFormat)) 
-            end if 
+				if instr("qmydwhms",sNTimeFormat)>0 then
+                	replaceStr = getFormatYMD(replaceStr, sNTimeFormat) 
+				else
+                	replaceStr = format_Time(replaceStr, cint(sNTimeFormat)) 
+            	end if
+			end if 
 
             '获得栏目名称
             s = rParam(labelStr, "getcolumnname") 
@@ -282,7 +308,7 @@ function replaceValueParam(content, paramName, replaceStr)
 				if EDITORTYPE = "jsp" then
 					replaceStr=s
 				else 	
-                	replaceStr = getcolumnname(s) 
+                	replaceStr =handleGetColumnName(tableName,s) 'getcolumnname(s) 
 				end if
             end if 
             '获得栏目URL
@@ -293,7 +319,7 @@ function replaceValueParam(content, paramName, replaceStr)
                 end if 
                 replaceStr = getcolumnurl(s, "id") 
             end if 
-            '是否为密码类型
+            '是否为密码类型  这是什么意思？？？
             s = rParam(labelStr, "password") 
             if s <> "" then
                 if s <> "" then
@@ -309,21 +335,59 @@ function replaceValueParam(content, paramName, replaceStr)
             elseValue = rParam(labelStr, "elsevalue") 
             instrStr = rParam(labelStr, "instr") 
             instr2Str = rParam(labelStr, "instr2") 
+            nLeft = rParam(labelStr, "left") 
+            nRight = rParam(labelStr, "right")  
+			
+            stype = trim(lcase(rParam(labelStr, "stype")))
+			
+			'为if判断检测
+			if instr(labelStr," if='")>0 then
+				isIf=true
+			end if
+			if instr(labelStr," elseif='")>0 then
+				isElseIf=true
+			end if
+			
+			'根据ID获得栏目名称
+			if stype=lcase("ParentColumnName") then
+				replaceStr=getParentColumnName(replaceStr)
+			'根据ID获得栏目网址
+			elseif stype=lcase("ColumnNameUrl") then
+				replaceStr=getColumnUrl(replaceStr,"")
+			'根据ID获得栏目网址
+			elseif stype=lcase("ColumnNameToNameUrl") then
+				replaceStr=getColumnUrl(replaceStr,"name")
+			end if
+			
+			'追加于20170603
+			if nLeft<>"" then
+				replaceStr=left(replaceStr,cint(nLeft))
+			elseif nRight<>"" then
+				replaceStr=right(replaceStr,cint(nRight))
+			end if
 
             'call echo("ifStr",ifStr)
             'call echo("valueStr",valueStr)
             'call echo("elseStr",elseStr)
             'call echo("elseIfStr",elseIfStr)
             'call echo("replaceStr",replaceStr)
-            if ifStr <> "" or instrStr <> "" then
-                if ifStr = CStr(replaceStr) and ifStr <> ""  then
+            if isIf=true then 
+				isDefault=false 						'默认值为假
+                if ifStr = CStr(replaceStr)   then		'and ifStr <> "" 
                     replaceStr = valueStr 
-                elseif elseIfStr = CStr(replaceStr) and elseIfStr <> "" then
+                elseif elseIfStr = CStr(replaceStr) and isElseIf=true then	'and elseIfStr <> ""
                     replaceStr = valueStr 
                     if elseIfValue <> "" then
                         replaceStr = elseIfValue 
-                    end if 
-                elseIf inStr(CStr(replaceStr), instrStr) > 0 and instrStr <> "" then
+                    end if
+				else 
+					replaceStr=elseValue				'IF默认值
+					isDefault=true 						'默认值为假
+					'call echo(ifStr , CStr(replaceStr))
+				end if
+			end if
+			if instrStr <> "" then
+                if inStr(CStr(replaceStr), instrStr) > 0 and instrStr <> "" then
                     replaceStr = valueStr 
                 elseIf inStr(CStr(replaceStr), instr2Str) > 0 and instr2Str <> "" then
 				
@@ -346,12 +410,10 @@ function replaceValueParam(content, paramName, replaceStr)
             end if 
 
             '默认值
-            s = rParam(labelStr, "default") 
-            if s <> "" and s <> "@ME" then
-                if replaceStr = "" then
-                    replaceStr = s 
-                end if 
-            end if 
+            s = rParam(labelStr, "default")  
+            if s <> "" and isDefault=true then   ' and s <> "@ME"  
+            	replaceStr = s  
+            end if
             'escape转码
             sIsEscape = lcase(rParam(labelStr, "escape")) 
             if sIsEscape = "1" or sIsEscape = "true" then
@@ -363,9 +425,8 @@ function replaceValueParam(content, paramName, replaceStr)
             if s <> "" then
                 replaceStr = "<font color=""" & s & """>" & replaceStr & "</font>" 
             end if 
-
-
-
+			 
+			replaceStr=replace(replaceStr,"@ME",tempReplaceStr)			'替换@ME这种20170707
 
             'call echo(tempLabelStr,replaceStr)
             content = replace(content, tempLabelStr, replaceStr) 

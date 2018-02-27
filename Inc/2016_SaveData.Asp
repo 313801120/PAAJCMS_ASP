@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -53,7 +53,7 @@ function autoSavePostData(sID, tableName, fieldNameList)
 	sql=getPostSql(sID, tableName, fieldNameList)
     '检测SQL
     If checksql(sql) = False Then
-        Call errorLog("出错提示：<hr>sql=" & sql & "<br>") 
+        Call errorLog("出错提示4：<hr>sql=" & sql & "<br>") 
         Exit Function 
     End If
 	'conn.execute(sql)			'checksql这一步就已经执行了不需要再执行了20160410
@@ -193,13 +193,21 @@ Function getPostSql(sID, tableName, fieldNameList)
             'call echo(fieldName,fieldSetType)
             End If 
         End If 
-    Next 
+    Next
+	
+	dim idname:idname=request("idname")
+	if idname="" then
+		idname="id"
+	end if
 
     If sID = "" Then
         sql = "insert into " & db_PREFIX & "" & tableName & " (" & fieldList & ",updatetime) values(" & valueStr & ",'" & Now() & "')" 
     Else
-		'call echo("editValueStr",editValueStr)
-        sql = "update " & db_PREFIX & "" & tableName & " set " & editValueStr & ",updatetime='" & Now() & "' where id=" & sID 
+		'判断是否自动添加修改字段
+		if instr(systemFieldList,",updatetime|")>0 then
+			editValueStr=editValueStr & ",updatetime='" & Now() & "'"
+		end if
+        sql = "update " & db_PREFIX & "" & tableName & " set " & editValueStr & " where "& idname &"=" & sID 
     End If 
     getPostSql = sql 
 End Function 

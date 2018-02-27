@@ -1,14 +1,21 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
 '************************************************************
 %>
-<% 
+<%
+'求两数比分比方法
+'dim a,b,c
+'a=1002
+'b=6003
+'c=(a+b)/100
+'response.Write(a/c)
+ 
 
 '判断是否为字符转义 
 function isStrTransferred(content)
@@ -256,7 +263,7 @@ function handleZipSize(byVal zipSize)
         nSize = nSize * 1024 
     end if 
     handleZipSize = nSize 
-    if err then doError err.description, "HandleZipSize 处理Zip大小 函数出错，ZipSize=" & zipSize 
+    if err then call doError(Err.description, "HandleZipSize 处理Zip大小 函数出错，ZipSize=" & zipSize) 
 end function 
 
 '//生成随机数
@@ -452,11 +459,17 @@ end function
 
 '获得有小数点数字
 function getDianNumb(byVal content)
-    dim i, s, c 
+    dim i, s, c,isDian
     c = "" 
+	isDian=false
     for i = 1 to len(content)
-        s = mid(content, i, 1) 
-        if inStr("0123456789.", s) > 0 then
+        s = mid(content, i, 1)
+		if s="." and isDian=true then
+			exit for
+		elseif s="." and c<>"" and isDian=false then
+			c=c & s
+			isDian=true 
+        elseif inStr("0123456789.", s) > 0 then
             c = c & s 
         end if 
     next 
@@ -602,6 +615,21 @@ function getNumberBeforeStr(content)
         c = c & s 
     next 
     getNumberBeforeStr = c 
+end function
+
+'获得数字包换负数 20171017
+function getNumberGroup(content)
+    dim i, s, c 
+    c = "" 
+    for i = 1 to len(content)
+        s = mid(content, i, 1) 
+        if s="-" and c="" then
+			c=s
+		elseif inStr("0123456789", s) > 0 then
+        	c = c & s 
+		end if
+    next 
+    getNumberGroup = c 
 end function 
 
 '获得随机数 20141212
@@ -779,5 +807,49 @@ function encodeJP(str)
     end if 
     encodeJP = str 
 end function 
+'中文转unicode
+function tounicode(str)
+    tounicode=""
+    dim i
+    for i=1 to len(str)
+    'asc函数：返回字符串的第一个字母对应的ANSI字符代码
+        'AscW函数：返回每一个GB编码文字的Unicode字符代码
+        'hex函数：返回表示十六进制数字值的字符串
+        tounicode=tounicode & "\u" & LCase(Right("0000" & Cstr(hex(AscW(mid(str,i,1)))),4))
+    next
+end function
+'\u51cc\u9648\u4eae\u535a\u5ba2
+function unicodeto(str) 'unicode转中文
+	dim i,s,c
+	for i=1 to len(str)
+		s=mid(str&"  ",i,2)
+		if s="\u" then
+			c=c & ChrW(cint("&H" & mid(str,i+2,4)))
+			i=i+5
+		else
+			c=c & mid(str,i,1)
+		end if
+		
+	next
+	unicodeto=c
+end function
+'把标准时间转换为UNIX时间戳 response.Write toUnixTime(now(), +8)
+Function toUnixTime(strTime, intTimeZone)
+    If IsEmpty(strTime) or Not IsDate(strTime) Then strTime = Now
+    If IsEmpty(intTimeZone) or Not isNumeric(intTimeZone) Then intTimeZone = 0
+    toUnixTime = DateAdd("h",-intTimeZone,strTime)
+    toUnixTime = DateDiff("s","1970-01-01 00:00:00", toUnixTime)
+End Function
+
+'把UNIX时间戳转换为标准时间 response.Write "<hr>" & fromUnixTime("1513858770", +8)
+Function fromUnixTime(intTime, intTimeZone)
+    If IsEmpty(intTime) or Not IsNumeric(intTime) Then
+        fromUnixTime = Now()
+        Exit Function
+    End If         
+    If IsEmpty(intTime) or Not IsNumeric(intTimeZone) Then intTimeZone = 0
+    fromUnixTime = DateAdd("s", intTime, "1970-01-01 00:00:00")
+    fromUnixTime = DateAdd("h", intTimeZone, fromUnixTime)
+End Function
 %>   
 

@@ -1,198 +1,71 @@
+【#jump#】true为true则为跳过当前
+【#top#】true为true则为停止全部
+-------------------------------
 【#sub#】
-Home【|】columntype='首页' parentid='-1' flags='|top|'
-About Us【|】columntype='文本' flags='|top|foot|'
-	Company profile 
-	Enterprise culture 
-	Organizational 
-	Honorary certificate 
-	Production capacity 
-	General Terms & Conditions
-What's Hot【|】columntype='新闻' flags='|top|foot|'
-	New Items 
-	Trends 
-	Best Sellers 
-	Closeout Sale
--------------------------------
-【#stop#】true
-【columnname】首页
-【columntype】首页
-【sortrank】0
-【filename】/
-【flags】|top|foot|
-【parentid】-1
-【labletitle】
-【target】
-【webtitle】首页 标题
-【webkeywords】首页 关键词
-【webdescription】首页 描述
-【bodycontent】
+网站首页【|】columntype='首页' columnenname='HOME' parentid='-1' flags='|top|' sortrank='1'
+成功案例【|】columntype='产品' columnenname='CASES' flags='|top|' sortrank='2'
+	别墅软装
+	商业类软装
+	样板房软装
+	酒店软装
+	视频样板房
+		aa
+			bb
+				cc
+					dd
+						ee
+						ee2
+整装设计【|】columntype='产品' columnenname='DESIGN' flags='|top|' sortrank='3'
+	现代风格
+	新古典风格
+	中式风格
+	美式风格
+	欧式风格
+软装产品【|】columntype='产品' columnenname='PRODUCE' flags='|top|' sortrank='4' templatepath='txt_product_class.html'
+	家具【|】columnenname='Furniture' bannerimage='[$cfg_webimages$]/c8eb505a425678ae.jpg'
+	窗帘【|】columnenname='Window curtains'  bannerimage='[$cfg_webimages$]/cd139ca788f9eaae.jpg'
+	软包【|】columnenname='Soft roll'  bannerimage='[$cfg_webimages$]/3594ad14cc79dfa9.jpg'
+	地毯【|】columnenname='Carpet'  bannerimage='[$cfg_webimages$]/bf4104e6d6feee2d.jpg'
+	壁纸【|】columnenname='Wallpaper'  bannerimage='[$cfg_webimages$]/523072ba8ecf3633.jpg'
+	灯具【|】columnenname='Lamps'  bannerimage='[$cfg_webimages$]/bf19c66263342372.jpg'
+	装饰画【|】columnenname='Decorative'  bannerimage='[$cfg_webimages$]/df3a078b60d81485.jpg'
+	家饰小品【|】columnenname='Furniture pieces'  bannerimage='[$cfg_webimages$]/4e0befc03944cb1a.jpg'
+设计团队【|】columntype='产品' columnenname='TEAM' flags='|top|' sortrank='5' labletitle=' style="margin-left:180px;" '
 
-【/bodycontent】
--------------------------------
-【columnname】关于我们
-【columntype】文本
-【sortrank】10
-【filename】/asptophp/
-【templatepath】
-【flags】|top|
-【parentid】-1
-【labletitle】
-【target】
-【webtitle】关于我们 标题
-【webkeywords】关于我们 关键词
-【webdescription】关于我们 描述
-【bodycontent】
-关于我们 详细内容
-【/bodycontent】
--------------------------------
-【columnname】新闻中心
-【columntype】新闻
-【sortrank】20
-【filename】/asptophp/
-【templatepath】
-【flags】|top|
-【parentid】-1
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】新闻中心 标题
-【webkeywords】新闻中心 关键词
-【webdescription】新闻中心 描述
-【bodycontent】
+专业服务【|】columntype='文本' columnenname='SERVICE' flags='|top|' sortrank='6'
+	服务范围
+	服务流程
+	服务优势
+	常见问题
+	客户感言
+	在线订单
 
-【/bodycontent】
--------------------------------
-【columnname】产品展示
-【columntype】产品
-【sortrank】30
-【filename】/asptophp/
-【templatepath】
-【flags】|top|
-【parentid】-1
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】产品展示 标题
-【webkeywords】产品展示 关键词
-【webdescription】产品展示 描述
-【bodycontent】
+资讯中心【|】columntype='新闻' columnenname='NEWS' flags='|top|' sortrank='7'
+	企业资讯
+	业界动态
+	软装课堂
 
-【/bodycontent】
--------------------------------
-【columnname】花
-【columntype】产品
-【sortrank】30
-【filename】/asptophp/
-【templatepath】
-【flags】
-【parentid】产品展示
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】花 标题
-【webkeywords】花 关键词
-【webdescription】花 描述
-【bodycontent】
 
-【/bodycontent】
--------------------------------
-【columnname】草
-【columntype】产品
-【sortrank】30
-【filename】/asptophp/
-【templatepath】
-【flags】
-【parentid】产品展示
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】草 标题
-【webkeywords】草 关键词
-【webdescription】草 描述
-【bodycontent】
+关于我们【|】columntype='文本' columnenname='ABOUT' flags='|top|' sortrank='8'
+	品牌故事
+	企业文化 
+	企业荣誉
+	软装品牌
+	联系我们
 
-【/bodycontent】
+banner【|】columntype='新闻' columnenname='Banner' flags='||' sortrank='100'
 -------------------------------
-【columnname】树
-【columntype】产品
-【sortrank】30
-【filename】/asptophp/
-【templatepath】
-【flags】
-【parentid】产品展示
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】树 标题
-【webkeywords】树 关键词
-【webdescription】树 描述
-【bodycontent】
+【#jump#】true
+【免责声明】
+【/免责声明】
 
-【/bodycontent】
--------------------------------
-【columnname】留言
-【columntype】留言
-【sortrank】40
-【filename】/asptophp/
-【templatepath】
-【flags】|top|
-【parentid】-1
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】留言 标题
-【webkeywords】留言 关键词
-【webdescription】留言 描述
-【bodycontent】
 
-【/bodycontent】
--------------------------------
-【columnname】反馈
-【columntype】反馈
-【sortrank】50
-【filename】/asptophp/
-【templatepath】
-【flags】|top|
-【parentid】-1
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】反馈 标题
-【webkeywords】反馈 关键词
-【webdescription】反馈 描述
-【bodycontent】
 
-【/bodycontent】
--------------------------------
-【columnname】招聘
-【columntype】招聘
-【sortrank】60
-【filename】/asptophp/
-【templatepath】
-【flags】|top|
-【parentid】-1
-【labletitle】
-【target】
-【npagesize】6
-【webtitle】招聘 标题
-【webkeywords】招聘 关键词
-【webdescription】招聘 描述
-【bodycontent】
 
-【/bodycontent】
--------------------------------
-【columnname】联系我们
-【columntype】文本
-【sortrank】90
-【filename】/asptophp/
-【templatepath】
-【flags】|top|
-【parentid】-1
-【labletitle】
-【target】
-【webtitle】联系我们 标题
-【webkeywords】联系我们 关键词
-【webdescription】联系我们 描述
-【bodycontent】
-联系我们 详细内容
-【/bodycontent】
+
+
+
+
+
+
+

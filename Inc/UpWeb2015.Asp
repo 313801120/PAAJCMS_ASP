@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -549,7 +549,7 @@ function checkFile(byVal fileName)
     set fso = createObject("Scripting.FileSystemObject")
         checkFile = fso.fileExists(fileName) 
     set fso = nothing 
-    if err then doError err.description, "checkFile 检查文件 函数出错，FileName=" & fileName 
+    if err then call doError(Err.description, "checkFile 检查文件 函数出错，FileName=" & fileName) 
 end function 
 
 function deleteFile(byVal fileName)
@@ -563,7 +563,7 @@ function deleteFile(byVal fileName)
             deleteFile = true 
         end if 
     set fso = nothing 
-    if err then doError err.description, "DeleteFile 删除文件 函数出错，FileName=" & fileName 
+    if err then call doError(Err.description, "DeleteFile 删除文件 函数出错，FileName=" & fileName) 
 end function 
 
 function getFileEditDate(byVal fileName)
@@ -577,7 +577,7 @@ function getFileEditDate(byVal fileName)
             set openFile = nothing 
         end if 
     set fso = nothing 
-    if err then doError err.description, "GetFileEditDate 获得文件修改时间 函数出错，FileName=" & fileName 
+    if err then call doError(Err.description, "GetFileEditDate 获得文件修改时间 函数出错，FileName=" & fileName) 
 end function 
 
 function format_Time(s_Time, n_Flag)
@@ -756,10 +756,10 @@ function writeToFile(byVal fileName, byVal content, byVal char_Set)
         stm.close 
         writeToFile = fileName & "写入成功" 
     set stm = nothing 
-    if err then doError err.description, "WriteToFile，数据流写入内容 函数出错，FileName=" & fileName & "，Content字符" & len(content) 
+    if err then call doError(Err.description, "WriteToFile，数据流写入内容 函数出错，FileName=" & fileName & "，Content字符" & len(content) )
 end function 
 
-sub doError(s, msg)
+sub call doError(s, msg)
     'On Error Resume Next
     dim nRnd, c 
     randomize 
@@ -839,7 +839,7 @@ function checkFolder(byVal folderName)
     set fso = createObject("Scripting.FileSystemObject")
         checkFolder = fso.folderExists(folderName) 
     set fso = nothing 
-    if err then doError err.description, "checkFolder 检查夹文件 函数出错，FolderName=" & folderName 
+    if err then call doError(Err.description, "checkFolder 检查夹文件 函数出错，FolderName=" & folderName) 
 end function 
 
 function createFolder(byVal folderPath)
@@ -853,7 +853,7 @@ function createFolder(byVal folderPath)
             createFolder = true 
         end if 
     set fso = nothing 
-    if err then doError err.description, "createFolder 创建文件夹 函数出错，FolderPath=" & folderPath & ":::" & fso.folderExists(folderPath) 
+    if err then call doError(Err.description, "createFolder 创建文件夹 函数出错，FolderPath=" & folderPath & ":::" & fso.folderExists(folderPath)) 
 end function 
 
 sub writeBinary(filePath, buf)
@@ -900,7 +900,7 @@ function createAddFile(byVal fileName, byVal content)
             createAddFile = addToFile(fileName, content) 
         end if 
     set fso = nothing 
-    if err then doError err.description, "CreateAddFile 创建文件，存在累加 函数出错，FileName=" & fileName 
+    if err then call doError(Err.description, "CreateAddFile 创建文件，存在累加 函数出错，FileName=" & fileName )
 end function 
 function addToFile(byVal fileName, byVal content)
     on error resume next 
@@ -917,7 +917,7 @@ function addToFile(byVal fileName, byVal content)
             addToFile = "追加信息成功" 
         end if 
     set fso = nothing 
-    if err then doError err.description, "AddToFile 追加文件信息 函数出错，FileName=" & fileName & "<br>Content字符长" & len(content) & " Content类型" & typeName(content) & "【" & content & "】" 
+    if err then call doError(Err.description, "AddToFile 追加文件信息 函数出错，FileName=" & fileName & "<br>Content字符长" & len(content) & " Content类型" & typeName(content) & "【" & content & "】" )
 end function 
 function existsZhiDuFile(byVal fileName)
     on error resume next 
@@ -938,7 +938,7 @@ function existsZhiDuFile(byVal fileName)
             existsZhiDuFile = CBool(existsZhiDuFile)                                        '让它成为布而类型
         end if 
     set fso = nothing 
-    if err then doError err.description, "ExistsZhiDuFile 判断只读文件 函数出错，FileName=" & fileName 
+    if err then call doError(Err.description, "ExistsZhiDuFile 判断只读文件 函数出错，FileName=" & fileName )
 end function 
 
 function editFileAttribute(byVal fileName, byVal n)
@@ -954,7 +954,7 @@ function editFileAttribute(byVal fileName, byVal n)
             editFileAttribute = true 
         end if 
     set fso = nothing 
-    if err then doError err.description, "EditFileAttribute 修改文件属性 函数出错，FileName=" & fileName 
+    if err then call doError(Err.description, "EditFileAttribute 修改文件属性 函数出错，FileName=" & fileName )
 end function 
 
 '图片转Base64 20150722引用网上 call echo("images/error.gif",ImagesToBase64("images/error.gif"))
@@ -1015,8 +1015,8 @@ function base64ToImages(saveImagePath, base64Data)
     dim xmlStr 
     saveImagePath = handlePath(saveImagePath) 
     xmlStr = "<data>" & base64Data & "</data>" 
-    dim xml : set xml = createObject("MSXML2.DOMDocument")
-        dim stm : set stm = createObject("ADODB.Stream")
+    dim xml : xml = createObject("MSXML2.DOMDocument")
+        dim stm : stm = createObject("ADODB.Stream")
             xml.resolveExternals = false 
             xml.loadxml(xmlStr) 
             xml.documentElement.setAttribute "xmlns:dt", "urn:schemas-microsoft-com:datatypes" 

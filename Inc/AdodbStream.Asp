@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -11,68 +11,198 @@
 <% 
 'AdodbStream Adodb.Stream组件操作大全 (2013,9,27)
 
+'获得二进制指定位置数值
+function midBin(bin,startPostion,nLength)
+	if lenB(bin)<startPostion+nLength then
+		midBin=&HFF									'长度不够刚退出一个转变二进制20171205
+	else
+		midBin=ascB(midB(bin, startPostion, nLength))
+	end if
+end function
+
+'二进制处理成   给图片合并用 97|98|99|49|50|51|214|208|185|250
+function bin2Int(bin,nPass)
+	dim g, str, clow 
+	for g = 1 to lenB(bin)
+		clow = midB(bin, g, 1) 
+		if ascB(clow) < 128 then
+			str = str & ascB(clow)+nPass & "|"
+		else
+			g = g + 1 
+			if g <= lenB(bin) then str = str  &  ascB(clow)+nPass & "|" & ascB(midB(bin, g, 1))+nPass & "|"
+		end if 
+	next 
+	if len(str)>0 then
+		str=mid(str,1,len(str)-1)
+	end if
+	bin2Int = str 
+end function 
+'数组转二进制  给图片合并用
+function arrayToBin(buf)
+	dim i,aBuf
+	'不是二进制处理成二进制(20151211)
+	if typeName(buf) <> "Byte()" then
+		reDim aBuf(uBound(buf) \ 2) 
+		for i = 0 to uBound(buf) - 1 step 2
+			aBuf(i \ 2) = chrW(buf(i + 1) * 256 + buf(i)) 
+		next 
+		if i = uBound(buf) then aBuf(i \ 2) = chrW(buf(i)) 
+		aBuf = join(aBuf, "")  
+	else
+		aBuf = buf 
+	end if
+	arrayToBin=aBuf
+end function
+'二进制到内容 给获得图片类型用
+function bin2Str(bin)
+	dim g, str, clow 
+	for g = 1 to lenB(bin)
+		clow = midB(bin, g, 1) 
+		if ascB(clow) < 128 then
+			str = str & chr(ascB(clow)) 
+		else
+			g = g + 1 
+			if g <= lenB(bin) then str = str & chr(ascW(midB(bin, g, 1) & clow)) 
+		end if 
+	next 
+	bin2Str = str 
+end function 
+'二进制到值 给获得图片类型用
+function binVal(bin)
+	dim ret 
+	dim h 
+	ret = 0 
+	for h = lenB(bin) to 1 step - 1
+		ret = ret * 256 + ascB(midB(bin, h, 1)) 
+	next 
+	binVal = ret 
+end function 
+'二进制转值第二种用法 给获得图片类型用
+function binVal2(bin)
+	dim ret, g 
+	ret = 0 
+	for g = 1 to lenB(bin)
+		ret = ret * 256 + ascB(midB(bin, g, 1)) 
+	next 
+	binVal2 = ret 
+end function 
+
+
 '检测文件编码
 function checkCode(byVal fileName)
     checkCode = getFileCharset(fileName) 
 end function 
-'获得文件编码
+'获得文件编码   为什么内容里有  结束  两个字就不可以获得编码呢？这种方法不好用呀
 function getFileCharset(byVal fileName)
-    on error resume next 
+  '  on error resume next 
     dim objStream, bintou 
-    call handlePath(fileName)                                                       '获得完整路径
+    call handlePath(fileName)  
+	getFileCharset = "gb2312"                                                      '获得完整路径
+	if checkFile(fileName)=false then
+		exit function
+	end if
+	'判断是否为空文件
+	If getFSize(fileName) = 0 Then
+		Exit Function
+	End If
     set objStream = createObject("ADODB.Stream")
         objStream.type = 1 
         objStream.mode = 3 
         objStream.open 
         objStream.position = 0 
         call objStream.loadFromFile(fileName) 
-        bintou = objStream.read(2)                                                      '以二进制方式读出二个字符出来(不太太)
-        if typeName(bintou) = "Null" then getFileCharset = "gb2312" : exit function 
-        if ascB(midB(bintou, 1, 1)) = &HEF and ascB(midB(bintou, 2, 1)) = &HBB then
+        bintou = objStream.read                                                       '以二进制方式读出二个字符出来(不太太)
+        
+	    if typeName(bintou) = "Null" or typeName(bintou) = "DBNull" then 
+			set objStream=nothing
+			exit function
+		end if 
+		if isUTF8(bintou)=true then
             getFileCharset = "utf-8" 
-        elseIf ascB(midB(bintou, 1, 1)) = &HFF and ascB(midB(bintou, 2, 1)) = &HFE then
-            getFileCharset = "unicode" 
-        else
-            getFileCharset = "gb2312" 
+        elseIf midBin(bintou, 1, 1) = &HFF and midBin(bintou, 2, 1) = &HFE then
+            getFileCharset = "unicode"  
         end if 
         objStream.close 
     set objStream = nothing 
-    if err then doError err.description, "getFileCharset，获得文件编码 函数出错，FileName=" & fileName 
+	'call echo(getFileCharset ,midBin(bintou, 1, 1) & "，" & midBin(bintou, 2, 1))
+    if err then call doError(Err.description, "getFileCharset，获得文件编码 函数出错，FileName=" & fileName) 
 
 end function 
-'获得文件编码Senior
-function seniorCheckCode(byVal fileName)
-    '暂时不这样用，因为慢，但是还要测试20150119
-    'CheckCode = checkFileCode(FileName)            '获得文件编码(这种慢 但精准)
-    'Exit Function
-    'On Error Resume Next
-    dim objStream, bintou 
-    call handlePath(fileName)                                                       '获得完整路径
-    set objStream = createObject("ADODB.Stream")
-        objStream.type = 1 
-        objStream.mode = 3 
-        objStream.open 
-        objStream.position = 0 
-        call objStream.loadFromFile(fileName) 
-        bintou = objStream.read(2)                                                      '以二进制方式读出二个字符出来(不太太)
-        if typeName(bintou) = "Null" then seniorCheckCode = checkFileCode(fileName) : exit function '改进2015019
-        'N1 = AscB(MidB(bintou, 1, 1)) : N2 = AscB(MidB(bintou, 2, 1))
-        'N = N1 & N2
-        if ascB(midB(bintou, 1, 1)) = &HEF and ascB(midB(bintou, 2, 1)) = &HBB then
-            seniorCheckCode = "UTF-8" 
-        elseIf ascB(midB(bintou, 1, 1)) = &HFF and ascB(midB(bintou, 2, 1)) = &HFE then
-            seniorCheckCode = "UNICODE" 
-        else
-            seniorCheckCode = checkFileCode(fileName)                                       '另一种超强获得文件编码方法
+'检测是否为UTF-8文件  超强版 引用于20161006
+Function isUTF8(Bytes)    
+	Dim i,  AscN  , Length,isOK,nLen
+	Length =lenB(Bytes) 
+
+	isUTF8 = True			'默认为真
+	'字符小于三为假
+	If Length < 3 Then
+		isUTF8 = False
+		Exit Function
+	ElseIf ascB(midB(Bytes,1,1)) = &HEF And ascB(midB(Bytes,2,1)) = &HBB And ascB(midB(Bytes,3,1)) = &HBF Then 
+		isUTF8 = True
+		Exit Function
+	End If 
+	nLen=lenB(Bytes)
+	if nLen>18048 then nLen=18048		'只截取1024个字符也OK,待更多测试 20171205 超大超不会出错为2K
+	for i = 1 to nLen 
+		isOK = False
+		If i + 1 < Length Then
+			If (ascB(midB(Bytes,i,1)) And &HE0) = &HC0 And (ascB(midB(Bytes,i+1,1)) And &HC0) = &H80 Then
+				isOK = True
+			End If
+		End If
+		If midBin(Bytes,i,1) < 128 Then 
+			AscN = AscN + 1
+		elseIf isOK=true Then 
+				i = i + 1
+		ElseIf i + 2 < Length Then 
+			If (ascB(midB(Bytes, i, 1)) And &HF0) = &HE0 And (ascB(midB(Bytes, i+1, 1)) And &HC0) = &H80 And (ascB(midB(Bytes, i+2, 1)) And &HC0) = &H80 Then
+				i = i + 2
+			Else 
+				isUTF8 = false 
+			End If
+		Else 
+			isUTF8 = false 
+		End If
+	next 
+	'为ascii码则为假
+	If AscN = Length Then
+		isUTF8 = false
+	End If
+	err.clear
+End Function
+'超级文件编码获取 待测试
+function checkFileCode(filePath)
+    dim splStr, c, content, toPath, yuanStr, s, nLen 
+    yuanStr = readBinary(filePath,0) 
+
+    'If Len(YuanStr) > 500 Then
+    'YuanStr = Right(YuanStr, Len(YuanStr) - 30)
+    'End If
+    '只提取2500个字符
+    if len(yuanStr) > 2500 then
+        yuanStr = right(yuanStr, 2500) 
+    end if 
+    nLen = len(yuanStr) 
+    toPath = filePath & "_Temp" 
+    splStr = split("GB2312|UTF-8|UNICODE", "|") 
+    for each s in splStr
+        content = readFile(filePath, s) 
+        call writeToFile(toPath, content, s) 
+        c = readBinary(toPath,0) 
+        c = right(c, nLen) 
+        if yuanStr = c then
+            checkFileCode = s 
+            call deleteFile(toPath)                                                         '删除这个临时文件
+            exit for 
         end if 
-        'CAll Rw(FileName & " >> Char_Set=" & CheckCode & " Code=" & N1  & "["& Chr(N1) &"]" &  "," & N2 & "["& Chr(N2) &"]" &"(utf-8(239,187),unicode(255,254)<br>")
-        objStream.close 
-    set objStream = nothing 
-    if err then doError err.description, "CheckCode，获得文件编码 函数出错，FileName=" & fileName 
+    next 
+    call deleteFile(toPath)                                                         '删除这个临时文件
 end function 
-'数据流读出内容
+
+ '数据流读出内容
 function readFile(byVal fileName, byVal char_Set)
-    on error resume next 
+    'on error resume next 
     if char_Set = "1" or uCase(char_Set) = "GB2312" then
         char_Set = "GB2312" 
     elseIf char_Set = "0" or uCase(char_Set) = "UTF-8" then
@@ -103,7 +233,7 @@ function readFile(byVal fileName, byVal char_Set)
                 stm.close 
             set stm = nothing 
             readFile = str 
-            if err then doError err.description, "ReadFile，数据流读出内容 函数出错，FileName=" & fileName 
+            if err then call doError(Err.description, "ReadFile，数据流读出内容 函数出错，FileName=" & fileName) 
         set fso = nothing 
     set stm = nothing 
 end function 
@@ -141,7 +271,7 @@ function writeToFile(byVal fileName, byVal content, byVal char_Set)
         stm.close 
         writeToFile = fileName & "写入成功" 
     set stm = nothing 
-    if err then doError err.description, "WriteToFile，数据流写入内容 函数出错，FileName=" & fileName & "，Content字符" & len(content) 
+    if err then call doError(Err.description, "WriteToFile，数据流写入内容 函数出错，FileName=" & fileName & "，Content字符" & len(content)) 
 end function 
 '创建gb2312文件
 function createFileGBK(byval fileName, byval content)
@@ -183,56 +313,11 @@ function getUGText(byVal path)
         getUGText = readFile(path, char_Set) 
     end if 
 end function 
-'检测Html内容是否设置了编码(当前页没有调用过20150119)
-function checkContentCharset(byVal content, byVal char_Set)
-    content = LCase(content) 
-    char_Set = LCase(char_Set) 
-    checkContentCharset = true 
-    if inStr(content, "<meta ") > 0 then
-        dim i, s, tempS, lalType, lalStr 
-        for i = 1 to len(content)
-            s = mid(content, i, 1) 
-            if s = "<" then
-                tempS = LCase(mid(content, i)) 
-                lalType = LCase(mid(tempS, 1, inStr(tempS, " "))) 
-                if lalType = "<meta " then
-                    lalStr = mid(tempS, 1, inStr(tempS, ">")) 
-                    if inStr(lalStr, "charset") > 0 then
-                        if inStr(lalStr, char_Set) = 0 then checkContentCharset = false 
-                    end if 
-                end if 
-            end if 
-        next 
-    end if 
-end function 
-'超级文件编码获取
-function checkFileCode(filePath)
-    dim splStr, c, content, toPath, yuanStr, s, nLen 
-    yuanStr = binaryReadFile(filePath) 
 
-    'If Len(YuanStr) > 500 Then
-    'YuanStr = Right(YuanStr, Len(YuanStr) - 30)
-    'End If
-    '只提取2500个字符
-    if len(yuanStr) > 2500 then
-        yuanStr = right(yuanStr, 2500) 
-    end if 
-    nLen = len(yuanStr) 
-    toPath = filePath & "_Temp" 
-    splStr = split("GB2312|UTF-8|UNICODE", "|") 
-    for each s in splStr
-        content = readFile(filePath, s) 
-        call writeToFile(toPath, content, s) 
-        c = binaryReadFile(toPath) 
-        c = right(c, nLen) 
-        if yuanStr = c then
-            checkFileCode = s 
-            call deleteFile(toPath)                                                         '删除这个临时文件
-            exit for 
-        end if 
-    next 
-    call deleteFile(toPath)                                                         '删除这个临时文件
-end function 
+
+
+
+
 '获得文件二进制内容 20150312
 function getFileBinaryContent(filePath)
     dim stream 
@@ -247,69 +332,30 @@ function getFileBinaryContent(filePath)
     set stream = nothing 
 'Response.BinaryWrite Stream.Read            '显示二进制文件内容
 end function 
-'读取二进制文件处理成数字方式
-function binaryReadFile(filePath)
-    dim i, nR, c, stm 
-    call handlePath(filePath)                                                       '获得完整路径
-    set stm = createObject("ADODB.Stream")
-        stm.mode = 3 
-        stm.type = 1 
-        stm.open 
-        call stm.loadFromFile(filePath) 
-        c = "" : i = 0 : nR = 1 
-        while i < stm.size
-            c = c & ascB(stm.read(nR)) 
-            i = i + nR 
-            doEvents 
-        wend 
-    set stm = nothing 
-    binaryReadFile = c 
-end function 
 '读取二进制文件并加密
-function readBinary(filePath, pass)
-    dim i, nR, c, stm 
-    if pass = "" then pass = 0                                                      '如果为空则为零20150119
-    call handlePath(filePath)                                                       '获得完整路径
-    set stm = createObject("ADODB.Stream")
-        stm.mode = 3 
-        stm.type = 1 
-        stm.open 
-        call stm.loadFromFile(filePath) 
-        c = "" : i = 0 : nR = 1                                                         '每次读取字符数
-        while i < stm.size
-            c = c &(ascB(stm.read(nR)) + pass) & "|" 
-            i = i + nR 
-        wend 
-        if c <> "" then c = left(c, len(c) - 1) 
-    set stm = nothing 
-    readBinary = c 
+function readBinary(filePath, nPass)
+    readBinary=bin2Int(getFileBinaryContent(filePath),nPass)
 end function 
 '解密保存二进制文件
-function decSaveBinary(filePath, content, pass)
-    dim splStr, buf(), i 
-    if pass = "" then pass = 0                                                      '如果为空则为零20150119
+function decSaveBinary(filePath, content, nPass)
+    dim splStr, buf(), i,id 
     splStr = split(content, "|") 
-    reDim buf(uBound(splStr)) 
+    reDim buf(uBound(splStr))
+	id=0 
     for i = 0 to uBound(splStr)
-        buf(i) = CByte(CInt(splStr(i)) - pass) 
+		if splStr(i)<>"" then
+        	id=id+1
+			buf(i) = CByte(CInt(splStr(i)) - nPass)
+		end if 
     next 
     call WriteBinary(filePath, buf) 
 end function 
 '保存二进制文件   call writeBinary(filePath,Request.BinaryRead (Request.TotalBytes))
 sub writeBinary(filePath, buf)
-    dim i, aBuf, size, bStream 
+    dim i, aBuf,  bStream 
     call handlePath(filePath)                                                       '获得完整路径
-    '不是二进制处理成二进制(20151211)
-    if typeName(buf) <> "Byte()" then
-        size = uBound(buf) : reDim aBuf(size \ 2) 
-        for i = 0 to size - 1 step 2
-            aBuf(i \ 2) = chrW(buf(i + 1) * 256 + buf(i)) 
-        next 
-        if i = size then aBuf(i \ 2) = chrW(buf(i)) 
-        aBuf = join(aBuf, "") 
-    else
-        aBuf = buf 
-    end if 
+
+	aBuf=arrayToBin(buf)
 
     set bStream = createObject("ADODB.Stream")
         bStream.type = 1 
@@ -344,7 +390,7 @@ public function getFileCharset2(byVal filePath)
             .type = 1 
             .mode = 3 
             .open 
-            .loadFromFile filePath 
+            .loadFromFile(filePath) 
             loadBytes =.read(3) 
             .close 
         end with 
@@ -375,8 +421,8 @@ end function
 public function binToHex(byVal vStream)
     dim reVal, i 
     reVal = 0 
-    for i = 1 to lenB(vStream)
-        reVal = reVal * 256 + ascB(midB(vStream, i, 1)) 
+    for i = 1 to Ubound(vStream)
+        reVal = reVal * 256 + midBin(vStream, i, 1)
     next 
     binToHex = hex(reVal) 
 end function 
@@ -410,6 +456,31 @@ function base64Decode(strData)
         objXd.documentElement.text = strData 
         base64Decode = objXd.documentElement.nodeTypedValue 
 end function
+
+
+
+
+
+'==================================================== 不常用 或无用函数
+
+'读取二进制文件处理成数字方式
+function binaryReadFile(filePath)
+    dim i, nR, c, stm 
+    call handlePath(filePath)                                                       '获得完整路径
+    set stm = createObject("ADODB.Stream")
+        stm.mode = 3 
+        stm.type = 1 
+        stm.open 
+        call stm.loadFromFile(filePath) 
+        c = "" : i = 0 : nR = 1 
+        while i < stm.size
+            c = c & ascB(stm.read(nR)) 
+            i = i + nR 
+            doEvents 
+        wend 
+    set stm = nothing 
+    binaryReadFile = c 
+end function 
 
 %>  
 

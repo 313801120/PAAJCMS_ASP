@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -238,7 +238,7 @@ End Function
  
 '生成 Install.php 文件
 function printAccessToPHPInstallFile()
-    Dim content, splTableName, tableName, splFieldName, fieldName, fieldType, c ,tempTableName
+    Dim content, splTableName, tableName, splFieldName, fieldName, fieldType, c ,tempTableName,sDefualtVal
 	dim tableNameList			'表名称列表
     Call openconn() 
     content = getTableList() 
@@ -263,14 +263,19 @@ function printAccessToPHPInstallFile()
 					fieldType = lcase(getFieldAlt(tempTableName, fieldName))
 					'call echo(copyStr("&nbsp;",8) & "fieldName",fieldName   & "("& fieldType &")")        'mediumtext
 					'call echo(fieldname,fieldType)
+					sDefualtVal=0
+					if lcase(fieldName)="isonhtml" then
+						sDefualtVal=1
+					end if
 					If fieldType = "varchar" Then
 						c = c & "`" & fieldName & "` varchar(255) NOT NULL default ''," & vbCrLf 
-					ElseIf fieldType = "int" Then
-						c = c & "`" & fieldName & "` int(8) NOT NULL default '0'," & vbCrLf 
+					ElseIf fieldType = "int" Then 
+						c = c & "`" & fieldName & "` int(8) NOT NULL default '"& sDefualtVal &"'," & vbCrLf 
 					ElseIf fieldType = "float" Then
-						c = c & "`" & fieldName & "` float(8) NOT NULL default '0'," & vbCrLf  
+						c = c & "`" & fieldName & "` float(8) NOT NULL default '"& sDefualtVal &"'," & vbCrLf  
 					ElseIf fieldType = "yesno" Then
-						c = c & "`" & fieldName & "` tinyint(1) NOT NULL default '0'," & vbCrLf  						
+					
+						c = c & "`" & fieldName & "` tinyint(1) NOT NULL default '"& sDefualtVal &"'," & vbCrLf  						
 						
 					'  InStr("|aboutcontent|bodycontent|content|template|", "|" & fieldName & "|") > 0 Or InStr(fieldName, "module") > 0
 					ElseIf fieldType="text" Then
@@ -285,17 +290,18 @@ function printAccessToPHPInstallFile()
 			c = c & "){$char};""," & vbCrLf 
 		end if
     Next 
-    Dim installFilePath, startStr, endStr, searchStr, replaceStr 
+    Dim installFilePath, startStr, endStr, searchStr, replaceStr,url
     startStr = "//access start" 
     endStr = "//access end" 
-    installFilePath = "\PHP2\ImageWaterMark\Include\Install.php" 
+    installFilePath = "\Inc_php\Install.php" 
     content = getftext(installFilePath) 
     searchStr = getStrCut(content, startStr, endStr, 1) 
     replaceStr = startStr & vbCrLf & c & endStr 
     content = Replace(content, searchStr, replaceStr) 
     'call eerr("",content)
     Call createfile(installFilePath, content) 
-    Call echo("操作完成，打印数据库到php能生成文件", "<a href=""http://127.0.0.1/PHP2/ImageWaterMark/Include/Install.php?db_PREFIX=xy_"">http://127.0.0.1/PHP2/ImageWaterMark/Include/Install.php?db_PREFIX=xy_</a>") 
+	url=getHost() & "Inc_php/Install.php?db_PREFIX=xy_"
+    Call echo("操作完成，打印数据库到php能生成文件", "<a href="""&url&""">"&url&"</a>") 
 End function 
  
  'php代码混淆处理 20160624 只能对函数定义的变量处理  从混淆js代码里复制过来改的，等完善

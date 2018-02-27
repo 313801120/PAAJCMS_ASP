@@ -34,7 +34,12 @@ PADDING-LEFT: 25px; FONT-SIZE: 12px; BACKGROUND: url(Images/loading_validator.gi
     <div style="width:60%;float:left;text-align:right;line-height:34px;">密&nbsp;码：<input type="password" name="password" id="password" class="LoginInput" onFocus="CheckForm(this.name,1)" onBlur="CheckForm(this.name,0)"> 
     </div> 
     <div style="width:40%;float:left;text-align:left;line-height:34px;">&nbsp;<span id="idpassword" class="onShow">请输入密码</span></div> 
-  <div style="text-align:center;padding-top:30px;"> 
+  
+    
+    <div id="selectDatabaseDiv" style="width:100%;float:left;text-align:left;line-height:34px;">数据库：<input name="selectDatabase" value="[$MDBPath$]" type="text" style="width:390px;"></div>
+    
+    
+    <div style="text-align:center;padding-top:30px;"> 
     <input type="submit" name="button" id="button" value=" 登 录 ">&nbsp;&nbsp; 
     <input type="reset" name="button2" id="button2" value=" 重 置 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
   </div> 

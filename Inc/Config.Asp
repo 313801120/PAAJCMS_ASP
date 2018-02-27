@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -16,6 +16,7 @@
 <!--#Include file = "XML.Asp"-->  
 <!--#Include file = "Time.Asp"-->  
 <!--#Include file = "RegExp.Asp"-->  
+<!--#Include file = "Http.Asp"-->   
 <!--#Include file = "Cai.Asp"-->  
 <!--#Include file = "StringNumber.Asp"-->  
 <!--#Include file = "EncDec.Asp"-->  
@@ -28,8 +29,10 @@
 <!--#Include file = "Conn.Asp"-->  
 <!--#Include file = "Fun_Table.Asp"-->  
 <!--#Include file = "FunHTML.Asp"-->   
-<!--#Include file = "Html.Asp"-->   
-<!--#Include file = "Img.Asp"-->  
+<!--#Include file = "Html.Asp"-->  
+<!--#Include file = "HtmlLable.Asp"-->   
+<!--#Include file = "Class_Image.Asp"-->  
+<!--#Include file = "Image.Asp"-->  
 <!--#Include file = "PinYin.Asp"--> 
 <!--#Include file = "Md5.Asp"-->   
 <!--#Include file = "IE.Asp"-->   
@@ -60,14 +63,32 @@
 <!--#Include file = "2015_NewWebFunction.Asp"--> 
 <!--#Include file = "2016_SaveData.Asp"-->   
 <!--#Include file = "2015_ToMyPHP.Asp"-->    
-<!--#Include file = "Member.Asp"-->    
- 
-<% 
+<!--#Include file = "Member.Asp"-->  
+<!--#Include file = "2015_hexSwitch.Asp"-->  
+<!--#Include file = "2016_PackXML.Asp"-->   
+<!--#Include file = "2017_member.Asp"--> 
+<!--#Include file = "2017_ColumnSubMenu.Asp"-->  
+<!--#Include file = "bootstrop_Ajax_Incpage.Asp"-->    
+<!--#Include file = "bootstrop_Incpage.asp"-->    
+
+<!--#Include virtual = "/Inc_More/class_css.asp"-->  
+<!--#Include virtual = "/Inc_More/class_js.asp"-->   
+<!--#Include virtual = "/Inc_More/class_html.asp"-->  
+<!--#Include virtual = "/Inc_More/class_formatting.asp"-->   
+<!--#Include virtual = "/Inc_More/class_template.asp"-->   
+<!--#Include virtual = "/Inc_More/class_cai.asp"-->   
+<!--#Include virtual = "/Inc_More/class_scanUrl.asp"-->   
+<%  
+
 
 
 server.scriptTimeout = 9999                                                     '超时
 session.timeout = 1440                                                          '最大值为24小时，也就是说你最大可以session.timeout=1440，1441都是不可以
+if request("utf8")=1 then
+response.addheader "Content-Type", "text/html; charset=utf-8" 
+else
 response.addheader "Content-Type", "text/html; charset=gb2312" 
+end if
 '禁止缓冲
 response.buffer = true 
 response.expires = 0 
@@ -76,16 +97,18 @@ response.cacheControl = "no-cache"
 response.addHeader "Expires", date() 
 response.addHeader "Pragma", "no-cache" 
 response.addHeader "Cache-Control", "private, no-cache, must-revalidate" 
-dim conn, rs, rsx, rss, rst, rsd, tempRs, tempRs2, rsTemp 
+dim conn, rs, rsx, rss, rst, rsd, tempRs, tempRs2, rsTemp,rs1,rs2,rs3,bbsRs
 dim pubTimer : pubTimer = now()                                                 'Timer()不要用这个(20150728)
 
 'Note:开发程序原则，能简单，绝对不复杂，能修改html的，绝对不修改asp，能傻瓜式，绝对不要用脑(20160121)
-dim WEBCOLUMNTYPE : WEBCOLUMNTYPE = "首页|文本|产品|新闻|视频|下载|案例|留言|反馈|招聘|订单" 
+dim WEBCOLUMNTYPE : WEBCOLUMNTYPE = "首页|文本|产品|新闻|视频|下载|案例|留言|反馈|招聘|订单|柴油" 
 dim WEB_VIEWURL : WEB_VIEWURL = "/index.asp"                                   '前台显示
 dim WEB_ADMINURL : WEB_ADMINURL = "/admin/index.asp"                                  '后台显示
 dim EDITORTYPE : EDITORTYPE = "asp"                                             '程序类型，是ASP,或PHP,或jSP,或.NET
 dim webDir : webDir = "" 
 MDBPath = "" 
+call handleUrlDirNameInMDB() 													'处理当前网址目录对应的mdb数据库 20171104
+
 if checkFile(webDir & MDBPath) = false then
     webDir = "/" & getUrlDir(remoteUrlFileName(getThisUrl())) 
     webDir = mid(webDir, 1, len(webDir) - 1) 
@@ -98,18 +121,30 @@ dim readBlockList						'读块列表
 dim databaseType : databaseType = ""                                      '数据库类型，Access与SqlServer之分
 dim sqlServerHostIP : sqlServerHostIP = "localhost"                          'SQL主机IP地址（服务器名）在2008版本使用
 dim sqlServerUsername : sqlServerUsername = "sa"                                'SQL数据库用户名
-dim sqlServerPassword : sqlServerPassword = ""                                'SQL数据库用户密码
+dim sqlServerPassword : sqlServerPassword = "sa"                                'SQL数据库用户密码
 dim sqlServerDatabaseName : sqlServerDatabaseName = "webdata"                   'SQL数据库名
 dim db_PREFIX : db_PREFIX = "xy_"                                               '表前缀
-
-dim incDir:incDir="/inc/"								'inc文件夹目录
-dim isMemberVerification:isMemberVerification=true						'为会员张验证
-'=========
-
-
-
  
-dim sArraySysColor 
+dim incDir:incDir="/inc/"								'inc文件夹目录
+dim isMemberVerification:isMemberVerification=true						'为会员验证
+dim isMemberCookieVerification:isMemberCookieVerification=true						'为会员Cookies验证
+dim glb_memberusercheck:glb_memberusercheck=1						   '全局会员检测 目录是让有些页面不需要验证
+
+
+
+
+dim pubHtmlObj : set pubHtmlObj=new class_html						'html类
+dim pubCssObj : set pubCssObj=new class_css							'css类
+dim pubJsObj : set pubJsObj=new class_js							'js类
+dim pubFormatObj : set pubFormatObj=new class_formatting			'格式化类
+dim pubTemplateObj : set pubTemplateObj=new class_template			'模板类
+dim pubCaiObj : set pubCaiObj=new class_cai							'采集类
+dim pubScanUrlObj : set pubScanUrlObj=new class_scanUrl				'扫描网址
+'=========
+ 
+ 
+ 
+dim sArraySysColor  
 sArraySysColor = array("#999", "#666") 
 
 dim makeHtmlFileToLCase : makeHtmlFileToLCase = true                            '生成HTML文件转小写
@@ -138,35 +173,44 @@ dim moduleReplaceArray : moduleReplaceArray = array("", "")                     
 dim code, pubCode                                                               'html代码
 dim templateName                                                                '模板名称
 dim cfg_webSiteUrl, cfg_webTemplate, cfg_webImages, cfg_webCss, cfg_webJs, cfg_webTitle, cfg_webKeywords, cfg_webDescription, cfg_webSiteBottom, cfg_flags 
-dim glb_columnName,glb_columnEnName , glb_columnId, glb_id, glb_columnType, glb_columnENType, glb_table, glb_detailTitle, glb_flags 
+dim glb_columnName,glb_columnEnName, glb_columnType, glb_columnENType, glb_table, glb_detailTitle, glb_flags 
 dim gbl_PageInfo					'页信息
-dim glb_columnRootId,glb_columnRootName,glb_columnRootEnName						'栏目主id
+dim glb_columnRootId,glb_columnRootName,glb_columnRootEnName,glb_columnId,glb_id,glb_columnParentId,glb_columnParentName						'栏目主id
+dim glb_smallimage,glb_bigimage,glb_bannerimage,glb_author,glb_sortrank,glb_aboutcontent,glb_bodyContent
 'dim webTemplate                                                                 '网站模板路径
 dim glb_url, glb_filePath                                                       '当前链接网址,和文件路径
 dim glb_isonhtml                                                                '是否生成静态网页
 dim glb_locationType                                                            '位置类型
-
-dim glb_bodyContent                                                             '主体内容
+ 
 dim glb_articleAuthor                                                           '文章作者
 dim glb_articleAdddatetime                                                      '文章添加时间
 dim glb_articlehits                                                             '文章浏览器
 dim glb_upArticle                                                               '上一篇文章
 dim glb_downArticle                                                             '下一篇文章
+dim glb_relatedTags																'文章里的标签
+dim glb_upArticleUrl,glb_downArticleUrl											'上一篇文章与下一篇文章的网址
 dim glb_aritcleRelatedTags                                                      '文章标签组
 dim glb_aritcleSmallImage, glb_aritcleBigImage                                  '文章小图与文章大图
-dim glb_searchKeyWord                                                           '搜索关键词
+dim glb_searchKeyWord,searchKeyWordName,glb_searchFieldName                           '搜索关键词 , 搜索字段名称
 dim cacheHtmlFilePath                                                           '缓冲html文件路径
 dim positionEndStr                                                              '面包线尾部追加内容
 
 dim isMakeHtml                                                                  '是否生成网页
+dim templatesetcode																'读 模板编码 20170517
+ 
 
 
-
-
-
-
-
-
+'处理URL目录名称对应的数据库
+function handleUrlDirNameInMDB()
+	dim s,filePath
+	s=getUrlDirName()
+	if s <>"" then
+		filePath="/data/data_" & s & ".mdb"
+	end if
+	if checkFile(filePath)=true then
+		MDBPath=filePath
+	end if
+end function
 
 
 '*****************************************  语言
@@ -212,7 +256,7 @@ function handleDisplayLanguage(c, sType)
     elseif sType = "loginok" then
         c = batchReplaceL(c, "后台地图|*|清除缓冲|*|超级管理员|*|当前位置|*|管理员信息|*|修改密码|*|最新访客信息|*|开发团队|*|版权所有|*|开发与支持团队") 
         c = batchReplaceL(c, "进入在线修改模式|*|系统信息|*|免费开源版|*|授权信息|*|服务器名称|*|服务器版本|*|交流群|*|相关链接|*|登录后台") 
-        c = batchReplaceL(c, "用户名|*|表前缀|*|帮助|*|退出|*|您好|*|首页|*|权限|*|端口|*|邮箱|*|官网|*|版|*|云孙World") 
+        c = batchReplaceL(c, "用户名|*|表前缀|*|帮助|*|退出|*|您好|*|首页|*|权限|*|端口|*|邮箱|*|官网|*|版|*|云祥孙") 
         c = batchReplaceL(c, "系统管理|*|我的面板|*|栏目|*|模板|*|会员|*|生成|*|更多设置") 
 
         c = batchReplaceL(c, "站点配置|*|网站统计|*|生成|*|后台操作日志|*|后台管理员|*|网站栏目|*|分类信息|*|评论|*|搜索统计|*|单页|*|友情链接|*|招聘管理") 
@@ -392,7 +436,7 @@ function languageEN(str)
         c = "official website" 
     elseif str = "邮箱" then
         c = "Emai" 
-    elseif str = "云孙World" then
+    elseif str = "云祥孙" then
         c = "Cloud" 
 
     elseif str = "版" then
@@ -404,6 +448,124 @@ function languageEN(str)
     languageEN = c 
 end function 
 %> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

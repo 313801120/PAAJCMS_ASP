@@ -9,11 +9,12 @@
 <script src="Js/runAction.js"></script>
 </head>
 <body>
-<!--#editor start#-->
 <script charset="utf-8" src="KEditor/kindeditor.js"></script> 
-<script charset="utf-8" src="KEditor/lang/zh_CN.js"></script>  
+<script charset="utf-8" src="KEditor/lang/zh_CN.js"></script>
+<link rel="stylesheet" href="KEditor/themes/default/default.css" />
 <script language="javascript">
 KindEditor.ready(function(K) {
+	//<!--#editor start#-->
 	var editor1 = K.create('textarea[name="bodycontent"]', {		//处理让文本域
 		cssPath : 'KEditor/plugins/code/prettify.css',
 		uploadJson : 'KEditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
@@ -28,12 +29,56 @@ KindEditor.ready(function(K) {
 			K.ctrl(self.edit.doc, 13, function() {
 				self.sync();
 				K('form[name=example]')[0].submit();
-			});
+			});  
 		}
+	}); 
+	//<!--#editor end#-->
+	
+	var editor2 = K.editor({
+		uploadJson : 'KEditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		fileManagerJson : 'KEditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		allowFileManager : true
 	});
-	//prettyPrint();				//因为这个出错，所以给它注释掉 2013,12,12
-});
-</script>
+
+
+	K('#btnsmallimage').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#smallimage').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#smallimage').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	});
+	K('#btnbigimage').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#bigimage').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#bigimage').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	});
+	K('#btnbannerimage').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#bannerimage').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#bannerimage').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	}); 
+}); 
+</script> 
 <!--#editor end#-->
 <div id="positionwrap">
     <div class="msg">当前位置：[$position$]</div>
@@ -62,6 +107,11 @@ KindEditor.ready(function(K) {
                 <tbody class="tbodybox">
                     
                     <tr align="center" height="25" bgcolor="#ffffff">
+                      <td>大类名称</td>
+                      <td align="left" style="padding:3px;">[$input_bigclassname$]</td>
+                      <td>bigclassname</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#ffffff">
                         <td>标题名称</td>
                         <td align="left" style="padding:3px;">[$input_title$]</td>
                         <td>title</td>
@@ -81,8 +131,7 @@ KindEditor.ready(function(K) {
 <option value="_blank"[$target if='_blank' value=' selected'$]>新页打开</option>
 <option value="Index"[$target if='Index' value=' selected'$]>Index页打开</option>
 <option value="Main"[$target if='Main' value=' selected'$]>Main页打开</option>
-</select>
-                        </td>
+</select>                        </td>
                         <td>filename / target</td>
                     </tr> 
                     <tr align="center" height="25" bgcolor="#F9FCEF">
@@ -131,6 +180,20 @@ KindEditor.ready(function(K) {
                         <td align="left" style="padding:3px;">[$input_labletitle$]</td>
                         <td>labletitle</td>
                     </tr>
+                    
+                    
+                    
+                     <tr align="center" height="25" bgcolor="#ffffff">
+                        <td>缩略图</td>
+                        <td align="left" style="padding:3px;">[$input_smallimage$]<input type="button" class="btnclick1" id="btnsmallimage" value="选择图片" />（本地上传）</td>
+                        <td>smallimage</td>
+                    </tr>
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>大图</td>
+                        <td align="left" style="padding:3px;">[$input_bigimage$]<input type="button" class="btnclick1" id="btnbigimage" value="选择图片" />（本地上传）</td>
+                        <td>bigimage</td>
+                    </tr>  
+                    
                     <tr align="center" height="25" bgcolor="#ffffff">
                         <td>不追踪链接</td>
                         <td align="left" style="padding:3px;"><label for="nofollow"><input type="checkbox" name="nofollow" id="nofollow"[$nofollow if='1' value=' checked'$] value="1" class="inputstyle">不追踪链接</label></td>
@@ -139,10 +202,21 @@ KindEditor.ready(function(K) {
                     <tr align="center" height="25" bgcolor="#F9FCEF">
                         <td>生成静态文件</td>
                         <td align="left" style="padding:3px;">
-                        <label for='isonhtml'><input type='checkbox' name='isonhtml' id='isonhtml' [$isonhtml if='False' elseif='0' value='' elsevalue=' checked'$]  value='1'>生成静态网页</label>                          
-                        </td>
+                        <label for='isonhtml'><input type='checkbox' name='isonhtml' id='isonhtml' [$isonhtml if='False' elseif='0' value='' elsevalue=' checked'$]  value='1'>生成静态网页</label>                        </td>
                         <td>isonhtml</td>
                     </tr>
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>生成静态文件</td>
+                        <td align="left" style="padding:3px;">
+                    <select name="memberusercheck" id="memberusercheck">
+<option value=''>会员登录检测</option>
+<option selected value='0'>默认</option>
+<option value="1"[$memberusercheck if='1' value=' selected'$]>登录检测</option>
+<option value="2"[$memberusercheck if='2' value=' selected'$]>登录不检测</option>
+</select>  </td>
+                        <td>memberusercheck</td>
+                    </tr>
+                    
                 </tbody>
         </table>
     </div>

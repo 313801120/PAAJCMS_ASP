@@ -1,15 +1,16 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
 '************************************************************
 %>
 <% 
-'【#stop#】1     这种为不导入当前条数据
+'【#jump#】true为true则为跳过当前
+'【#top#】true为true则为停止全部
 
 '调用callfile_setAccess文件函数
 function callfile_setAccess()
@@ -196,7 +197,7 @@ end function
 function nImportTXTData(content, tableName, sType)
     dim fieldConfigList, splList, listStr, splStr, splxx, s, sql, nOK 
     dim fieldName, fieldType, fieldValue, addFieldList, addValueList, updateValueList 
-    dim fieldStr 
+    dim fieldStr,isJump,isStop
     tableName = trim(lcase(tableName))                                              '表
     '这样做是为了从GitHub下载时它把vbcrlf转成 chr(10)  20160409
     if instr(content, vbCrLf) = false then
@@ -212,8 +213,16 @@ function nImportTXTData(content, tableName, sType)
         addValueList = ""                                                               '添加字段列表值
         updateValueList = ""                                                            '修改字段列表
 
-        s = lcase(newGetStrCut(listStr, "#stop#")) 
-        if s <> "1" and s <> "true" then
+        isJump = lcase(trim(newGetStrCut(listStr, "#jump#"))) 
+        isStop = lcase(trim(newGetStrCut(listStr, "#stop#")))
+ 
+		'停止导入
+		if isStop = "1" or isStop = "true" then
+    		nImportTXTData = nOK 
+			exit function
+		end if
+		'判断不是跳转当前
+        if isJump <> "1" and isJump <> "true" then
             for each fieldStr in splStr
                 if fieldStr <> "" then
                     splxx = split(fieldStr & "| ", "|")			'必需加上| 在jsp里必需这样，不知道为什么？ 不过没关系，不影响下面执行结束 
@@ -248,6 +257,12 @@ function nImportTXTData(content, tableName, sType)
                             'call echo("fieldValue",fieldValue)
                             fieldValue = getColumnId(fieldValue) 
                             'call echo("fieldValue",fieldValue)
+						'BBS大类20171003
+						elseif(tableName = "bbsdetail" or tableName = "bbscolumn") and fieldName = "parentid" then	 
+                            fieldValue = handleGetColumnID("bbscolumn", fieldValue)  
+						'CAI大类20171117
+						elseif(tableName = "caidetail" or tableName = "caicolumn") and fieldName = "parentid" then	 
+                            fieldValue = handleGetColumnID("caicolumn", fieldValue)  
                         '后台菜单
                         elseif tableName = "listmenu" and fieldName = "parentid" then
                             fieldValue = getListMenuId(fieldValue) 
@@ -278,11 +293,11 @@ function nImportTXTData(content, tableName, sType)
                 end if 
                 '检测SQL
                 if checksql(sql) = false then
-                    call eerr("出错提示", "<hr>sql=" & sql & "<br>") 
+                    call eerr("出错提示1", "<hr>sql=" & sql & "<br>") 
                 end if 
                 nOK = nOK + 1 
             else
-                nOK = nBatchImportColumnList(splStr, listStr, nOK, tableName) 
+                nOK = nBatchImportColumnList(content,splStr, listStr, nOK, tableName) 
 
             end if 
         end if 
@@ -291,8 +306,8 @@ function nImportTXTData(content, tableName, sType)
     nImportTXTData = nOK 
 end function 
 '批量导入栏目列表 20160716
-function nBatchImportColumnList(splField, byval listStr, nOK, tableName)
-    dim splStr, splxx, isColumn, columnName, s, c, nLen, id, parentIdArray(99), columntypeArray(99), flagsArray(99), nIndex, fieldStr, fieldName, valueStr, nCount 
+function nBatchImportColumnList(content,splField, byval listStr, nOK, tableName)
+    dim splStr, splxx, isColumn, columnName, s, c, nLen, id, parentIdArray(99), columntypeArray(99), flagsArray(99), nIndex, fieldStr, fieldName, valueStr, nCount, bodycontent
     dim fileName, templatepath, rowC 
     isColumn = false 
     nCount = 0 
@@ -333,7 +348,6 @@ function nBatchImportColumnList(splField, byval listStr, nOK, tableName)
                             templatepath = valueStr 
                         elseif fieldName = "filename" then
                             fileName = valueStr 
-                            'call echo("filename",filename)
 
                         end if 
                     end if 
@@ -356,8 +370,16 @@ function nBatchImportColumnList(splField, byval listStr, nOK, tableName)
                 else
                     rowC = rowC & "【parentid】-1" & vbCrLf 
                 end if 
-                rowC = rowC & "【sortrank】" & nCount & vbCrLf 
+                rowC = rowC & "【sortrank】" & nCount & vbCrLf
+				s=getStrCut(content,"【"& columnName &"】","【/"& columnName &"】",2)
+                rowC = rowC & "【bodycontent】" & s & "【/bodycontent】" & vbCrLf
+				if s <>""then
+					'call echo("s",s)
+				
+				end if
+				 
                 nCount = nCount + 1 
+				rowC = rowC & getRowConfigData(content,parentIdArray,nIndex) 
                 c = c & rowC & "-------------------------------" & vbCrLf 
             end if 
         end if 
@@ -368,7 +390,20 @@ function nBatchImportColumnList(splField, byval listStr, nOK, tableName)
         call nImportTXTData(c, tableName, "添加") 
     end if 
     nBatchImportColumnList = nCount 
-end function 
+end function
+'获得当前行配置数据
+function getRowConfigData(content,parentIdArray,nIndex)
+	dim i,s,c
+	for i=0 to nIndex
+		s=parentIdArray(i)
+		if c<>"" then
+			c=c & "/"
+		end if
+		c=c & s
+	next
+	s=getStrCut(content,"【###"& c &"###】","【/###"& c &"###】",2)
+	getRowConfigData= vbcrlf & s & vbcrlf
+end function
 
 '新的截取字符20160216
 function newGetStrCut(content, title)

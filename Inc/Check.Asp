@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -135,6 +135,15 @@ function chkPost()
     else
         chkPost = true 
     end if 
+end function 
+
+ 
+'验证手机号码
+function isValidMobileNo(MobileNo)
+    dim regEx
+    set regEx = createObject("VBscript.RegExp")
+    regEx.Pattern = "^1\d{10}$"						'待改进
+    isValidMobileNo=regEx.test(MobileNo)
 end function 
 'Response.Write(IsMail("asdf@sdf.com"))
 '正则表达验证邮箱

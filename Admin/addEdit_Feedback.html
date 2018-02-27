@@ -142,11 +142,26 @@ KindEditor.ready(function(K) {
                       </td>
                       <td>adddatetime</td>
                     </tr>
+                    
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>生成静态文件</td>
+                        <td align="left" style="padding:3px;">
+                    <select name="memberusercheck" id="memberusercheck">
+<option value=''>会员登录检测</option>
+<option selected value='0'>默认</option>
+<option value="1"[$memberusercheck if='1' value=' selected'$]>登录检测</option>
+<option value="2"[$memberusercheck if='2' value=' selected'$]>登录不检测</option>
+</select>  </td>
+                        <td>memberusercheck</td>
+                    </tr>
+                    
                     <tr align="center" height="25" bgcolor="#F9FCEF">
                         <td>帮助信息</td>
                         <td align="left" style="padding:3px;"> </td>
                         <td> 要</td>
                     </tr>
+                    
+                    
                 </tbody>
         </table>
     </div>

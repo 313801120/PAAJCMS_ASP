@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -20,30 +20,30 @@
 'call handleDataArray(rsDataArray,"edit","asp","eeeeeeeeeee")
 'call handleDataArray(rsDataArray,"打印","","")
 '操作二维数组 当数据库来用 20160727 
-function handleDataArray(arrayData, byval sAction, fieldName, fieldValue) 
+function handleDataArray(array2Data, byval sAction, fieldName, fieldValue) 
     dim title, content, i 
     sAction = lcase(sAction) 
-    for i = 0 to uBound(arrayData)
-        title = arrayData(i, 0) 
-        content = arrayData(i, 1) 
+    for i = 0 to uBound(array2Data)
+        title = array2Data(i, 0) 
+        content = array2Data(i, 1) 
         if sAction = "打印" or sAction = "print" then
             call echo(i & "、" & title, content) 
         elseif title <> "" then
             if(sAction = "修改" or sAction = "edit") and title = fieldName then
-                arrayData(i, 0) = fieldName 
-                arrayData(i, 1) = fieldValue 
+                array2Data(i, 0) = fieldName 
+                array2Data(i, 1) = fieldValue 
                 exit for 
             elseif(sAction = "删除" or sAction = "del") and title = fieldName then
-                arrayData(i, 0) = "" 
-                arrayData(i, 1) = "" 
+                array2Data(i, 0) = "" 
+                array2Data(i, 1) = "" 
                 exit for 
             elseif(sAction = "获得" or sAction = "get") and title = fieldName then
                 handleDataArray = content 
                 exit function 
             end if 
         elseif sAction = "添加" or sAction = "add" then
-            arrayData(i, 0) = fieldName 
-            arrayData(i, 1) = fieldValue 
+            array2Data(i, 0) = fieldName 
+            array2Data(i, 1) = fieldValue 
             exit for 
         end if 
     next 
@@ -171,7 +171,7 @@ end function
 function getArrayCount(content, sSpl)
     dim splStr 
     getArrayCount = 0 
-    if inStr(content, sSpl) > 0 then
+    if inStr(content, sSpl) > 0 or trim(content)<>"" then
         splStr = split(content, sSpl) 
         getArrayCount = uBound(splStr) + 1 
     end if 
@@ -523,42 +523,42 @@ function handleSplitArray(content, splOneType, splTowType)
     handleSplitArray = splStr 
 end function 
 '二维数组正排序 20150313
-function twoDimensionalArrayAsc(splStr)
+function twoDimensionalArrayAsc(arr2Date)
     dim i, j, t 
-    for i = 0 to uBound(splStr)
-        if isNul(splStr(i, 0)) = false then
-            for j = i to uBound(splStr)
-                if splStr(i, 0) > splStr(j, 0) then
-                    t = splStr(i, 0) 
-                    splStr(i, 0) = splStr(j, 0) 
-                    splStr(j, 0) = t 
-                    t = splStr(i, 1) 
-                    splStr(i, 1) = splStr(j, 1) 
-                    splStr(j, 1) = t 
+    for i = 0 to uBound(arr2Date)
+        if isNul(arr2Date(i, 0)) = false then
+            for j = i to uBound(arr2Date)
+                if arr2Date(i, 0) > arr2Date(j, 0) then
+                    t = arr2Date(i, 0) 
+                    arr2Date(i, 0) = arr2Date(j, 0) 
+                    arr2Date(j, 0) = t 
+                    t = arr2Date(i, 1) 
+                    arr2Date(i, 1) = arr2Date(j, 1) 
+                    arr2Date(j, 1) = t 
                 end if 
             next 
         end if 
     next 
-    twoDimensionalArrayAsc = splStr 
+    twoDimensionalArrayAsc = arr2Date 
 end function 
 '二维数组倒排序 20150313
-function twoDimensionalArrayDesc(splStr)
+function twoDimensionalArrayDesc(arr2Date)
     dim i, j, t 
-    for i = 0 to uBound(splStr)
-        if isNul(splStr(i, 0)) = false then
-            for j = i to uBound(splStr)
-                if splStr(i, 0) < splStr(j, 0) then
-                    t = splStr(i, 0) 
-                    splStr(i, 0) = splStr(j, 0) 
-                    splStr(j, 0) = t 
-                    t = splStr(i, 1) 
-                    splStr(i, 1) = splStr(j, 1) 
-                    splStr(j, 1) = t 
+    for i = 0 to uBound(arr2Date)
+        if isNul(arr2Date(i, 0)) = false then
+            for j = i to uBound(arr2Date)
+                if arr2Date(i, 0) < arr2Date(j, 0) then
+                    t = arr2Date(i, 0) 
+                    arr2Date(i, 0) = arr2Date(j, 0) 
+                    arr2Date(j, 0) = t 
+                    t = arr2Date(i, 1) 
+                    arr2Date(i, 1) = arr2Date(j, 1) 
+                    arr2Date(j, 1) = t 
                 end if 
             next 
         end if 
     next 
-    twoDimensionalArrayDesc = splStr 
+    twoDimensionalArrayDesc = arr2Date 
 end function 
 '【删除.netc end】
 %>   

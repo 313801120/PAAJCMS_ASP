@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -142,9 +142,8 @@ function handleContentCode(byVal content, sType)
     if sType = "check" or sType = "检测" then
         handleContentCode = false 
     end if 
-
-    '系统自带 不可删除
-    splContent = splContent & "|now|date|len|left|right|mid|lcase|ucase|ltrim|rtrim|trim|" 
+	'函数列表 start
+	
     splContent = "|getblankhtmlbody|errortext|printpre|foldingmenu|returnren|returnhr|returnrenhr|showerr|printforminfo|dedecmsmsg|handleaccessdata|adsql|checkaccesspass|checksql|createtable|showistable|getrecordcount|tablecount|" 
     splContent = splContent & "|opentable|inserttable|gettabletext|createmdb|deletetable|deletealltable|checktable|existstable|edittable|checkfield|existsfield|editfield|getfieldalt|gettablelist_conn|gettablelist|getfieldlist|getfieldconfiglist|" 
     splContent = splContent & "|getdifferenttablefieldlist|compactdb|editaccesspassword|handlesqlserver|exporttoexcel|importtodatabase|getdatatablelist|settablefield|gettypestring|getproductrndidlist|getfieldvalue|getconnfieldvalue|setfieldvalue|" 
@@ -193,6 +192,11 @@ function handleContentCode(byVal content, sType)
     splContent = splContent & "|handledoublequotation|strdq|handletoarray|handlecontentcode|handleinmodule|clearrparam|atrparam|rparam|handlerparam|getconfigblock|getconfigblock2|getconfigblock3|getcutconfigblock|getconfigcontentblock|" 
     splContent = splContent & "|getconfigfileblock|setconfigfileblock|delconfigblock|delconfigblock2|delconfigblock3|delcutconfigblock|getfileparamvalue|setfileparamvalue|handlegetsetfileparamevalue|setrparam|addreplacerparam|deletestrcut|" 
     splContent = splContent & "|replacecontentmodule|replacecontentrowmodule|handleconfigfile|getrparam|getdefaultvalue|addmodulereplacearray|modulefindcontent|batchfindfunction|getfindfilefunction|getaspcode|handlegetaspcode|delaspnote|" 
+'函数列表 end
+	
+
+    '系统自带 不可删除
+    splContent = splContent & "|now|date|len|left|right|mid|lcase|ucase|ltrim|rtrim|trim|" 
 
 
     splStr = split(splContent, "|") 
@@ -238,7 +242,7 @@ function handleContentCode(byVal content, sType)
 
     '-----------------------------------------------------------
 
-    'footer start
+    '函数判断 start
     if labelName = "getblankhtmlbody" then
         s = getBlankHtmlBody(strDQ(splxx(0)), strDQ(splxx(1))) 
     elseIf labelName = "errortext" then
@@ -1692,14 +1696,14 @@ function handleContentCode(byVal content, sType)
         s = getFunctionStrDim(strDQ(s)) 
     elseIf labelName = "getrandcolor" then
         s = getRandColor() 
-
+	'函数判断 end
         '----------------------- ASP自身内部函数处理 -----------------------------
     '系统函数 Now
     elseIf labelName = "now" then
         s = now() 
     '系统函数 Date
     elseIf labelName = "date" then
-        s = date 
+        s = date()
     '系统函数 Len
     elseIf labelName = "len" then
         s = len(s) 
@@ -2210,6 +2214,9 @@ function getRParam(byVal content, byVal lableStr)
 'call echo("c",c)
 end function 
 
+
+
+
 '获得模板某标签默认内容 代码进行了二次查找 会在HTML模板里二次查找默认值
 function getDefaultValue(action)
     getDefaultValue = moduleFindContent(action, "default") 
@@ -2254,6 +2261,96 @@ function moduleFindContent(action, moduleName)
         call addModuleReplaceArray("【删除】", startStr & defaultStr & endStr) 
     end if 
     moduleFindContent = defaultStr 
+end function 
+
+
+
+
+'配置内容设置
+function getNewConfig(byval content,labelName)
+	getNewConfig=handleNewConfig(content,labelName,"","get")
+end function
+function setNewConfig(content,labelName,labelValue)
+	content=handleNewConfig(content,labelName,labelValue,"set")
+	setNewConfig=content
+end function
+function delNewConfig(content,labelName)
+	delNewConfig=handleNewConfig(content,labelName,"","del")
+end function
+'解密 
+function decrypt_GetNewConfig(byval content,labelName)
+	decrypt_GetNewConfig=decCode(handleNewConfig(content,labelName,"","get"))
+end function
+'加密
+function encryption_SetNewConfig(content,labelName,byval labelValue) 
+	content=handleNewConfig(content,labelName,encCode(labelValue),"set")
+	encryption_SetNewConfig=content
+end function
+
+
+
+'call echo("aa=",getNewConfig(c, "aa"))
+'call echo("aa=",setNewConfig(c, "aa","中国人"))
+'call echo("bb=",setNewConfig(c, "bb","中国人"))
+'call echo("aa=",delNewConfig(c, "aa"))
+'配置内容设置 20161007
+function handleNewConfig(byval c,labelName,byval labelValue,sType)
+	dim startStr,endStr,s,nLen,leftS,contentS,rightS,tempC
+	tempC=c
+	c=vbcrlf & c & vbcrlf
+	
+	labelValue=replace(labelValue,"\\","\\")			'设置值特殊字符转义
+	labelValue=replace(labelValue,"'","\'")			'设置值特殊字符转义
+	labelValue=replace(labelValue,"=","\=")			'设置值特殊字符转义
+	labelValue=replace(labelValue,vbcrlf,"\" & vbcrlf)			'设置值特殊字符转义
+	
+	c=replace(c, "'" & vbcrlf, "[|dyh vbcrlf+pie|]")	'处理'换行
+	
+	c=replace(c, "\\", "[|dyh shuanpie|]")				'替换特殊转义的'撇
+	c=replace(c, "\'", "[|dyh danpie|]")				'替换特殊转义的'撇
+	c=replace(c, "\=", "[|dyh dengpie|]")				'替换特殊转义的'撇
+	c=replace(c, "\" & vbcrlf, "[|dyh pie+br|]")				'替换特殊转义的'撇 
+	
+	c=replace(c,  "[|dyh vbcrlf+pie|]", "'" & vbcrlf)  	'恢复'换行
+	startStr=vbcrlf & labelName & "='"
+	endStr="'" & vbcrlf
+	nLen=instr(c,startStr)				'截取开始字符位置
+	 
+	if nLen>0 then 
+		leftS=mid(c,1,nLen-1)			'内容左边字符
+		c=mid(c,nLen+len(startStr) )	'左边往后内容
+		nLen=instr(c,endStr)			'截取结束字符位置
+		if nLen>0 then
+			contentS=mid(c,1,nLen-1)		'内容中间字符
+			rightS=mid(c,nLen+len(endStr))		'内容右边字符
+		end if 
+		'c=leftS & startStr & contentS & endStr & rightS		'组合后完整内容
+		
+		'获得值
+		if sType="get" then
+			s=contentS 
+			s=replace(s, "[|dyh shuanpie|]", "\")				'替换特殊转义的'撇
+			s=replace(s, "[|dyh danpie|]", "'")				'替换特殊转义的'撇
+			s=replace(s, "[|dyh dengpie|]", "=")				'替换特殊转义的'撇
+			s=replace(s, "[|dyh pie+br|]", vbcrlf)				'替换特殊转义的'撇 
+		elseif sType="set" then
+			s=leftS & startStr & labelValue & endStr & rightS
+			s=mid(s,3,len(s)-4)
+		elseif sType="del" then
+			s=leftS & rightS
+		end if 
+		
+		s=replace(s, "[|dyh shuanpie|]", "\\")				'替换特殊转义的'撇
+		s=replace(s, "[|dyh danpie|]", "\'")				'替换特殊转义的'撇
+		s=replace(s, "[|dyh dengpie|]", "\=")				'替换特殊转义的'撇
+		s=replace(s, "[|dyh pie+br|]", "\" & vbcrlf)				'替换特殊转义的'撇 
+		
+		
+	elseif sType="set" then
+		s=tempC & startStr & labelValue & "'"
+	end if
+	
+	handleNewConfig=s
 end function 
 %>      
 

@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -14,9 +14,15 @@
 
 '===================================== SQl操作部分 =====================================
 
-
-
-
+'插入
+sub connInsertInto(sql)
+	conn.Execute(sql)
+end sub
+'更新
+sub connUpdate(sql)
+	'call echo("sql",sql)
+	conn.Execute(sql)
+end sub
 
 '处理成Access数据库值 (20151116)  用法 conn.execute("update product set content='"& AD(c) &"'")
 function handleAccessData(byVal valueStr)
@@ -67,10 +73,11 @@ function getRecordCount(tableName, addSql)
     'Call Eerr("","Select Count(*) From [" & Table & "]" & AddSql)
     call OpenConn() 
     getRecordCount = conn.execute("Select Count(*) From [" & tableName & "] " & addSql)(0) 
-end function 
+end function
 function tableCount(table, addSql)
     tableCount = getRecordCount(table, addSql) 
-end function 
+end function  
+
 '打开表RsOpenTable
 function openTable(tableName, addSql)
     rs.open "Select * From [" & tableName & "] " & addSql, conn, 1, 1 
@@ -103,8 +110,9 @@ function deleteTable(tableName)
     end if 
     if checkTable(tableName) then
         deleteTable = true 
+		Conn.Execute("Drop Table [" & tableName & "]")
     end if 
-    'Conn.Execute("Drop Table [" & Table & "]")
+    
 'End If
 end function 
 '删除全部表
@@ -197,21 +205,24 @@ function editField(tableName, fieldName, toFieldName)
         end if 
     end if 
 end function
-'追加字符
+'追加字段
 function addField(tableName,fieldName,fieldType)
 	if fieldType="" then
 		fieldType="VarChar"
 	end if
 	if checkField(tableName,fieldName) = false then
 		conn.execute("Alter Table [" & tableName & "] Add [" & fieldName & "] " & fieldType & "") '添加字段
-	end if
-
+	end if 
 end function
 '获得字段属性
 function getFieldAlt(tableName, fieldName)
+	getFieldAlt=getFieldAlt_conn(tableName, fieldName,customConn)
+end function
+function getFieldAlt_conn(tableName, fieldName,customConn)
     dim n, fn, fld, rs 
+	getFieldAlt_conn=""
     set rs = createObject("Adodb.RecordSet")
-        rs.open "Select * From [" & tableName & "]", conn, 1, 1 
+        rs.open "Select * From [" & tableName & "]", customConn, 1, 1 
         fn = rs.fields.count 
         for n = 1 to fn - 1
             set fld = rs.fields.item(n)
@@ -219,27 +230,27 @@ function getFieldAlt(tableName, fieldName)
                     'MsgBox (FieldName & vbCrLf & Rs.Fields(N).Type)
                     select case rs.fields(n).type
                         case "202"
-                            getFieldAlt = "VarChar" 
+                            getFieldAlt_conn = "VarChar" 
                         case "203"
-                            getFieldAlt = "Text" 
+                            getFieldAlt_conn = "Text" 
                         case "7"
-                            getFieldAlt = "DateTime" 
+                            getFieldAlt_conn = "DateTime" 
                         case "3"
-                            getFieldAlt = "Int" 
+                            getFieldAlt_conn = "Int" 
                         case "11"
-                            getFieldAlt = "YesNo" 
+                            getFieldAlt_conn = "YesNo" 
                         case "5"
-                            getFieldAlt = "float" 
+                            getFieldAlt_conn = "Float" 
                         case else
                             msgBox(rs.fields(n).type & vbCrLf & fieldName & "没有类型") 
-                            getFieldAlt = "没类型" & rs.fields(n).type 
+                            getFieldAlt_conn = "没类型" & rs.fields(n).type 
                     end select
                     exit for 
                 end if 
             set fld = nothing 
         next : rs.close 
 end function
-'获得指定数据库里表列表
+'获得指定数据名柄里表列表
 function getTableList_Conn(conn)
     dim s, c, rs 
     set rs = conn.openSchema(20)
@@ -260,30 +271,35 @@ function getTableList()
 end function 
 '获得表字段列表
 function getFieldList(tableName)
-    dim fn, c, fld, n 
-    on error resume next 
+    getFieldList = getFieldList_conn(tableName,conn)
+end function 
+'获得自定义句枸表字段列表20171208
+function getFieldList_conn(tableName,customConn)
+    dim fn, c, fld, n,tempRs
+	Set tempRs = CreateObject("Adodb.RecordSet")
+    'on error resume next 
     '字段
-    tempRs.open "Select * From [" & tableName & "]", conn, 1, 1 
+    tempRs.open "Select * From [" & tableName & "]", customConn, 1, 1 
     if tempRs.fields.count = 0 then exit function                                   '为零退出
     fn = tempRs.fields.count 
-    if err <> 0 then call eerr("字段", tempRs.fields.count) 
+    'if err <> 0 then call eerr("字段2", tempRs.fields.count) 
     c = "," 
     for n = 1 to fn - 1
         set fld = tempRs.fields.item(n)
             c = c & fld.name & "," 
         set fld = nothing 
     next : tempRs.close 
-    getFieldList = c 
-end function 
+    getFieldList_conn = c 
+end function
 '获得表字段配置列表20160226
 function getFieldConfigList(tableName)
     dim fn, c, fld, n, s 
-    on error resume next 
+   ' on error resume next 
     '字段
     tempRs.open "Select * From [" & tableName & "]", conn, 1, 1 
     if tempRs.fields.count = 0 then exit function                                   '为零退出
     fn = tempRs.fields.count 
-    if err <> 0 then call eerr("字段", tempRs.fields.count) 
+    'if err <> 0 then call eerr("字段3", tempRs.fields.count) 
     c = "," 
     for n = 1 to fn - 1
         set fld = tempRs.fields.item(n)
@@ -304,9 +320,46 @@ function getFieldConfigList(tableName)
     next : tempRs.close 
     getFieldConfigList = c 
 end function 
+
+'获得表字段列表 20170221
+function getFirstField(tableName)
+    dim fn, c, fld, n ,tempRs
+		Set tempRs = CreateObject("Adodb.RecordSet")
+    'on error resume next 
+    '字段
+    tempRs.open "Select * From [" & tableName & "]", conn, 1, 1 
+    if tempRs.fields.count = 0 then exit function                                   '为零退出
+    fn = tempRs.fields.count 
+    'if err <> 0 then call eerr("字段4", tempRs.fields.count) 
+    
+    getFirstField =tempRs.fields.item(0).name
+end function 
+
+'获得插入数据表字段列表
+function getInstallFieldList(tableName)
+    dim fn, c, fld, n,tempRs 
+		Set tempRs = CreateObject("Adodb.RecordSet")
+    'on error resume next 
+    '字段
+    tempRs.open "Select * From [" & tableName & "]", conn, 1, 1 
+    if tempRs.fields.count = 0 then exit function                                   '为零退出
+    fn = tempRs.fields.count 
+    'if err <> 0 then call eerr("字段2", tempRs.fields.count) 
+    for n =1 to fn - 1
+        set fld = tempRs.fields.item(n)
+			if c<>"" then
+				c=c & ","
+			end if
+            c = c & fld.name
+        set fld = nothing 
+    next : tempRs.close 
+    getInstallFieldList = c 
+end function 
+
 '获得不同数据库表字段列表 (.mdb Or .xls)
 function getDifferentTableFieldList(connObj, table)
-    dim fn, c, fld, n 
+    dim fn, c, fld, n ,rs,conn
+		Set rs = CreateObject("Adodb.RecordSet")
     '重复打开这个数据库
     if typeName(connObj) = "Connection" then
         set conn = createObject("Adodb.Connection")
@@ -562,6 +615,22 @@ function getFieldValue(tableName, fieldName, addSql)
             getFieldValue = rs(fieldName) 
         end if : rs.close 
 end function
+'获得某字段内容 20150129  例：getFieldValue("WebSite","WebTitle","")     '获得网站标题
+function getFieldValueList(sql, fieldName)
+    dim rs,s,c
+    call OpenConn() 
+    set rs = createObject("Adodb.RecordSet")
+    rs.open sql, conn, 1, 1 
+    while not rs.eof
+		if c<>"" then
+			c=c & vbcrlf
+		end if
+		c=c & rs(fieldName) 
+	rs.movenext:wend:rs.close
+	getFieldValueList=c
+end function
+
+
 '获得指定字段内容　指定Conn对象
 function getConnFieldValue(objConn, tableName, fieldName, addSql)
     on error resume next 

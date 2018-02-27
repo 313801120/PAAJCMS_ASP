@@ -34,12 +34,13 @@
 		<table width="100%" border="0" cellpadding="2" cellspacing="1" bgcolor="#CFCFCF" align="center" style="margin-top:8px">
 		<tbody>
 		<tr bgcolor="#E7E7E7">
-			<td height="28" colspan="7" background="Images/tbg.gif" style="padding-left:10px;">
+			<td height="28" colspan="8" background="Images/tbg.gif" style="padding-left:10px;">
              <!--           ◆ 所有栏目>文档列表  (使用鼠标右键弹出菜单)-->			</td>
 		</tr>
 		<tr align="center" bgcolor="#FBFCE2" height="25">
 		  <td>ID</td>
 		  <td>选择</td>
+		  <td>反馈类型</td>
 		  <td>反馈内容</td>
 		  <td>IP</td>
 		  <td>反馈时间</td>
@@ -53,7 +54,8 @@
           
 				<input name="idcheck" type="checkbox" class="np" value="[$id$]">
                 <input type="hidden" name="id" id="id" value="[$id$]" />          </td>
-		  <td align="left">[$bodycontent len='30'$]</td>
+		  <td align="left">[$feedbacktype$]</td>
+		  <td align="left">[$bodycontent len='30' trim='true' delhtml='true'$]</td>
 		  <td>[$ip$]</td>
 		  <td>[$adddatetime$]</td>
 		  <td><a href="javascript:updateFieldHandle('isthrough','[$isthrough if='False' elseif='0' value='1' elsevalue='0'$]','[$actionType$]','[$lableTitle$]','[$page$]','[$id$]')"><img src="Images/[$isthrough if='False' elseif='0' value='isno.gif' elsevalue='isyes.gif'$]"></a></td>
@@ -64,7 +66,7 @@
 		  </tr>
         [/list] 
 		<tr bgcolor="#ffffff">
-			<td height="36" colspan="10">
+			<td height="36" colspan="11">
 				<a href="javascript:checkmm('全选')" class="coolbg">全选</a>
 				<a href="javascript:checkmm('反选')" class="coolbg">反选</a>
 				<a href="javascript:checkmm('取消')" class="coolbg">取消</a>
@@ -83,15 +85,13 @@
               <option value="30"[$nPageSize if='30' value=' selected'$]>每页显示30条</option>
               <option value="40"[$nPageSize if='40' value=' selected'$]>每页显示40条</option>
               <option value="50"[$nPageSize if='50' value=' selected'$]>每页显示50条</option>
-            </select>
-            </td>
+            </select>            </td>
 		</tr> 
 		<tr align="right" bgcolor="#F9FCEF">
-			<td height="36" colspan="7" align="center">
+			<td height="36" colspan="8" align="center">
 				[$pageInfo$]			
                 <input name="nPageSize" type="hidden" id="nPageSize" value="[$nPageSize$]"> 
-                <input name="focusid" type="hidden" id="focusid" value="[$focusid$]"> 
-                </td>
+                <input name="focusid" type="hidden" id="focusid" value="[$focusid$]">                </td>
 		</tr>
 		</table>
 

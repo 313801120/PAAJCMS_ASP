@@ -1,0 +1,23 @@
+【webtitle】测试网站标题
+【webkeywords】测试网站关键词
+【webdescription】测试网站描述
+【websitebottom】
+
+PAAJCMS 是一款免费开源的，快速、简单、轻量级网站内容管理系统<br>
+现有千套模板任你选择，交流群：35915100<br>
+版权 sharembweb.com | Powered by PAAJCMS<br>
+<a href='admin/index.asp'>后台管理</a>
+
+【/websitebottom】
+
+【webtemplate】/Templates2015/test
+【webimages】/Templates2015/test/Images
+【webcss】/Templates2015/test/Css
+【webjs】/Templates2015/test/Js
+【flags】
+【websiteurl】http://test.com/
+
+
+
+
+|addwebsite|iscloseeditor|htmlrun|ziphtml|

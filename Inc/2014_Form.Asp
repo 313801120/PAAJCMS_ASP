@@ -1,8 +1,8 @@
 <%
 '************************************************************
-'作者：云孙World(SXY) 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
+'作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2016-09-22
+'创建：2018-02-27
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -59,6 +59,33 @@ function getFormFieldList()
     getFormFieldList = c 
 end function 
 
+
+'获得POST字段转JSON 20170311
+function getPostToJson() 
+	dim aspD, aspHelpTitle, aspHelpContent 
+	set aspD = createObject("Scripting.Dictionary")  
+    dim s, c, splStr, fieldName,fieldValue 
+    splStr = split(request.form(), "&") 
+    for each s in splStr
+        fieldName = lCase(mid(s, 1, inStr(s, "=") - 1)) 
+		fieldValue=request.Form(fieldName)
+		aspD.add fieldName, fieldValue
+    next  
+	getPostToJson=json_encode(aspD)
+end function 
+'获得GET字段转JSON 20170311
+function getGetToJson() 
+	dim aspD, aspHelpTitle, aspHelpContent 
+	set aspD = createObject("Scripting.Dictionary")  
+    dim s, c, splStr, fieldName,fieldValue 
+    splStr = split(request.QueryString(), "&") 
+    for each s in splStr
+        fieldName = lCase(mid(s, 1, inStr(s, "=") - 1)) 
+		fieldValue=request.QueryString(fieldName)
+		aspD.add fieldName, fieldValue
+    next  
+	getGetToJson=json_encode(aspD)
+end function 
 %> 
 
 

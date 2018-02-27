@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>{$Web_Title$} - :::企业后台管理系统,QQ:313801120:::</title>
+<link href="Css/style.css" rel="stylesheet"  type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+<script type="text/javascript" src="../Jquery/jquery.Min.js"></script>
+<script src="Js/runAction.js"></script>
+</head>
+<body>
+<script charset="utf-8" src="KEditor/kindeditor.js"></script> 
+<script charset="utf-8" src="KEditor/lang/zh_CN.js"></script>
+<link rel="stylesheet" href="KEditor/themes/default/default.css" />
+<script language="javascript">
+KindEditor.ready(function(K) {
+	//<!--#editor start#-->
+	var editor1 = K.create('textarea[name="bodycontent"]', {		//处理让文本域
+		cssPath : 'KEditor/plugins/code/prettify.css',
+		uploadJson : 'KEditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		fileManagerJson : 'KEditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		allowFileManager : true,
+		afterCreate : function() {
+			var self = this;
+			K.ctrl(document, 13, function() {
+				self.sync();
+				K('form[name=example]')[0].submit();
+			});
+			K.ctrl(self.edit.doc, 13, function() {
+				self.sync();
+				K('form[name=example]')[0].submit();
+			});  
+		}
+	}); 
+	//<!--#editor end#-->
+	
+	var editor2 = K.editor({
+		uploadJson : 'KEditor/[$EDITORTYPE if='aspx' value='asp.net' elsevalue='@ME'$]/upload_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		fileManagerJson : 'KEditor/[$EDITORTYPE  if='aspx' value='asp.net' elsevalue='@ME'$]/file_manager_json.[$EDITORTYPE if='aspx' value='ashx' elsevalue='@ME'$]',
+		allowFileManager : true
+	});
+
+
+	K('#btnsmallimage').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#smallimage').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#smallimage').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	});
+	K('#btnbigimage').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#bigimage').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#bigimage').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	});
+	K('#btnbannerimage').click(function() {
+		editor2.loadPlugin('image', function() {
+			editor2.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#bannerimage').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#bannerimage').val(url);
+					editor2.hideDialog();
+				}
+			});
+		});
+	}); 
+}); 
+</script> 
+ 
+
+<div id="positionwrap">
+    <div class="msg">当前位置：[$position$]</div>
+</div>
+<form action="[$postUrl$]" method="post" name="formsubmit" onSubmit="return new xyClass().checkForm(this)">
+<div class="mg10">
+	<ul class="tabbut noselect">
+        <li>基本设置</li>
+        <li>SEO设置</li>
+        <li>内容编辑</li>
+        <li>辅助设置</li>
+        <li>更多设置</li>
+    </ul>&nbsp;    
+    <div class="clear"></div>
+    <div class="acontent">
+        <div class="explain-col">
+            温馨提示：<font color="#FF0000">*</font>星号为必填
+        </div>
+        <table width="100%" class="mgu10 inputtable" id="tablelist" border="0" cellspacing="1" cellpadding="1" bgcolor="#cfcfcf">
+            	<tbody>
+                <tr align="center" bgcolor="#FBFCE2" height="25">
+                   <td width="220">参数说明</td>
+                  <td>参数值</td>
+                  <td width="180">变量名</td>
+                </tr>
+                </tbody>
+                <tbody class="tbodybox">
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                        <td>上级栏目</td>
+                        <td align="left" style="padding:3px;">[$input_parentid$]</td>
+                        <td>parentid</td>
+                    </tr>
+                    
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容1</td>
+                      <td align="left" style="padding:3px;"><textarea name="value1" class="input-text" id="value1" style="width:57%;">[$value1$]</textarea>
+                      <input name="fieldname1" type="text" id="fieldname1" value="[$fieldname1$]" style="width:99px;" class="input-text"></td>
+                      <td>value1/fieldname1</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容2</td>
+                      <td align="left" style="padding:3px;"><textarea name="value2" class="input-text" id="value2" style="width:57%;">[$value2$]</textarea>
+                      <input name="fieldname2" type="text" id="fieldname2" value="[$fieldname2$]" style="width:99px;" class="input-text"></td>
+                      <td>value2/fieldname2</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容3</td>
+                      <td align="left" style="padding:3px;"><textarea name="value3" class="input-text" id="value3" style="width:57%;">[$value3$]</textarea>
+                      <input name="fieldname3" type="text" id="fieldname3" value="[$fieldname3$]" style="width:99px;" class="input-text"></td>
+                      <td>value3/fieldname3</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容4</td>
+                      <td align="left" style="padding:3px;"><textarea name="value4" class="input-text" id="value4" style="width:57%;">[$value4$]</textarea>
+                      <input name="fieldname4" type="text" id="fieldname4" value="[$fieldname4$]" style="width:99px;" class="input-text"></td>
+                      <td>value4/fieldname4</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容5</td>
+                      <td align="left" style="padding:3px;"><textarea name="value5" class="input-text" id="value5" style="width:57%;">[$value5$]</textarea>
+                      <input name="fieldname5" type="text" id="fieldname5" value="[$fieldname5$]" style="width:99px;" class="input-text"></td>
+                      <td>value5/fieldname5</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容6</td>
+                      <td align="left" style="padding:3px;"><textarea name="value6" class="input-text" id="value6" style="width:57%;">[$value6$]</textarea>
+                      <input name="fieldname6" type="text" id="fieldname6" value="[$fieldname6$]" style="width:99px;" class="input-text"></td>
+                      <td>value6/fieldname6</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容7</td>
+                      <td align="left" style="padding:3px;"><textarea name="value7" class="input-text" id="value7" style="width:57%;">[$value7$]</textarea>
+                      <input name="fieldname7" type="text" id="fieldname7" value="[$fieldname7$]" style="width:99px;" class="input-text"></td>
+                      <td>value7/fieldname7</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容8</td>
+                      <td align="left" style="padding:3px;"><textarea name="value8" class="input-text" id="value8" style="width:57%;">[$value8$]</textarea>
+                      <input name="fieldname8" type="text" id="fieldname8" value="[$fieldname8$]" style="width:99px;" class="input-text"></td>
+                      <td>value8/fieldname8</td>
+                    </tr> 
+
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>内容9</td>
+                      <td align="left" style="padding:3px;"><textarea name="value9" class="input-text" id="value9" style="width:57%;">[$value9$]</textarea>
+                      <input name="fieldname9" type="text" id="fieldname9" value="[$fieldname9$]" style="width:99px;" class="input-text"></td>
+                      <td>value9/fieldname9</td>
+                    </tr> 
+                     
+                    <tr align="center" height="25" bgcolor="#F9FCEF">
+                      <td>显示/隐藏</td>
+                      <td align="left" style="padding:3px;"><label for='isthrough'><input type='checkbox' name='isthrough' id='isthrough' [$isthrough if='False' elseif='0' value='' elsevalue=' checked'$]  value='1'>显示</label></td>
+                      <td>isthrough</td>
+                    </tr>
+                </tbody>            
+                <tbody class="tbodybox">
+                </tbody>
+                <tbody class="tbodybox">
+                </tbody>
+                <tbody class="tbodybox">
+                </tbody> 
+                
+
+                <tbody class="tbodybox">
+                </tbody> 
+        </table>
+    </div>
+</div>
+
+	<div class="height60"></div>
+    <div class="fixed-but">
+        <div class="buttonwrap" >
+            <input name="提交" type="submit" class="mybtn2 radius5" value="保存(S)"  />
+            <input name="switchId" type="hidden" id="switchId" value="[$switchId$]" /> 
+            <input name="fieldNameList" type="hidden" id="fieldNameList" value="[$fieldNameList$]" />  
+            <input name="重置" type="reset" class="mybtn2 radius5" value="重置"  />
+        </div>    </div>
+</form>
+<script language="javascript" type="text/javascript" src="Js/formBottom.js"></script>
+</body>
+</html> 
