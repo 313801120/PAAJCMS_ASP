@@ -1117,7 +1117,7 @@ function deleteDir(byVal folderPath,noDelFolderList,noDelFileList)
 end function 
 '批量复制文件(夹)  20160804
 function copyDir(byVal folderPath,toFolderPath) 
-    dim fso, f, fc, myFile, f1, fileType 
+    dim fso, f, fc, myFile, f1, fileType,noDelFolderList
     call handlePath(folderPath)                                                     '获得完整路径 
     set fso = createObject("Scripting.FileSystemObject")
         if not fso.folderExists(folderPath) then exit function 
