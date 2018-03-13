@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>{$Web_Title$}</title>
+<meta name="keywords" content="{$Web_KeyWords$}" />
+<meta name="description" content="{$Web_Description$}" /> 
+<script src="Jquery/jquery.min.js" type="text/javascript"></script><!--#JS#-->
+<link href="[$WebCss$]/style.css" rel="stylesheet" type="text/css" /><!--#Css#-->
+</head>
+<body>
+<style>
+
+/*文章内容*/
+.articlecontent{font-size:16px;padding:0 20px;line-height:30px;font-family:SimSun;word-wrap:break-word}
+/*细节位置信息*/
+.positionwrap{border:1px solid #DBDBDB;padding:10px 6px;color:#666666;font-size:14px;line-height:18px;margin:0 0 10px 0}
+.positionwrap a{color:#666666;font-size:14px;line-height:18px}
+.positionwrap a:hover{color:#333333}
+/*上一篇下一篇定义*/
+.updownarticlewrap{color:#666666;font-size:14px;line-height:30px}
+.updownarticlewrap a{color:#000000;font-size:14px;line-height:30px}
+.updownarticlewrap a:hover{color:#333333;text-decoration:underline}
+/*文章中作者信息*/
+.articleinfowrap{margin:10px 0;line-height:22px;color:#999999;font-size:14px}
+/*文章中时间与作者信息*/
+.articletimes{text-align:center;margin:22px 0}
+/*文章底部*/ 
+.articlefooter{clear:both;margin-top:0;color:#999999;font-size:14px;line-height:18px;margin:10px 0}
+/*文章中标签*/
+.article_lable{color:#393838;margin:0px 0px 10px 0px;border-left:#858C85 solid thick;padding:10px 0px 10px 10px;background-color:#f8f8f8;font-size:18px;line-height:30px;font-family:"微软雅黑","黑体","宋体"}
+/*文章中块引用*/
+.article_blockquote{background:#F4F5F7 url(/Templates2015/sharembweb/Images/blockquote.gif) 3px 3px no-repeat;border:1px dashed #CCC;padding:8px 12px 8px 36px;margin:25px 0;font-family:'Open Sans','Helvetica Neue',Arial,"Hiragino Sans GB",sans-serif;color:#555}
+</style>
+<div class="mainwrap"> 
+
+{$Include file='head.html' block='top'$} 
+
+    
+	<div class="sidebarleft"> 
+ {$Include file='left.html' block='left'$} 
+    
+    </div>
+	<div class="sidebarright">
+    
+    <sPAn class="testspan">{$ReadColumeSetTitle title='[\$detailTitle\$]' style='默认' moreclass='morewrite' morestr='More' moreurl=' ' stylevalue='0' value='[$读出内容 block=\'BlockNameMain\' file=\'\'$]'$}</sPAn>
+    </div>
+    <div class="clear6"></div> 
+    
+     {$ReadFoot style='底部' stylevalue='0'$} 
+    
+</div>
+
+    <!--#test start#-->
+<R#读出内容BlockNameMain start#> 
+
+           <div class="articletimes">作者：[$glb_articleAuthor$] 发表于：[$glb_articleAdddatetime format_time='1'$]</div>
+           	 <img src="[$bigimage$]" /><br>
+             [$detailContent$]
+                [$glb_aritcleRelatedTags$]
+                
+                <ul class="updownarticlewrap">
+                <li>{$glb_upArticle$}</li>
+                <li>{$glb_downArticle$}</li>
+                </ul>
+<R#读出内容BlockNameMain end#>
+    <!--#test end#-->
+
+</body>
+</html>
+
+

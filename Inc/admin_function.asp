@@ -2,7 +2,7 @@
 '************************************************************
 '作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2018-02-27
+'创建：2018-03-13
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -366,11 +366,20 @@ function showColumnList(byVal parentid, byVal tableName, showFieldName, byVal th
                     subHeaderStartStr = "[subheader-" & rs(titleFieldName) & "]" : subHeaderEndStr = "[/subheader-" & rs(titleFieldName) & "]" 
                     if instr(action, subHeaderStartStr) = 0 and instr(action, subHeaderEndStr) = 0 then
                         subHeaderStartStr = "[subheader]" : subHeaderEndStr = "[/subheader]"  
-                    end if 
+                    end if
+					
+					 
                     subFooterStartStr = "[subfooter-" & rs(titleFieldName) & "]" : subFooterEndStr = "[/subfooter-" & rs(titleFieldName) & "]" 
                     if instr(action, subFooterStartStr) = 0 and instr(action, subFooterStartStr) = 0 then
                         subFooterStartStr = "[subfooter]" : subFooterEndStr = "[/subfooter]" 
-                    end if 
+                    end if
+					'在最后20180308
+					if i=nRecordCount then
+						subFooterStartStr = "[subfooter-end]" : subFooterEndStr = "[/subfooter-end]"
+						if instr(action, subFooterStartStr) = 0 and instr(action, subFooterStartStr) = 0 then
+							subFooterStartStr = "[subfooter]" : subFooterEndStr = "[/subfooter]" 
+						end if
+					end if
                     subHeaderStr = getStrCut(action, subHeaderStartStr, subHeaderEndStr, 2) 
                     subFooterStr = getStrCut(action, subFooterStartStr, subFooterEndStr, 2) 
                     'call echo(rs("columnname"),"哈哈")

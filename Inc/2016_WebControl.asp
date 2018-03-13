@@ -2,7 +2,7 @@
 '************************************************************
 '作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2018-02-27
+'创建：2018-03-13
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -454,14 +454,20 @@ function displayEditor(action)
 
     displayEditor = c 
 end function 
-'处理网站url20160202
+'处理网站url20160202 
 function handleWebUrl(url)
-    if request("gl") <> "" then
-        url = getUrlAddToParam(url, "&gl=" & request("gl"), "replace") 
-    end if 
-    if request("templatedir") <> "" then
-        url = getUrlAddToParam(url, "&templatedir=" & request("templatedir"), "replace") 
-    end if 
+	'排除生成html页20180313
+	if isMakeHtml = false then
+		if request("gl") <> "" then
+			url = getUrlAddToParam(url, "&gl=" & request("gl"), "replace") 
+		end if 
+		if request("skin") <> "" then		'追加于20180313 网站皮肤
+			url = getUrlAddToParam(url, "&skin=" & request("skin"), "replace") 
+		end if 
+		if request("templatedir") <> "" then
+			url = getUrlAddToParam(url, "&templatedir=" & request("templatedir"), "replace") 
+		end if 
+	end if
     handleWebUrl = url 
 end function 
 

@@ -6,7 +6,17 @@
 PAAJCMS 是一款免费开源的，快速、简单、轻量级网站内容管理系统<br>
 现有千套模板任你选择，交流群：35915100<br>
 版权 sharembweb.com | Powered by PAAJCMS<br>
-<a href='admin/index.asp'>后台管理</a>
+联系方式：<a href='tencent://message/?uin=313801120&Site=云祥孙&Menu=yes'>QQ313801120</a> &nbsp;| &nbsp;邮箱313801120@qq.com<br>
+官方网址：<a href='http://sharembweb.com/' target='_blank' title='分享模板网站'>http://sharembweb.com/</a><br>
+喜悦TA官网：<a href='http://xiyueta.com/' target='_blank' title='喜悦TA'>http://xiyueta.com/</a><br>
+<a href='admin/index.asp'>后台管理</a>&nbsp;|&nbsp;<a href='http://sharembweb.com/url.asp?act=viewTemplate' target='_blank' title='模板样式预览'>模板样式预览</a>
+&nbsp; | 
+<a href='?skin=3'>黄色样式</a>
+<a href='?skin=2'>灰色样式</a>
+<a href='?skin=1'>红色样式</a>
+<a href='?skin=0'>绿色样式</a>
+
+<br>
 
 【/websitebottom】
 

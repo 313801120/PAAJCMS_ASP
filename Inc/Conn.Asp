@@ -2,7 +2,7 @@
 '************************************************************
 '作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2018-02-27
+'创建：2018-03-13
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -38,9 +38,13 @@ Public Sub openConn()
 	'sqlServerPassword="sa"
 	'sqlServerDatabaseName="aabb"
 	'sqlServerHostIP="127.0.0.1"
-	
-	autoCreateDataUrl="<a href='/inc/install.asp?webdataDir=/Templates2015/sharembweb/WebData'>点击创建数据库</a>"
-	autoCreateDataUrl="<a href='/inc/install.asp?webdataDir=/Templates2015/test/WebData'>点击创建数据库</a>" 
+	dim splstr,s
+	splstr=split("/Templates2015/sharembweb/WebData|/Templates2015/test/WebData|/Data/WebData","|")
+	for each s in splstr
+		if checkFolder(s)=true and s<>"" then
+			autoCreateDataUrl=autoCreateDataUrl & "<a href='/inc/install.asp?webdataDir="& s &"'>点击创建数据库("& s &")</a><br>" 
+		end if
+	next 
 	
 	
 	'链接sqlserver数据库

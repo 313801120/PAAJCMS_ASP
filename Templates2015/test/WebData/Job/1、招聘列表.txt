@@ -1,0 +1,33 @@
+【title】ASP工程师
+【sex】男
+【age】25-35
+【adddatetime】2018-01-28 15:09:05
+【education】本科
+【workarea】南京 
+【monthly】10K
+【startdatetime】2018-01-28 15:09:05
+【enddatetime】2018-11-28 15:09:05
+【isthrough】1
+-------------------------------
+【title】网站前端开发工程师
+【sex】男女不限
+【age】23-30
+【adddatetime】2018-01-28 15:09:05
+【education】本科
+【workarea】上海
+【monthly】8K
+【startdatetime】2018-01-28 15:09:05
+【enddatetime】2018-11-28 15:09:05
+【isthrough】1
+-------------------------------
+【title】PHP网站后端开发工程师
+【sex】男女不限
+【age】30-35
+【adddatetime】2018-01-28 15:09:05
+【education】本科
+【workarea】北京
+【monthly】30K
+【startdatetime】2018-01-28 15:09:05
+【enddatetime】2018-11-28 15:09:05
+【isthrough】1
+-------------------------------

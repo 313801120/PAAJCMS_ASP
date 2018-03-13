@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>{$Web_Title$}</title>
+<meta name="keywords" content="{$Web_KeyWords$}" />
+<meta name="description" content="{$Web_Description$}" /> 
+<script src="Jquery/jquery.min.js" type="text/javascript"></script><!--#JS#-->
+<link href="[$WebCss$]/style.css" rel="stylesheet" type="text/css" /><!--#Css#-->
+</head>
+<body>
+<div class="mainwrap"> 
+
+{$Include file='head.html' block='top'$} 
+
+    
+	<div class="sidebarleft"> 
+ {$Include file='left.html' block='left'$} 
+    
+    </div>
+	<div class="sidebarright">
+    
+    <sPAn class="testspan">{$ReadColumeSetTitle title='[\$detailTitle\$]' style='默认' moreclass='morewrite' morestr='More' moreurl=' ' stylevalue='0' value='[$读出内容 block=\'BlockNameMain\' file=\'\'$]'$}</sPAn>
+    </div>
+    <div class="clear6"></div> 
+    
+     {$ReadFoot style='底部' stylevalue='0'$} 
+    
+</div>
+
+    <!--#test start#-->
+<R#读出内容BlockNameMain start#> 
+[$detailContent$]<div class="clear6"></div>[$pageInfo$]
+<R#读出内容BlockNameMain end#>
+    <!--#test end#-->
+
+
+<!--#list start#-->
+        <!--#body start#-->
+[list]
+<table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#000000" style="margin:0 0 10px 0;">
+  <tr>
+    <td width="20%" height="22" align="right" bgcolor="#FFFFFF">招聘职位：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$title$]</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" bgcolor="#FFFFFF">性别：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$sex$]</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" bgcolor="#FFFFFF">年龄：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$age$]</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" bgcolor="#FFFFFF">学历要求：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$education$]</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" bgcolor="#FFFFFF">工作地区：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$workarea$]</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" bgcolor="#FFFFFF">月薪待遇：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$monthly$]</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" bgcolor="#FFFFFF">开始时间：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$startdatetime$]</td>
+  </tr>
+  <tr>
+    <td height="22" align="right" bgcolor="#FFFFFF">结束时间：</td>
+    <td bgcolor="#FFFFFF">&nbsp;[$enddatetime$]</td>
+  </tr>
+</table>
+[/list]  
+
+  
+
+ 
+        <!--#body end#--> 
+ <!--#list end#-->
+</body>
+</html>
+
+

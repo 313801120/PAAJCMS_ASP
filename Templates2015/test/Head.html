@@ -66,6 +66,7 @@
 .bannerwrap{ margin:0 auto;
 	height:300px;
 	position:relative;
+	overflow:hidden;
 }
 .bannerwrap .content{
 }
@@ -81,8 +82,11 @@
 .Homedot a{display:inline-block;margin:0px 5px;height:12px;width:12px;line-height:1000px;overflow:hidden;background:url([$WebImages$]/index_229.png) no-repeat;}
 .Homedot a.cur{background:url([$WebImages$]/index_228.png) no-repeat}
 </style>
-    <div class="headerwrap">{$ReadNav style='13' stylevalue='0'$}</div>
-    <div class="clear6"></div>
+    <div class="headerwrap">
+    {$ReadTop style='顶部' stylevalue='0'$}
+    <div class="clear"></div>
+    {$ReadNav style='导航' stylevalue='0'$}</div>
+    <div class="clear"></div>
     <div class="bannerwrap">
     	<ul class="content">
         
@@ -105,17 +109,23 @@
 <script>
 var bannerIndex=0
 $(document).ready(function(){
-	$(".bannerwrap ul li").width($(".mainwrap").width()).height($(".bannerwrap").height());
-	var nH=($(".bannerwrap").height()-50)/2; 
-	$(".bannerwrap").hover(function(){  
-		$(".bannerwrap .left, .bannerwrap .right").stop(true).animate({top:nH},100);	 
-	},function(){
-		$(".bannerwrap .left, .bannerwrap .right").stop(true).animate({top:-100},100);
-	}); 
-	$(".Homedot a").click(function(){
-		showBannerIndex($(this).index());
-	})  
-	showBannerIndex(bannerIndex);
+	//ZOOM resize load  加载与改变
+	$(window).bind('resize load', function(){				 			
+		$(".bannerwrap ul li").width($(".mainwrap").width()).height($(".bannerwrap").height());
+		var nH=($(".bannerwrap").height()-50)/2; 
+		$(".bannerwrap").hover(function(){  
+			$(".bannerwrap .left, .bannerwrap .right").stop(true).animate({top:nH},100);	 
+		},function(){
+			$(".bannerwrap .left, .bannerwrap .right").stop(true).animate({top:-100},100);
+		}); 
+		$(".Homedot a").click(function(){
+			showBannerIndex($(this).index());
+		})  
+		showBannerIndex(bannerIndex);
+	})
+
+	
+	
 });
 function showUpBanner(){
 	bannerIndex--;
@@ -139,5 +149,15 @@ function showBannerIndex(i){
 	$(".bannerwrap ul li:eq("+i+")").show();
 }
 </script>
-    <div class="clear6"></div>
+    <div class="clear2"></div>
+    
+<script>
+$(function(){	
+	$(window).bind('resize load', function(){		 
+		//详细内容框架宽
+		$(".sidebarright").find(".cbg").find(".ccontent").width( $(".sidebarright").width()-16 ) 
+ 
+	})
+})
+</script>
 <!--#top end#--> 

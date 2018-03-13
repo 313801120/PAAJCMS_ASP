@@ -2,7 +2,7 @@
 '************************************************************
 '作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2018-02-27
+'创建：2018-03-13
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -122,6 +122,9 @@ function handleAction(content)
             '读模板样式并设置标题与内容   软件里有个栏目Style进行设置
             elseIf checkFunValue(action, "ReadColumeSetTitle ") = true then
                 action = XY_ReadColumeSetTitle(action) 
+            '读模板样式并设置标题与内容 顶部
+            elseIf checkFunValue(action, "ReadTop ") = true then
+                action = XY_ReadTop(action) 
             '读模板样式并设置标题与内容 导航
             elseIf checkFunValue(action, "ReadNav ") = true then
                 action = XY_ReadNav(action) 
@@ -664,7 +667,9 @@ function getDetailList(action, content, actionName, lableTitle, byVal fieldNameL
         '【留言】
         if tableName = "guestbook" then
             url = WEB_ADMINURL & "?act=addEditHandle&actionType=GuestBook&lableTitle=留言&nPageSize=10&parentid=&searchfield=bodycontent&keyword=&addsql=&page=" & idPage & "&id=" & rs("id") & "&n=" & getRnd(11) 
-
+        '【招聘】
+        elseif tableName = "job" then
+            url = WEB_ADMINURL & "?act=addEditHandle&actionType=Job&lableTitle=招聘&nPageSize=10&parentid=&searchfield=bodycontent&keyword=&addsql=&page=" & idPage & "&id=" & rs("id") & "&n=" & getRnd(11) 
         '【默认显示文章】
         else
             url = WEB_ADMINURL & "?act=addEditHandle&actionType=ArticleDetail&lableTitle=分类信息&nPageSize=10&page=" & idPage & "&parentid=" & rs("parentid") & "&id=" & rs("id") & "&n=" & getRnd(11) 
@@ -961,6 +966,9 @@ function makeWebHtml(action)
         '留言类列表
         elseIf inStr("|留言|", "|" & glb_columnType & "|") > 0 then
             glb_bodyContent = getDetailList(action, defaultListTemplate(glb_columnType, glb_columnName), "GuestBook", "留言列表", "*", npagesize, cstr(npage), " where isthrough<>0 " & sortSql) 
+        '招聘类列表
+        elseIf inStr("|招聘|", "|" & glb_columnType & "|") > 0 then 
+            glb_bodyContent = getDetailList(action, defaultListTemplate(glb_columnType, glb_columnName), "Job", "招聘列表", "*", npagesize, cstr(npage), " where isthrough<>0 " & sortSql) 
         elseIf glb_columnType = "文本" then
             '航行栏目加管理
             if request("gl") = "edit" then
@@ -1262,6 +1270,11 @@ function getDateilTemplate(parentid, templateType)
             if checkFile(cfg_webTemplate & "/Down_" & templateType & ".html") = true then
                 templateName = "Down_" & templateType & ".html" 
             end if 
+        elseIf rsx("columntype") = "招聘" then
+            '下载细节页
+            if checkFile(cfg_webTemplate & "/Job_" & templateType & ".html") = true then
+                templateName = "Job_" & templateType & ".html" 
+            end if 
 
         elseIf rsx("columntype") = "视频" then
             '视频细节页
@@ -1322,6 +1335,8 @@ sub makeAllHtml(columnType, columnName, columnId)
             if inStr("|产品|新闻|视频|下载|案例|留言|反馈|招聘|订单|", "|" & rss("columntype") & "|") > 0 then
                 if rss("columntype") = "留言" then
                     nCountSize = getRecordCount(db_PREFIX & "guestbook", "")                        '记录数
+                elseif rss("columntype") = "招聘" then
+                    nCountSize = getRecordCount(db_PREFIX & "job", "")                        '记录数
                 else
                     nCountSize = getRecordCount(db_PREFIX & "articledetail", " where parentid=" & rss("id")) '记录数
                 end if 

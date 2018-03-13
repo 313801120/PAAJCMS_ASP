@@ -2,7 +2,7 @@
 '************************************************************
 '作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2018-02-27
+'创建：2018-03-13
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -136,7 +136,9 @@ function XY_ReadColumeSetTitle(action)
     moreClass = rParam(action, "MoreClass") 
     moreUrl = phpTrim(rParam(action, "MoreUrl")) 
     moreStr = rParam(action, "MoreStr") 
-    valueStr = handleInModule(valueStr, "end") 
+    valueStr = handleInModule(valueStr, "end")
+	'call echo("style",style) 
+	style=handleStyleID(style)		'处理样式ID
     c = readColumeSetTitle(action, style, title, valueStr) 
 
     if moreClass = "" then moreClass = "more"                                       'More链接为空 则用默认代替
@@ -149,6 +151,7 @@ function XY_ReadColumeSetTitle(action)
     end if 
     XY_ReadColumeSetTitle = c 
 end function 
+
 
 '读栏目并赋标题与内容值
 function readColumeSetTitle(action, styleID, columeTitle, columeContent)
@@ -282,10 +285,20 @@ function readArticleInfoStyleSource(sID)
     end if 
     readArticleInfoStyleSource = readTemplateFileSource(filePath, sID) 
 end function  
+'读出Top模板样式    
+function XY_ReadTop(action)
+    dim startStr, endStr, style, title, valueStr, moreClass, moreUrl, moreStr, aStr, c 
+    style = rParam(action, "style")
+	style=handleStyleID(style)		'处理样式ID
+	c=readNavLeftFoot(style,"Top")
+	c = Replace(c, "{$Top$}", getNavTemplateSource)         '替换显示默认导航内容
+    XY_ReadTop = c
+end function 
 '读出Nav模板样式    
 function XY_ReadNav(action)
     dim startStr, endStr, style, title, valueStr, moreClass, moreUrl, moreStr, aStr, c 
-    style = rParam(action, "style") 
+    style = rParam(action, "style")
+	style=handleStyleID(style)		'处理样式ID
 	c=readNavLeftFoot(style,"Nav")
 	c = Replace(c, "{$Nav$}", getNavTemplateSource)         '替换显示默认导航内容
     XY_ReadNav = c
@@ -295,19 +308,23 @@ end function
 function XY_ReadFoot(action)
     dim startStr, endStr, style, title, valueStr, moreClass, moreUrl, moreStr, aStr, c 
     style = rParam(action, "style") 
+	style=handleStyleID(style)		'处理样式ID
 	c=readNavLeftFoot(style,"Foot") 
     XY_ReadFoot = c
 end function
 function readNavLeftFoot(sId,sType) 
-    dim templateFilePath, startStr, endStr, s,templateContent,content,cssFilePath,cssContent,splstr,c
+    dim templateFilePath, startStr, endStr, s,templateContent,content,cssFilePath,cssContent,splstr,c,url
     templateFilePath = cfg_webTemplate & "\Template_"& sType &".html" 
 	'call echo("templateFilePath",templateFilePath)
     startStr = "/*"& sType &"" & sID & "Start*/" 
     endStr = "/*"& sType &"" & sID & "End*/" 
-    s = readTemplateFileModular(templateFilePath, startStr, endStr) 
+    s = readTemplateFileModular(templateFilePath, startStr, endStr)  
     if s = "[$NO$]" then
-		templateContent=readFile(templateFilePath,"gb2312")
-		content=getHttpUrl("http://aa/vbtemplate.asp?act=get"& sType &"Template&id="&sID,"")
+		templateContent=readFile(templateFilePath,"gb2312") 
+		if getIP()="127.0.0.1" then pubServerHttpurl="http://zfb/" 
+		url=pubServerHttpurl&"vbtemplate.asp?act=get"& sType &"Template&id="&sID
+		call echo("url",url):doevents
+		content=getHttpUrl(url,"")
 		if instr(content,"$Array$")>0 then
 			splstr=split(content,"$Array$")
 			c=startStr&vbcrlf&splstr(1)&endStr
@@ -316,7 +333,7 @@ function readNavLeftFoot(sId,sType)
 		cssFilePath=cfg_webCss&"\style.css"
 		cssContent=readFile(cssFilePath,"gb2312")
 		if instr(cssContent,startStr)=false then
-			c=startStr&vbcrlf&splstr(0)&endStr
+			c=startStr&vbcrlf&cssCompression(splstr(0),0)&vbcrlf&endStr
 			cssContent=phptrim(cssContent)&phptrim(c)
 			call writeToFile(cssFilePath,cssContent,"gb2312")
 		end if
@@ -353,10 +370,36 @@ Function getNavTemplateSource()
     c = c & "[/subheader]" & vbCrlf
     c = c & "[subfooter]</ul><li class=line></li>" & vbCrlf
     c = c & "[/subfooter] " & vbCrlf
+    c = c & "[subfooter-end]</ul>" & vbCrlf
+    c = c & "[/subfooter-end] " & vbCrlf
     c = c & "[sql]where flags like '%top%'[/sql]" & vbCrlf
     c = c & "#-->" & vbCrlf
     c = c & "<li class=right></li>" & vbCrlf 
     getNavTemplateSource = c
 End Function
+'处理样式ID
+function handleStyleID(byval style)
+	dim addSql
+	if request("skin")<>"" then
+		addSql=" where id=" & request("skin")
+	else
+		addSql="  where isThrough=true"
+	end if
+	rs1.open"select * from " & db_PREFIX & "webStyle" & addSql,conn,1,1
+	if not rs1.eof then
+		if style="左边" then
+			style=rs1("leftStyle")
+		elseif style="默认" then
+			style=rs1("defaultStyle")
+		elseif style="导航" then
+			style=rs1("navStyle")
+		elseif style="底部" then
+			style=rs1("footStyle")
+		elseif style="顶部" then
+			style=rs1("topStyle")
+		end if
+	end if:rs1.close
+	handleStyleID=style
+end function
 %>     
 

@@ -2,7 +2,7 @@
 '************************************************************
 '作者：云祥孙 【精通ASP/PHP/ASP.NET/VB/JS/Android/Flash，交流/合作可联系)
 '版权：源代码免费公开，各种用途均可使用。 
-'创建：2018-02-27
+'创建：2018-03-13
 '联系：QQ313801120  交流群35915100(群里已有几百人)    邮箱313801120@qq.com   个人主页 sharembweb.com
 '更多帮助，文档，更新　请加群(35915100)或浏览(sharembweb.com)获得
 '*                                    Powered by PAAJCMS 
@@ -287,7 +287,7 @@ dim showLayout				'显示布局
 
 dim configTableList,tableListC
  
-	configTableList="|webcolumn|articledetail|onepage|tablecomment|website|admin|searchstat|friendlink|job|guestbook|feedback|listmenu|lineqq|linevote|member|memberlog|payment|previeworder|productcomment|websitestat|systemlog|weblayout|webmodule|caiweb|caiconfig|caidata|bidding|weburlscan|webdomain|CaiColumn|CaiDetail|"
+	configTableList="|webcolumn|articledetail|onepage|tablecomment|website|admin|searchstat|friendlink|job|guestbook|feedback|listmenu|lineqq|linevote|member|memberlog|payment|previeworder|productcomment|websitestat|systemlog|weblayout|webmodule|caiweb|caiconfig|caidata|bidding|weburlscan|webdomain|CaiColumn|CaiDetail|webStyle|"
   
   configTableList=lcase(configTableList)
   
@@ -880,6 +880,9 @@ sub webData(db_PREFIX, loginname, loginpwd)
 
         sql = sql & "isHtml YesNo Default No,"                                          '是否为html
         sql = sql & "isOnHtml YesNo Default Yes,"                                       '开启生成Html
+		
+		
+        sql = sql & "customAUrl VarChar Default """","                                  '自定义链接网址
 
         sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
         sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间
@@ -1247,9 +1250,35 @@ sub webData(db_PREFIX, loginname, loginpwd)
         sql = sql & "bodycontent Text Default """")"                                    '备注
         if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
         conn.execute(sql) 
-    end if 
-
-
+    end if
+	'模板样式表 20151228-------------------------------
+    tableName = db_PREFIX & "webStyle" 
+    if checkCreateTable(tableName) = false then
+        sql = "Create Table " & tableName & " (Id Int Identity(0,1) Primary Key," 
+        sql = sql & "title VarChar Default """","                                  '标题
+        sql = sql & "topStyle VarChar Default """","                               '顶部样式
+        sql = sql & "defaultStyle VarChar Default """","                               '默认样式
+        sql = sql & "leftStyle VarChar Default """","                                  '左边样式
+        sql = sql & "rightStyle VarChar Default """","                                 '右边样式
+        sql = sql & "navStyle VarChar Default """","                               'nav样式
+        sql = sql & "footStyle VarChar Default """","                               'foot样式
+        sql = sql & "mainStyle VarChar Default """","                                  'main页样式
+        sql = sql & "productStyle VarChar Default """","                               'product页样式
+        sql = sql & "newsStyle VarChar Default """","                               'news页样式
+        sql = sql & "downStyle VarChar Default """","                               'down页样式
+        sql = sql & "guestBookStyle VarChar Default """","                               'guestBook页样式
+        sql = sql & "isThrough YesNo Default No,"                                       '通过审核
+  
+        sql = sql & "sortRank Int Default 0,"                                           '排序编号 
+        sql = sql & "author VarChar Default """","                                      '作者
+        sql = sql & "views Int Default 0,"                                              '点击次数  
+        sql = sql & "addDateTime DateTime Default Now(),"                               '创建时间
+        sql = sql & "upDateTime DateTime Default Now(),"                               '修改时间 
+        sql = sql & "aboutcontent Text Default """","                                   '简单介绍 
+        sql = sql & "bodycontent Text Default """")"                                    '备注
+        if MDBPath = "" then sql = handleSqlServer(sql)                                 '把Access数据库类型转成SqlServer数据库类型
+        conn.execute(sql) 
+    end if   
     '布局表 20151228-------------------------------
     tableName = db_PREFIX & "webLayout" 
     if checkCreateTable(tableName) = false then
