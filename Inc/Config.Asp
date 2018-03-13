@@ -140,7 +140,7 @@ dim pubFormatObj : set pubFormatObj=new class_formatting			'格式化类
 dim pubTemplateObj : set pubTemplateObj=new class_template			'模板类
 dim pubCaiObj : set pubCaiObj=new class_cai							'采集类
 dim pubScanUrlObj : set pubScanUrlObj=new class_scanUrl				'扫描网址
-dim pubServerHttpurl:pubServerHttpurl="http://sharembweb.com/"		'远程服务器网址
+dim pubServerHttpurl:pubServerHttpurl="http://116.62.214.133:8888/"		'远程服务器网址  http://sharembweb.com/
 '=========
  
  
