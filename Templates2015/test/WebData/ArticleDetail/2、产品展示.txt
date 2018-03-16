@@ -1,81 +1,127 @@
 【parentid】产品展示
-【title】企业案例网站1
+【title】PAAJCMS网站后台管理系统2018多样式版安装演示
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
-【bodycontent】 
-这是企业案例网站1 测试内容
+【bodycontent】  
+<br>
+<div>
+腾讯视频<br>
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=y06052i36x4&auto=0" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+</div>
+
+<div><br>
+YOUKU视频<br>
+<iframe height=498 width=510 src='http://player.youku.com/embed/XMzQ2NDkzOTg5Ng==' frameborder=0 'allowfullscreen'></iframe>
+</div>
+
 【/bodycontent】
 -------------------------------
 【parentid】产品展示
-【title】企业案例网站2
+【title】PAAJCMS网站后台管理系统2018多样式版 在线修改
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
-这是企业案例网站2 测试内容
+<br>
+<div>
+腾讯视频<br>
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=t0605pbb029&auto=0" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+</div>
+
+<div><br>
+YOUKU视频<br>
+<iframe height=498 width=510 src='http://player.youku.com/embed/XMzQ2NDk0MzMxMg==' frameborder=0 'allowfullscreen'></iframe>
+</div>
 【/bodycontent】
 -------------------------------
 【parentid】产品展示
-【title】企业案例网站3
+【title】PAAJCMS网站后台管理系统2018多样式版 绿色样式演示
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
-这是企业案例网站3 测试内容
+腾讯视频<br>
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=j06050af87n&auto=0" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+</div>
+
+<div><br>
+YOUKU视频<br>
+<iframe height=498 width=510 src='http://player.youku.com/embed/XMzQ2NDk0NTY2MA==' frameborder=0 'allowfullscreen'></iframe>
+</div>
 【/bodycontent】
 -------------------------------
 【parentid】产品展示
-【title】企业案例网站4
+【title】PAAJCMS网站后台管理系统2018多样式版 红色样式演示
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
-这是企业案例网站4 测试内容
+腾讯视频<br>
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=m0605rpbenp&auto=0" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+</div>
+
+<div><br>
+YOUKU视频<br>
+<iframe height=498 width=510 src='http://player.youku.com/embed/XMzQ2NDk1NTY4MA==' frameborder=0 'allowfullscreen'></iframe>
+</div>
 【/bodycontent】
 -------------------------------
 【parentid】产品展示
-【title】企业案例网站5
+【title】PAAJCMS网站后台管理系统2018多样式版 灰色样式演示
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
-这是企业案例网站5 测试内容
+腾讯视频<br>
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=g06054kj7qb&auto=0" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+</div>
+
+<div><br>
+YOUKU视频<br>
+<iframe height=498 width=510 src='http://player.youku.com/embed/XMzQ2NDk0ODU0OA==' frameborder=0 'allowfullscreen'></iframe>
+</div>
 【/bodycontent】
 -------------------------------
 【parentid】产品展示
 【title】企业案例网站6
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
@@ -86,10 +132,11 @@
 【title】企业案例网站7
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
@@ -100,10 +147,11 @@
 【title】企业案例网站7
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
@@ -114,10 +162,11 @@
 【title】企业案例网站8
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
@@ -128,10 +177,11 @@
 【title】企业案例网站9
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner1.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 
@@ -142,10 +192,11 @@
 【title】企业案例网站10
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner2.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 这是企业案例网站11 测试内容
@@ -156,10 +207,11 @@
 【title】企业案例网站11
 【sortrank】0
 【author】test
-【adddatetime】2015-01-28 15:09:05
+【adddatetime】2018-03-16 15:09:05
 【target】
 【customaurl】 
 【smallimage】[$cfg_webimages$]/Banner3.jpg 
+【relatedtags】产品展示
 【aboutcontent】 
 【/aboutcontent】
 【bodycontent】 

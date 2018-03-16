@@ -45,7 +45,7 @@
     </div>
 	<div class="sidebarright">
     
-    <sPAn class="testspan">{$ReadColumeSetTitle title='[\$detailTitle\$]' style='默认' moreclass='morewrite' morestr='More' moreurl=' ' stylevalue='0' value='[$读出内容 block=\'BlockNameMain\' file=\'\'$]'$}</sPAn>
+    <sPAn class="testspan">{$ReadColumeSetTitle title='详细内容' style='默认' moreclass='morewrite' morestr='More' moreurl=' ' stylevalue='0' value='[$读出内容 block=\'BlockNameMain\' file=\'\'$]'$}</sPAn>
     </div>
     <div class="clear6"></div> 
     
@@ -55,9 +55,10 @@
 
     <!--#test start#-->
 <R#读出内容BlockNameMain start#> 
-
+			<h2 style="text-align:center; line-height:34px;">[\$detailTitle\$]</h2>
            <div class="articletimes">作者：[$glb_articleAuthor$] 发表于：[$glb_articleAdddatetime format_time='1'$]</div>
-           	 <img src="[$bigimage$]" /><br>
+           	
+           	 <img src="[$glb_aritcleSmallImage$]" width="100%"/><br>
              [$detailContent$]
                 [$glb_aritcleRelatedTags$]
                 

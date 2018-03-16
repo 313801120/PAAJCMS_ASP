@@ -58,7 +58,7 @@
 <sPAn class="testspan">{$ArticleList columnname='产品展示' topnumb='4' default='[_产品展示_最新]'$}</sPAn>
  
 <!--#[_产品展示_最新]
-[list]<li class="left"><a href="[$url$]" title="[$title$]" [$atarget$]><img src="[$smallimage$]" width="169" height="200"><div class="title">[$title$]</div></a></li>[/list]  
+[list]<li class="left"><a href="[$url$]" title="[$title$]" [$atarget$]><img src="[$smallimage$]" width="169" height="200"><div class="title">[$title len='18'$]</div></a></li>[/list]  
 #--> 
 </ul>
 <R#读出内容BlockName最新产品 end#>
@@ -66,7 +66,7 @@
 <R#读出内容BlockName新闻中心 start#>
 <ul class="newswrap">
  
-<sPAn class="testspan">{$ArticleList columnname='新闻中心' topnumb='6' default='[_新闻中心_最新]'$}</sPAn>
+<sPAn class="testspan">{$ArticleList columnname='新闻中心' topnumb='8' default='[_新闻中心_最新]'$}</sPAn>
  
 <!--#[_新闻中心_最新]
 [list]<li class="left"><a href="[$url$]" title="[$title$]" [$atarget$]>[$title$]<div class='time'>[$adddatetime format_time='2'$]</div></a></li>[/list]  

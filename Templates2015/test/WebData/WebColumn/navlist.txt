@@ -191,7 +191,7 @@ function formmessageSubmit(){
 英文名：YXS<br>
 QQ：313801120<br>
 微信：MQ313801120<br>
-邮箱：313801120@qq.com   postmaster@aspphpcms.com   qq313801120@gmail.com<br>
+邮箱：313801120@qq.com<br>
 交流群：35915100<br>
 作者主页：http://sharembweb.com/<br>
 喜悦TA官网：http://xiyueta.com/<br>
